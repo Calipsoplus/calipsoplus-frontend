@@ -20,6 +20,7 @@
       "prefix": "app",
       "styles": [
         "styles.css"
+        
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
@@ -55,6 +56,10 @@
   },
   "defaults": {
     "styleExt": "css",
-    "component": {}
+    "component": {},
+    "serve": {
+      "port": 8001,
+      "host": "192.168.33.10"
+    }
   }
 }
