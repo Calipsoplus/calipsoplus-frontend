@@ -11,18 +11,20 @@ import { Router } from "@angular/router";
 })
 export class SelectCalipsoExperimentFormComponent implements OnInit {
 
-  experiments: CalipsoExperiment[]
+  experiments: CalipsoExperiment[];
+  selectedVal: Number;
+
   constructor( private calipsoService: CalipsoplusService, private router: Router) { }
 
   ngOnInit() {
-    if (this.calipsoService.logged) {
+    if (this.calipsoService.isLogged()) {
       this.calipsoService.getCalipsoExperiments().subscribe(
         data => this.experiments = data);
     }else {
       this.router.navigate(['login']);
     }
 
-    
+
   }
 
 

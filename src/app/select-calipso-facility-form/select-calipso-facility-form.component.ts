@@ -15,18 +15,19 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
 
 
   facilities: CalipsoFacility[];
+  selectedVal: Number;
 
   constructor(private calipsoService: CalipsoplusService, private router: Router) { }
 
   ngOnInit() {
-    if (this.calipsoService.logged) {
+    if (this.calipsoService.isLogged()) {
          this.calipsoService.getCalipsoFacilities().subscribe(facilities=>this.facilities=facilities)
-    }else { 
+    }else {
       this.router.navigate(['login']);
     }
   }
 
-  
+
   next() {
     this.router.navigate(['experiment']);
   }

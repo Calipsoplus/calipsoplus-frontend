@@ -20,7 +20,8 @@ export class CalipsoplusService {
 
   authUrl = 'http://192.168.33.11:8000/login/';
   facilitiesUrl = 'http://192.168.33.11:8000/facilities/all/';
-  logged = false;
+
+
 
 
 
@@ -37,10 +38,10 @@ export class CalipsoplusService {
 
   public getCalipsoFacilities_fake(): Observable<CalipsoFacility[]> {
 
-    let fakeFacilities = [{ id: 1, name: 'Spanish ALBA Light Source', desc: 'desc1', url: 'https://calipsoplus.facility1.eu' },
-    { id: 2, name: 'French synchrotron Soleil', desc: 'desc2', url: 'https://calipsoplus.facility2.eu' },
-    { id: 3, name: 'Diamond UK Synchrotron', desc: 'desc3', url: 'https://calipsoplus.facility3.eu' },
-    { id: 4, name: 'Bessy II at Helmholz-Zentrum Berlin (HZB)', desc: 'desc4', url: 'https://calipsoplus.facility4.eu' }]
+    let fakeFacilities = [{ id: 1, name: 'Spanish ALBA Light Source', description: 'desc1', url: 'https://calipsoplus.facility1.eu' },
+    { id: 2, name: 'French synchrotron Soleil', description: 'desc2', url: 'https://calipsoplus.facility2.eu' },
+    { id: 3, name: 'Diamond UK Synchrotron', description: 'desc3', url: 'https://calipsoplus.facility3.eu' },
+    { id: 4, name: 'Bessy II at Helmholz-Zentrum Berlin (HZB)', description: 'desc4', url: 'https://calipsoplus.facility4.eu' }]
     return of(fakeFacilities);
   }
 
@@ -52,35 +53,39 @@ export class CalipsoplusService {
     { id: 4, subject: 'Experiment number 4 ref 61/3 from ALba', body: 'Experiment description body4' }]
     return of(fakeExperiments);
   }
-  
+
   public getCalipsoFacilities(): Observable<CalipsoFacility[]> {
     return this.http.get<CalipsoFacility[]>(this.facilitiesUrl);
   }
- 
-
-  public fake_auth(username, password) {
-    if (username == 'alex' && password == 'alexcamps') {
-      this.logged = true;
-    } else {
-      this.logged = false;
-    }
-  }
 
   public auth(username: string, password: string) {
+    this.logout();
     let params = "username=" + username + "&password=" + password;
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
     return this.http.post(this.authUrl, params, { headers: headers })
       .map(res => {
-        this.logged = true;
+        this.login(username);
         return res;
       });
   }
 
+
   public logout() {
-    // remove user from local storage to log user out
-    this.logged = false;
+    sessionStorage.removeItem("loginkey");
   }
 
+  private login(username:string) {
+    sessionStorage.setItem("loginkey", username);
+  }
+
+  public getUserLogged():string{
+    return sessionStorage.getItem("loginkey");
+  }
+
+
+  public isLogged():boolean{
+    return "loginkey" in sessionStorage;
+  }
 
 }
 

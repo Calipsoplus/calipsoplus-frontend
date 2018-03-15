@@ -12,6 +12,9 @@ import { PartnersCalipsoPageComponent } from './partners-calipso-page/partners-c
 const routes: Routes = [
   { path: '', component: HomeCalipsoPageComponent },
   { path: 'login', component: LoginCalipsoUserFormComponent },
+
+  { path: 'logout', component: LoginCalipsoUserFormComponent },
+
   { path: 'facility', component: SelectCalipsoFacilityFormComponent },
   { path: 'experiment', component: SelectCalipsoExperimentFormComponent },
 
