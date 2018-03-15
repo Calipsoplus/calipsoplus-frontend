@@ -19,6 +19,10 @@
 	margin: 0;
 }
 
-.container{
+.prevent_footer{
   margin-bottom:65px;
+}
+
+.underline{
+  text-decoration: underline;
 }

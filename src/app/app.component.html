@@ -3,11 +3,11 @@
   <a class="nav-link" routerLink="">Home</a>
   <a class="nav-link" routerLink="/about">About</a>
   <a class="nav-link" routerLink="/partners">Partners</a>
-  <a *ngIf="isLogged()" title="logout.." class="nav-link ml-auto" (click)="logout()" routerLink="/">{{getUserName()}}</a>
+  <a *ngIf="isLogged()" title="logout.." class="underline  nav-link ml-auto" (click)="logout()" routerLink="/">{{getUserName()}}</a>
   <a *ngIf="!isLogged()" class="nav-link ml-auto" routerLink="/login">Login...</a>
 </nav>
 
-<div class="container">
+<div class="container prevent_footer">
   <router-outlet></router-outlet>
 </div>
 
