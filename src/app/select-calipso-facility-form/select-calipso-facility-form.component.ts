@@ -21,12 +21,12 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
   ngOnInit() {
     if (this.calipsoService.logged) {
          this.calipsoService.getCalipsoFacilities().subscribe(facilities=>this.facilities=facilities)
-    }else {
+    }else { 
       this.router.navigate(['login']);
     }
   }
 
-
+  
   next() {
     this.router.navigate(['experiment']);
   }

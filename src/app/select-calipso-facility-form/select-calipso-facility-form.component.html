@@ -1,20 +1,16 @@
-<div class="container">
-    <form  class="form-signin"  #calipsoForm="ngForm" name="ftemp">
-      <h1 class="h3 mb-3 font-weight-normal">Please, choose a facility</h1>
-  
-      <div class="form-group row">
-        <label  class="h3 mb-3 font-weight-normal" for="sfacility" class="sr-only">Select a facility</label>
-        <select  name="sfacilityname" id="sfacility" class="form-control" required [(ngModel)]="selectedVal" >
-          <option disabled selected hidden>Choose one</option>
-          <option *ngFor="let facility of facilities" [ngValue]="facility.id">
-            {{ facility.name }}
-          </option>
-        </select>
-      </div>
-      <div class="form-group row">   
-            <button [disabled]="!selectedVal>0"  class="btn btn-lg btn-primary btn-block" (click)="next()">Next</button>
-        </div>
-    </form>
+<form class="form-signin  center-all" #calipsoForm="ngForm" name="ftemp">
+  <h1 class="h3 mb-3 font-weight-normal">Please, choose a facility</h1>
+
+  <div class="form-group row">
+    <label class="h3 mb-3 font-weight-normal" for="sfacility" class="sr-only">Select a facility</label>
+    <select name="sfacilityname" id="sfacility" class="form-control" required [(ngModel)]="selectedVal">
+      <option disabled selected hidden>Choose one</option>
+      <option *ngFor="let facility of facilities" [ngValue]="facility.id">
+        {{ facility.name }}
+      </option>
+    </select>
   </div>
-  
-  
+  <div class="form-group row">
+    <button [disabled]="!selectedVal>0" class="btn btn-lg btn-primary btn-block" (click)="next()">Next</button>
+  </div>
+</form>
