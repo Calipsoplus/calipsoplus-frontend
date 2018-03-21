@@ -16,7 +16,7 @@ export class AppComponent {
   }
 
   public getUserName():string{
-    return this.calipsoService.getUserLogged();
+    return this.calipsoService.getLoggedUserName();
   }
 
   public isLogged():boolean{
