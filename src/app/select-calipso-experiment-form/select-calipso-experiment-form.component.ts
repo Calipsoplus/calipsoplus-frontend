@@ -25,4 +25,10 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
       this.router.navigate(['login']);
     }
   }
+
+
+  public logout(){
+    this.calipsoService.logout();
+  }
 }
+

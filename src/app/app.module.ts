@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
 
-import { HttpClientModule } from '@angular/common/http'; 
+import { HttpClientModule } from '@angular/common/http';
 
 
 import { AppComponent } from './app.component';
@@ -15,13 +15,16 @@ import { HomeCalipsoPageComponent } from './home-calipso-page/home-calipso-page.
 import { AboutCalipsoPageComponent } from './about-calipso-page/about-calipso-page.component';
 import { PartnersCalipsoPageComponent } from './partners-calipso-page/partners-calipso-page.component';
 
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule  
+    HttpClientModule,
+    NgbModule.forRoot()
   ],
   declarations: [
     AppComponent,
