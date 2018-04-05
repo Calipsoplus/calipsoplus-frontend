@@ -20,7 +20,7 @@ import { CalipsoSoftware } from "./calipso-software";
 
 @Injectable()
 export class CalipsoplusService {
-  backendUrl = "http://192.168.33.11:8000/";
+  backendUrl = "https://misapptest.cells.es/calipsoplus-services/";
 
   authUrl = this.backendUrl + "login/";
   facilitiesUrl = this.backendUrl + "facilities/all/";
