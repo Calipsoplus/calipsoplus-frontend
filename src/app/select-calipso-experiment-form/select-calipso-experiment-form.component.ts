@@ -18,8 +18,8 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   ngOnInit() {
     if (this.calipsoService.isLogged()) {
-      let user_id = this.calipsoService.getLoogedUserId();
-      this.calipsoService.getCalipsoExperiments(user_id).subscribe(
+      let username = this.calipsoService.getLoggedUserName();
+      this.calipsoService.getCalipsoExperiments(username).subscribe(
         data => this.experiments = data);
     }else {
       this.router.navigate(['login']);
