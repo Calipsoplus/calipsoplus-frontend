@@ -21,7 +21,7 @@ export class LoginCalipsoUserFormComponent implements OnInit {
   login() {
     this.calipsoService.auth(this.username, this.password).subscribe(
       success => {
-        this.router.navigate(["facility"]);
+        this.router.navigate(["/partners"]);
       },
       error => {
         alert("Invalid credentials");

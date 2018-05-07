@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginCalipsoUserFormComponent } from './login-calipso-user-form/login-calipso-user-form.component';
 import { SelectCalipsoFacilityFormComponent } from './select-calipso-facility-form/select-calipso-facility-form.component';
 import { SelectCalipsoExperimentFormComponent } from './select-calipso-experiment-form/select-calipso-experiment-form.component';
+import { SelectCalipsoResourceFormComponent } from './select-calipso-resource-form/select-calipso-resource-form.component';
+
 import { HomeCalipsoPageComponent } from './home-calipso-page/home-calipso-page.component'
 
 
@@ -17,6 +19,8 @@ const routes: Routes = [
 
   { path: 'facility', component: SelectCalipsoFacilityFormComponent },
   { path: 'experiment', component: SelectCalipsoExperimentFormComponent },
+  { path: 'resource', component: SelectCalipsoResourceFormComponent },
+
 
   { path: 'about', component: AboutCalipsoPageComponent },
   { path: 'partners', component: PartnersCalipsoPageComponent }

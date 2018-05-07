@@ -16,6 +16,10 @@ import { AboutCalipsoPageComponent } from './about-calipso-page/about-calipso-pa
 import { PartnersCalipsoPageComponent } from './partners-calipso-page/partners-calipso-page.component';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { MainNavComponent } from './main-nav/main-nav.component';
+import { FacilityNavComponent } from './facility-nav/facility-nav.component';
+import { SelectCalipsoResourceFormComponent } from './select-calipso-resource-form/select-calipso-resource-form.component';
+import { ExperimentNavComponent } from './experiment-nav/experiment-nav.component';
 
 
 @NgModule({
@@ -33,7 +37,11 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     SelectCalipsoExperimentFormComponent,
     HomeCalipsoPageComponent,
     AboutCalipsoPageComponent,
-    PartnersCalipsoPageComponent
+    PartnersCalipsoPageComponent,
+    MainNavComponent,
+    FacilityNavComponent,
+    SelectCalipsoResourceFormComponent,
+    ExperimentNavComponent
   ],
   providers: [CalipsoplusService],
   bootstrap: [AppComponent]
