@@ -20,9 +20,9 @@ import { CalipsoSoftware } from "./calipso-software";
 
 @Injectable()
 export class CalipsoplusService {
-  //backendUrl = "https://misapptest.cells.es/calipsoplus-services/";
+  backendUrl = "https://misapptest.cells.es/calipsoplus-services/";
   backendUrl_duo = "https://misapptest.cells.es/duo-services/";
-  backendUrl_calipso = "http://192.168.33.11:8000/";
+  //backendUrl_calipso = "http://192.168.33.11:8000/";
 
 
   authUrl = this.backendUrl_duo + "login/";
