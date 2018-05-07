@@ -9,19 +9,21 @@
       <table class="table">
         <thead>
           <tr class="d-flex">
-            <th class="col-sm-4">Title</th>
+            <th class="col-sm-2">Title</th>
             <th class="col-sm-2">S/N</th>
-            <th class="col-sm-4">BeamL</th>
+            <th class="col-sm-4">Description</th>
+            <th class="col-sm-2">BeamL</th>
             <th class="col-sm-2"></th>
           </tr>
         </thead>
         <tbody>
           <tr class="d-flex" *ngFor="let experiment of experiments">
-            <td class="col-sm-4">{{experiment.subject}}</td>
-            <td class="col-sm-2">{{experiment.id}}</td>
+            <td class="col-sm-2">{{experiment.subject}}</td>
+            <td class="col-sm-2">{{experiment.serial_number}}</td>
             <td class="col-sm-4">{{experiment.body | slice:0:106}}
               <img src='assets/magnifier.svg' width="20px" height="20px" alt="<!>" title="{{experiment.body}}" />
             </td>
+            <td class="col-sm-2">{{experiment.beam_line}}</td>
             <td class="col-sm-2">
               <button class="btn btn-primary">Launch!</button>
             </td>
