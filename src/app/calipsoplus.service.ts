@@ -20,11 +20,15 @@ import { CalipsoSoftware } from "./calipso-software";
 
 @Injectable()
 export class CalipsoplusService {
-  backendUrl = "https://misapptest.cells.es/calipsoplus-services/";
+  backendUrl_calipso = "https://misapptest.cells.es/calipsoplus-services/";
+  backendUrl_duo = "https://misapptest.cells.es/duo-services/";
+  //backendUrl_calipso = "http://192.168.33.11:8000/";
 
-  authUrl = this.backendUrl + "login/";
-  facilitiesUrl = this.backendUrl + "facilities/all/";
-  experimentsUrl = this.backendUrl + "users/$USER_ID/experiments/";
+
+  authUrl = this.backendUrl_duo + "login/";
+  facilitiesUrl = this.backendUrl_calipso + "facility/all/";
+  experimentsUrl = this.backendUrl_calipso + "experiment/$USERNAME/";
+
 
   DATASETS: CalipsoDataset[] = [
     { id: 1, subject: "Dataset 1", type : "FAT32", location:"/srv/datasets1/d1A1.dst" },
@@ -46,13 +50,23 @@ export class CalipsoplusService {
     { id: 5, subject: "Jomsa", command:"./jomsa_start.sh" },
     { id: 6, subject: "Mayson", command:"./mayson.sh" }];
 
+  EXPERIMENTS: CalipsoExperiment[] = [
+    { id: 201800221, subject: "Experiment 1", body:"ALorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" },
+    { id: 201800423, subject: "Experiment 2", body:"BLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" },
+    { id: 201800322, subject: "Experiment 3", body:"CLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" },
+    { id: 201802013, subject: "Experiment 4", body:"DLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" }];
+
+
   constructor(private http: HttpClient) {}
 
   public getCalipsoExperiments(
-    user_id: string
+    username: string
   ): Observable<CalipsoExperiment[]> {
-    let url = this.experimentsUrl.replace("$USER_ID", user_id);
-    return this.http.get<CalipsoExperiment[]>(url);
+//    let url = this.experimentsUrl.replace("$USERNAME", username);
+//    return this.http.get<CalipsoExperiment[]>(url);
+
+    return of(this.EXPERIMENTS);
+
   }
 
   public getCalipsoFacilities(): Observable<CalipsoFacility[]> {
@@ -69,13 +83,16 @@ export class CalipsoplusService {
 
   public auth(username: string, password: string) {
     this.logout();
-    let params = "username=" + username + "&password=" + password;
+    let data = "{\"withCredentials\":true, \"username\":\""+username+"\",\"password\":\""+password+"\"}"
+
     let headers = new HttpHeaders().set(
       "Content-Type",
-      "application/x-www-form-urlencoded; charset=UTF-8"
+      "application/json; charset=UTF-8"
     );
+
     return this.http
-      .post(this.authUrl, params, { headers: headers })
+      //.post(this.authUrl, data, { headers: headers, withCredentials:true })
+      .post(this.authUrl, data, { headers: headers})
       .map(res => {
         this.login(username, JSON.stringify(res));
         return res;
@@ -88,29 +105,30 @@ export class CalipsoplusService {
 
   public logout() {
     sessionStorage.removeItem("c_username");
-    sessionStorage.removeItem("c_user_calipso");
+    //sessionStorage.removeItem("c_user_calipso");
   }
 
   private login(username: string, json_user: string) {
     sessionStorage.setItem("c_username", username);
-    sessionStorage.setItem("c_user_calipso", json_user);
+    //sessionStorage.setItem("c_user_calipso", json_user);
   }
 
   public getLoggedUserName(): string {
     return sessionStorage.getItem("c_username");
   }
 
-  public getLoggedCalipsoUser(): string {
+  /*public getLoggedCalipsoUser(): string {
     return sessionStorage.getItem("c_user_calipso");
-  }
+  }*/
 
   public isLogged(): boolean {
     return "c_username" in sessionStorage;
   }
 
-  public getLoogedUserId(): string {
-    return JSON.parse(this.getLoggedCalipsoUser()).user_id;
-  }
+ // public getLoogedUserId(): string {
+ //   return JSON.parse(this.getLoggedCalipsoUser()).user_id;
+ // }
+
 }
 
 /*

@@ -10,20 +10,10 @@ export class AppComponent {
   title = "CALIPSOplus";
 
 
-  constructor(private calipsoService: CalipsoplusService) {}
+  constructor() {}
 
   ngOnInit() {
   }
 
-  public getUserName():string{
-    return this.calipsoService.getLoggedUserName();
-  }
 
-  public isLogged():boolean{
-    return this.calipsoService.isLogged();
-  }
-
-  public logout(){
-    this.calipsoService.logout();
-  }
 }

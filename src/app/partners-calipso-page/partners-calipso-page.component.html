@@ -1,3 +1,4 @@
+<app-main-nav></app-main-nav>
 <div class="container" >
   <h1 class="mt-5">
     Partners involved</h1>
@@ -7,8 +8,8 @@
       <p class="lead">
         {{ facility.description }}
       </p>
-      <a href="{{ facility.url }">{{ facility.url }}</a>
+      <a routerLink="/experiment">{{ facility.url }}</a>
     </li>
   </ul>
-  <hr>
+
 </div>

@@ -1,73 +1,33 @@
-<!--div class="container">
+<app-facility-nav></app-facility-nav>
+<div class="container">
+  <div class="row ">
+    <app-experiment-nav></app-experiment-nav>
 
-  <div class="text-center mt-5">
-    <h1>List of last experiments</h1>
-  </div>
-  <form> SELECT FROM AVAILABLE EXPERIMENTS BANNED
-    <div class="row mt-5 ">
-      <div class="col-sm-5 form-group ">
-        <label for="available_experiments ">available</label>
-
-        <select class="form-control" required multiple=multiple>
-          <option *ngFor="let experiment of experiments " [ngValue]="experiment.id ">
-            {{ experiment.subject }}
-          </option>
-        </select>
-      </div>
-      <div class="col-sm-2 mt-5 text-center">
-        <button class="btn">add</button>
-        <button class="btn">remove</button>
-      </div>
-
-
-      <div class="col-sm-5 form-group ">
-        <label for="selected_experiments ">selected</label>
-        <select id="selected_experiments " class="form-control " required multiple=multiple>
-        </select>
-      </div>
-
+    <!-- experiments list -->
+    <div class="col">
+      <h1>Proposals</h1>
+      <table class="table">
+        <thead>
+          <tr class="d-flex">
+            <th class="col-sm-4">Title</th>
+            <th class="col-sm-2">S/N</th>
+            <th class="col-sm-4">BeamL</th>
+            <th class="col-sm-2"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="d-flex" *ngFor="let experiment of experiments">
+            <td class="col-sm-4">{{experiment.subject}}</td>
+            <td class="col-sm-2">{{experiment.id}}</td>
+            <td class="col-sm-4">{{experiment.body | slice:0:106}}
+              <img src='assets/magnifier.svg' width="20px" height="20px" alt="<!>" title="{{experiment.body}}" />
+            </td>
+            <td class="col-sm-2">
+              <button class="btn btn-primary">Launch!</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </form>
-
--->
-<div class="row mt-5">
-  <div class="col-sm-2 ">
-    <img src="assets/alba.png" width="auto"/>
-
-    <!-- left menu -->
-    <div class="bootstrap-vertical-nav ml-5">
-      <ul class="nav flex-column">
-        <a class="nav-item mt-5" routerLink="/experiment">Experiments</a>
-        <a class="nav-item disabled" routerLink="/resources">My resources</a>
-        <a class="nav-item active" (click)="logout()"  routerLink="/">Logout...</a>
-      </ul>
-    </div>
-  </div>
-
-  <!-- experiments list -->
-  <div class="col-sm-9">
-    <h1 class="col-ms-2">List of experiments</h1>
-    <table class="table col-ms-10 mt-5">
-      <thead>
-        <tr class="d-flex">
-          <th class="col-sm-4">Title</th>
-          <th class="col-sm-2">S/N</th>
-          <th class="col-sm-5">BeamL</th>
-          <th class="col-sm-1"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="d-flex" *ngFor="let experiment of experiments">
-          <td class="col-sm-4">{{experiment.subject}}</td>
-          <td class="col-sm-2">{{experiment.id}}</td>
-          <td class="col-sm-5">{{experiment.body | slice:0:106}}
-            <img src='assets/magnifier.svg' width="20px" height="20px" alt="<!>" title="{{experiment.body}}" />
-          </td>
-          <td class="col-sm-1">
-            <button class="btn btn-primary">Launch!</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </div>
