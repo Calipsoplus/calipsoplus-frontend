@@ -17,41 +17,124 @@ import { CalipsoFacility } from "./calipso-facility";
 import { CalipsoExperiment } from "./calipso-experiment";
 import { CalipsoDataset } from "./calipso-dataset";
 import { CalipsoSoftware } from "./calipso-software";
+import { CalipsoContainer } from "./calipso-container";
 
 @Injectable()
 export class CalipsoplusService {
-  backendUrl_calipso = "https://misapptest.cells.es/calipsoplus-services/";
+  //backendUrl_calipso = "https://misapptest.cells.es/calipsoplus-services/";
 
-  //backendUrl_calipso = "http://192.168.33.11:8000/";
-
+  backendUrl_calipso = "http://192.168.33.11:8000/";
 
   authUrl = this.backendUrl_calipso + "login/";
   facilitiesUrl = this.backendUrl_calipso + "facility/all/";
-  experimentsUrl = this.backendUrl_calipso + "user/$USERNAME/experiment";
-
+  experimentsUrl = this.backendUrl_calipso + "user/$USERNAME/experiment/";
+  runContainersUrl = this.backendUrl_calipso +
+  "container/run/$USERNAME/$EXPERIMENT/";
+  removeContainersUrl = this.backendUrl_calipso + "container/rm/$CONTAINER/";
+  stopContainersUrl = this.backendUrl_calipso + "container/stop/$CONTAINER/";
+  listContainersUrl = this.backendUrl_calipso + "container/list/$USERNAME/";
 
   DATASETS: CalipsoDataset[] = [
-    { id: 1, subject: "Dataset 1", type : "FAT32", location:"/srv/datasets1/d1A1.dst" },
-    { id: 2, subject: "Dataset 2", type : "FAT64", location:"/srv/datasets1/d1A2.dst" },
-    { id: 3, subject: "Dataset 3", type : "PNG", location:"/srv/datasets2/d2A1.dst" },
-    { id: 4, subject: "Dataset 4", type : "IOS", location:"/srv/datasets2/d2A2.dst" },
-    { id: 5, subject: "Dataset 5", type : "LX64", location:"/srv/datasets3/d3A1.dst" },
-    { id: 6, subject: "Dataset 6", type : "AMD32", location:"/srv/datasets3/d3A2.dst" },
-    { id: 7, subject: "Dataset 7", type : "BIN", location:"/srv/datasets4/d4A1.dst" },
-    { id: 8, subject: "Dataset 8", type : "SET", location:"/srv/datasets4/d4A2.dst" },
-    { id: 9, subject: "Dataset 9", type : "JPS", location:"/srv/datasets4/d4A3.dst" },
-    { id: 10, subject: "Dataset 10", type : "MKR", location:"/srv/datasets5/d5A1.dst" }];
+    {
+      id: 1,
+      subject: "Dataset 1",
+      type: "FAT32",
+      location: "/srv/datasets1/d1A1.dst"
+    },
+    {
+      id: 2,
+      subject: "Dataset 2",
+      type: "FAT64",
+      location: "/srv/datasets1/d1A2.dst"
+    },
+    {
+      id: 3,
+      subject: "Dataset 3",
+      type: "PNG",
+      location: "/srv/datasets2/d2A1.dst"
+    }
+  ];
 
   SOFTWARE: CalipsoSoftware[] = [
-    { id: 1, subject: "Phynix", command:"./phynix.sh" },
-    { id: 2, subject: "Tree", command:"./tree.sh" },
-    { id: 3, subject: "Fixme", command:"./fixme.sh" },
-    { id: 4, subject: "Cati", command:"./cati.sh" },
-    { id: 5, subject: "Jomsa", command:"./jomsa_start.sh" },
-    { id: 6, subject: "Mayson", command:"./mayson.sh" }];
+    { id: 1, subject: "Phynix", command: "./phynix.sh" },
+    { id: 2, subject: "Tree", command: "./tree.sh" },
+    { id: 3, subject: "Fixme", command: "./fixme.sh" },
+    { id: 4, subject: "Cati", command: "./cati.sh" },
+    { id: 5, subject: "Jomsa", command: "./jomsa_start.sh" },
+    { id: 6, subject: "Mayson", command: "./mayson.sh" }
+  ];
+
+  /*
+  CONTAINERS: CalipsoContainer[] = [
+    {
+      id: 1,
+      calipso_username: "acampsm",
+      calipso_experiment: "2189192924",
+      container_id: "jgbuyogoyugyuogyuoguoy",
+      container_name: "name-container-1",
+      container_status: "created",
+      container_info: "",
+      container_logs: "...",
+      guacamole_username: "guacd_username",
+      guacamole_password: "guacd_pass",
+      vnc_password: "vncpassw"
+    },
+    {
+      id: 2,
+      calipso_username: "acampsm",
+      calipso_experiment: "2018712254",
+      container_id: "jgbuyogoyugyuogyuoguoy",
+      container_name: "name-container-2",
+      container_status: "removed",
+      container_info: "",
+      container_logs: "...",
+      guacamole_username: "guacd_username",
+      guacamole_password: "guacd_pass",
+      vnc_password: "vncpassw"
+    },
+    {
+      id: 3,
+      calipso_username: "acampsm",
+      calipso_experiment: "2108438234",
+      container_id: "jgbuyogoyugyuogyuoguoy",
+      container_name: "name-container-3",
+      container_status: "created",
+      container_info: "",
+      container_logs: "...",
+      guacamole_username: "guacd_username",
+      guacamole_password: "guacd_pass",
+      vnc_password: "vncpassw"
+    },
+    {
+      id: 4,
+      calipso_username: "acampsm",
+      calipso_experiment: "2189192924",
+      container_id: "jgbuyogoyugyuogyuoguoy",
+      container_name: "name-container-4",
+      container_status: "created",
+      container_info: "",
+      container_logs: "...",
+      guacamole_username: "guacd_username",
+      guacamole_password: "guacd_pass",
+      vnc_password: "vncpassw"
+    },
+    {
+      id: 5,
+      calipso_username: "acampsm",
+      calipso_experiment: "2837029124",
+      container_id: "jgbuyogoyugyuogyuoguoy",
+      container_name: "name-container-4",
+      container_status: "removed",
+      container_info: "",
+      container_logs: "...",
+      guacamole_username: "guacd_username",
+      guacamole_password: "guacd_pass",
+      vnc_password: "vncpassw"
+    }
+  ];
+*/
 
   EXPERIMENTS: CalipsoExperiment[] = [];
-
 
   constructor(private http: HttpClient) {}
 
@@ -66,7 +149,9 @@ export class CalipsoplusService {
     return this.http.get<CalipsoFacility[]>(this.facilitiesUrl);
   }
 
-  public getDatasetsFromExperiment(experiment_id): Observable<CalipsoDataset[]> {
+  public getDatasetsFromExperiment(
+    experiment_id
+  ): Observable<CalipsoDataset[]> {
     return of(this.DATASETS);
   }
 
@@ -76,14 +161,14 @@ export class CalipsoplusService {
 
   public auth(username: string, password: string) {
     this.logout();
-    let params = "username="+username+"&password="+password
+    let params = "username=" + username + "&password=" + password;
     let headers = new HttpHeaders().set(
       "Content-Type",
       "application/x-www-form-urlencoded; charset=UTF-8"
     );
 
     return this.http
-      .post(this.authUrl, params, { headers: headers})
+      .post(this.authUrl, params, { headers: headers })
       .map(res => {
         this.login(username, JSON.stringify(res));
         return res;
@@ -108,18 +193,72 @@ export class CalipsoplusService {
     return sessionStorage.getItem("c_username");
   }
 
-  /*public getLoggedCalipsoUser(): string {
-    return sessionStorage.getItem("c_user_calipso");
-  }*/
-
   public isLogged(): boolean {
     return "c_username" in sessionStorage;
   }
 
- // public getLoogedUserId(): string {
- //   return JSON.parse(this.getLoggedCalipsoUser()).user_id;
- // }
+  public listContainersActive(
+    username: string
+  ): Observable<CalipsoContainer[]> {
+    let url = this.listContainersUrl.replace("$USERNAME", username);
+    return this.http.get<CalipsoContainer[]>(url);
+  }
 
+  private handleError(error: Response | any) {
+    // In a real world app, you might use a remote logging infrastructure
+    let errMsg: string;
+    errMsg = error.message ? error.message : error.toString();
+    console.error(errMsg);
+    return Observable.throw(errMsg);
+  }
+
+  public runContainer(
+    username: string,
+    experiment: string
+  ): Observable<CalipsoContainer> {
+    let url = this.runContainersUrl.replace("$USERNAME", username);
+    let run_url = url.replace("$EXPERIMENT", experiment);
+
+    let params = "";
+    let headers = new HttpHeaders().set(
+      "Content-Type",
+      "application/x-www-form-urlencoded; charset=UTF-8"
+    );
+
+    return this.http
+      .post<CalipsoContainer>(run_url, params, { headers: headers })
+      .map(res => {
+        //return JSON.stringify(res);
+        return res;
+      })
+      .catch(this.handleError);
+  }
+
+  public removeContainer(
+    experiment_serial_number: string
+  ): Observable<CalipsoContainer> {
+    let url = this.removeContainersUrl.replace(
+      "$CONTAINER",
+      experiment_serial_number
+    );
+    return this.http.get<CalipsoContainer>(url).map(res => {
+      //return JSON.stringify(res);
+      return res;
+    });
+  }
+
+  public stopContainer(
+    experiment_serial_number: string
+  ): Observable<CalipsoContainer> {
+    let url = this.stopContainersUrl.replace(
+      "$CONTAINER",
+      experiment_serial_number
+    );
+    return this.http.get<CalipsoContainer>(url).map(res => {
+      //return JSON.stringify(res);
+      return res;
+    });
+  }
 }
 
 /*
