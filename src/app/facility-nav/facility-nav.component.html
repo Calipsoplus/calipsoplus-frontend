@@ -4,27 +4,21 @@
       <img src="assets/alba.png" />
     </a>
     <a class="col-sm-5 nav-link" routerLink="/">
-      <img src="assets/logo.jpg"  />
+      <img src="assets/logo.jpg" />
     </a>
-    <a *ngIf="!isLogged()" class="nav-link ml-auto" routerLink="/login">Login</a>
-    <div *ngIf="isLogged()" class="nav-link ml-auto">
+    <a *ngIf="!calipsoService.isLogged()" class="nav-link ml-auto" routerLink="/login">Login</a>
+    <div *ngIf="calipsoService.isLogged()" class="nav-link ml-auto">
       <div class="row">
         <div class="col">
           <div ngbDropdown placement="bottom-right">
-            <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{getUserName()}}</button>
+            <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{calipsoService.getLoggedUserName()}}</button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <a class="nav-link dropdown-menu-right" (click)="logout()" routerLink="/">Logout</a>
+              <a class="nav-link dropdown-menu-right" (click)="calipsoService.logout()" routerLink="/">Logout</a>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-
-
-
-
-
   </nav>
   <hr>
 </div>
