@@ -10,52 +10,27 @@
     <table class="table">
       <thead>
         <tr class="d-flex">
-          <th class="col">SNAP1</th>
-          <th class="col">SNAP2</th>
-          <th class="col">SNAP3</th>
-
+          <th class="col"  *ngFor="let resource of resources">RESOURCE</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="d-flex">
-          <td class="col">
-            Experiment id: 201800123
-            <br> Machine: e.g. Ubuntu 16.04
-            <br> IP address: 192.168.1.1
-            <br> Created date: 2018/03/22 10:51
-            <br> Last accessed: 2018/03/22 11:24
-            <br> Expiration date: 2018/06/22 11:24
-            <br>
-            <span class="col-12">
-              <button class="btn btn-lg btn-primary btn-block">Enter</button>
-            </span>
-          </td>
-
-          <td class="col">Experiment id: 201800123
-            <br> Machine: e.g. Ubuntu 16.04
-            <br> IP address: 192.168.1.1
-            <br> Created date: 2018/03/22 10:51
-            <br> Last accessed: 2018/03/22 11:24
-            <br> Expiration date: 2018/06/22 11:24
-            <br>
-            <span class="col-12">
-              <button class="btn btn-lg btn-primary btn-block">Enter</button>
-            </span>
-          </td>
-          <td class="col">Experiment id: 201800123
-            <br> Machine: e.g. Ubuntu 16.04
-            <br> IP address: 192.168.1.1
-            <br> Created date: 2018/03/22 10:51
-            <br> Last accessed: 2018/03/22 11:24
-            <br> Expiration date: 2018/06/22 11:24
-            <br>
-            <span class="col-12">
-              <button class="btn btn-lg btn-primary btn-block">Enter</button>
-            </span>
+        <tr class="d-flex" >
+          <td class="col" *ngFor="let resource of resources">
+              <b>{{resource.experiment}}</b><br/>
+              <i>{{resource.machine_name}}</i><br/>
+              {{resource.machine_ip}}<br/>
+              {{resource.created_date}}<br/>
+              {{resource.last_accessed_date}}<br/>
+              {{resource.expiration_date}}<br/>
+              <button class="btn btn-lg btn-primary" (click)="go_in(resource.machine_name)">ENTER</button>
           </td>
         </tr>
       </tbody>
     </table>
+    <div *ngIf="!resources.length">
+        <div class="text-center col">
+        <h2>No resources</h2>
+        </div>
+     </div>
   </div>
-
 </div>
