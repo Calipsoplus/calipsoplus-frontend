@@ -55,11 +55,9 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
     var c = this.containers.find(x => x.container_name == container_name);
     if (c == null) alert("error win up");
     else {
+      var paramenters = btoa("un=" +c.guacamole_username + "&up=" + c.guacamole_password);
       window.open(
-        "http://calipsotest.cells.es:8080/guacamole/#/?username=" +
-          c.guacamole_username +
-          "&password=" +
-          c.guacamole_password,
+        this.calipsoService.guacamoleUrl+"guac_access.html?t=" + paramenters,
         c.container_name,
         "menubar=no, location=no, toolbar=no, scrollbars=yes, height=500"
       );
