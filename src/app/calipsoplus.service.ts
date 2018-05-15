@@ -22,8 +22,11 @@ import { CalipsoContainer } from "./calipso-container";
 @Injectable()
 export class CalipsoplusService {
   backendUrl_calipso = "https://misapptest.cells.es/calipsoplus-services/";
+  guacamoleUrl = "http://calipsotest.cells.es:8080/"
 
   //backendUrl_calipso = "http://192.168.33.11:8000/";
+  //guacamoleUrl = "http://192.168.33.15:8080/"
+
 
   authUrl = this.backendUrl_calipso + "login/";
   facilitiesUrl = this.backendUrl_calipso + "facility/all/";
