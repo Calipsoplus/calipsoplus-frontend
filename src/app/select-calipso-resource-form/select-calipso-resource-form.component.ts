@@ -38,7 +38,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
               c.container_name,
               "192.168.11.12/8080",
               "01/02/2018",
-              "23/10/2018",
+              "24/10/2018",
               "12/05/2018",
               c.container_info
             );
