@@ -6,7 +6,7 @@
   <!-- resources list -->
 
   <div class="col">
-    <h1 center>My resources</h1>
+    <h1 center>Resources</h1>
     <table class="table">
       <thead>
         <tr class="d-flex">
@@ -16,12 +16,13 @@
       <tbody>
         <tr class="d-flex" >
           <td class="col" *ngFor="let resource of resources">
-              <b>{{resource.experiment}}</b><br/>
-              <i>{{resource.machine_name}}</i><br/>
-              {{resource.machine_ip}}<br/>
-              {{resource.created_date}}<br/>
-              {{resource.last_accessed_date}}<br/>
-              {{resource.expiration_date}}<br/>
+              <b>Proposal ID : </b>{{resource.experiment}}<br/>
+              <b>Name of the Machine : </b>{{resource.machine_name}}<br/>
+              <b>IP Address/Port : </b>{{resource.machine_ip}}<br/>
+              <b>Creation Date : </b>{{resource.created_date}}<br/>
+              <b>Expiration Date : </b>{{resource.last_accessed_date}}<br/>
+              <b>Last Access : </b>{{resource.expiration_date}}<br/>
+              <br/>
               <button class="btn btn-lg btn-primary" (click)="go_in(resource.machine_name)">ENTER</button>
           </td>
         </tr>
