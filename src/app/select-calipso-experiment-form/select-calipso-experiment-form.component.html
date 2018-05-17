@@ -5,14 +5,14 @@
 
   <!-- experiments list -->
   <div class="col">
-    <h1>Proposals</h1>
+    <h1>Experiments</h1>
     <table class="table">
       <thead>
         <tr class="d-flex">
           <th class="col-sm-3">Title</th>
-          <th class="col-sm-2">S/N</th>
-          <th class="col-sm-4">Description</th>
-          <th class="col-sm-1">BeamL</th>
+          <th class="col-sm-2">Proposal Id</th>
+          <th class="col-sm-4">Abstract</th>
+          <th class="col-sm-1">Beamline</th>
           <th class="col-sm-2"></th>
         </tr>
       </thead>
@@ -31,6 +31,7 @@
                 <span class="fa fa-refresh fa-spin">&nbsp;</span>&nbsp;&nbsp;Wait&nbsp;&nbsp;</button>
 
               <button *ngSwitchCase="2" class="center-text btn btn-danger" (click)="stop_and_remove_container(experiment.serial_number)">Stop</button>
+              <button *ngSwitchCase="2" class="btn btn-primary" (click)="go_in(experiment.serial_number)">ENTER</button>
 
               <button *ngSwitchCase="3" class="btn btn-danger">Fully</button>
               <li *ngSwitchDefault>Error</li>

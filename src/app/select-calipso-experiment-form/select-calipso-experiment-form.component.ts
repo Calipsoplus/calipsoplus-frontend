@@ -121,4 +121,20 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
       });
     });
   }
+
+  public go_in(experiment_serial_number: string) {
+    var c = this.containers.find(
+      x => x.calipso_experiment == experiment_serial_number
+    );
+
+    if (c == null) alert("error win up");
+    else {
+      var paramenters = btoa("un=" +c.guacamole_username + "&up=" + c.guacamole_password);
+      window.open(
+        this.calipsoService.guacamoleUrl+"guac_access.html?t=" + paramenters,
+        c.container_name,
+        "menubar=no, location=no, toolbar=no, scrollbars=yes, height=500"
+      );
+    }
+  }
 }
