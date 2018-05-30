@@ -67,76 +67,6 @@ export class CalipsoplusService {
     { id: 6, subject: "Mayson", command: "./mayson.sh" }
   ];
 
-  /*
-  CONTAINERS: CalipsoContainer[] = [
-    {
-      id: 1,
-      calipso_username: "acampsm",
-      calipso_experiment: "2189192924",
-      container_id: "jgbuyogoyugyuogyuoguoy",
-      container_name: "name-container-1",
-      container_status: "created",
-      container_info: "",
-      container_logs: "...",
-      guacamole_username: "guacd_username",
-      guacamole_password: "guacd_pass",
-      vnc_password: "vncpassw"
-    },
-    {
-      id: 2,
-      calipso_username: "acampsm",
-      calipso_experiment: "2018712254",
-      container_id: "jgbuyogoyugyuogyuoguoy",
-      container_name: "name-container-2",
-      container_status: "removed",
-      container_info: "",
-      container_logs: "...",
-      guacamole_username: "guacd_username",
-      guacamole_password: "guacd_pass",
-      vnc_password: "vncpassw"
-    },
-    {
-      id: 3,
-      calipso_username: "acampsm",
-      calipso_experiment: "2108438234",
-      container_id: "jgbuyogoyugyuogyuoguoy",
-      container_name: "name-container-3",
-      container_status: "created",
-      container_info: "",
-      container_logs: "...",
-      guacamole_username: "guacd_username",
-      guacamole_password: "guacd_pass",
-      vnc_password: "vncpassw"
-    },
-    {
-      id: 4,
-      calipso_username: "acampsm",
-      calipso_experiment: "2189192924",
-      container_id: "jgbuyogoyugyuogyuoguoy",
-      container_name: "name-container-4",
-      container_status: "created",
-      container_info: "",
-      container_logs: "...",
-      guacamole_username: "guacd_username",
-      guacamole_password: "guacd_pass",
-      vnc_password: "vncpassw"
-    },
-    {
-      id: 5,
-      calipso_username: "acampsm",
-      calipso_experiment: "2837029124",
-      container_id: "jgbuyogoyugyuogyuoguoy",
-      container_name: "name-container-4",
-      container_status: "removed",
-      container_info: "",
-      container_logs: "...",
-      guacamole_username: "guacd_username",
-      guacamole_password: "guacd_pass",
-      vnc_password: "vncpassw"
-    }
-  ];
-*/
-
   EXPERIMENTS: CalipsoExperiment[] = [];
 
   constructor(private http: HttpClient) {}
@@ -231,7 +161,6 @@ export class CalipsoplusService {
     return this.http
       .post<CalipsoContainer>(run_url, params, { headers: headers })
       .map(res => {
-        //return JSON.stringify(res);
         return res;
       })
       .catch(this.handleError);
