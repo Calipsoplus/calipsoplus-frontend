@@ -33,16 +33,18 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
             x => x.calipso_experiment == element.calipso_experiment
           );
           if (c != null) {
-            var resource: CalipsoResource = new CalipsoResource(
-              c.calipso_experiment,
-              c.container_name,
-              "192.168.11.12/8080",
-              "01/02/2018",
-              "24/10/2018",
-              "12/05/2018",
-              c.container_info
-            );
-            this.resources.push(resource);
+            if ((c.container_status == "created")) {
+              var resource: CalipsoResource = new CalipsoResource(
+                c.calipso_experiment,
+                c.container_name,
+                "192.168.11.12/8080",
+                "01/02/2018",
+                "24/10/2018",
+                "12/05/2018",
+                c.container_info
+              );
+              this.resources.push(resource);
+            }
           }
         });
       });
@@ -55,9 +57,11 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
     var c = this.containers.find(x => x.container_name == container_name);
     if (c == null) alert("error win up");
     else {
-      var paramenters = btoa("un=" +c.guacamole_username + "&up=" + c.guacamole_password);
+      var paramenters = btoa(
+        "un=" + c.guacamole_username + "&up=" + c.guacamole_password
+      );
       window.open(
-        this.calipsoService.guacamoleUrl+"guac_access.html?t=" + paramenters,
+        this.calipsoService.guacamoleUrl + "guac_access.html?t=" + paramenters,
         c.container_name,
         "menubar=no, location=no, toolbar=no, scrollbars=yes, height=500"
       );
