@@ -7,18 +7,12 @@ import { CalipsoContainer } from "../calipso-container";
 
 import { Observable } from "rxjs/Observable";
 
-let Status_idle = 0;
-let Status_busy = 1;
-let Status_running = 2;
-let Status_full = 3;
-let Status_error = 4;
-
 export enum Status {
-  idle = Status_idle,
-  busy = Status_busy,
-  running = Status_running,
-  full = Status.full,
-  error = Status.error
+  idle = 0, // ready
+  busy = 1, // waitting
+  running = 2, // runing
+  full = 3, // forbidden
+  error = 4 // error
 }
 
 @Component({
@@ -32,6 +26,9 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   statusActiveExperiments: { [key: string]: Status } = {};
 
+  max_num_machines_exceeded: Boolean = false;
+  safe_locked_button: Boolean = false;
+
   constructor(
     private calipsoService: CalipsoplusService,
     private router: Router
@@ -40,6 +37,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   ngOnInit() {
     if (this.calipsoService.isLogged()) {
       let username = this.calipsoService.getLoggedUserName();
+      this.safe_locked_button = false;
 
       //get all containers active from user
       this.calipsoService.listContainersActive(username).subscribe(res => {
@@ -49,6 +47,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
         this.calipsoService.getCalipsoExperiments(username).subscribe(data => {
           this.experiments = data;
 
+          // search experiment in container
           this.experiments.forEach(element => {
             var c = this.containers.find(
               x => x.calipso_experiment == element.serial_number
@@ -57,7 +56,16 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
             if (c == null) {
               this.statusActiveExperiments[element.serial_number] = Status.idle;
             } else {
+              if (c.max_num_container > this.containers.length)
+                this.max_num_machines_exceeded = false;
+              else this.max_num_machines_exceeded = true;
+
               switch (c.container_status) {
+                case "busy": {
+                  this.statusActiveExperiments[element.serial_number] =
+                    Status.busy;
+                  break;
+                }
                 case "created": {
                   this.statusActiveExperiments[element.serial_number] =
                     Status.running;
@@ -75,6 +83,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
                   break;
                 }
               }
+              this.safe_locked_button = false;
             }
           });
         });
@@ -86,18 +95,31 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   public run(experiment_serial_number: string) {
     this.statusActiveExperiments[experiment_serial_number] = Status.busy;
+    this.safe_locked_button = true;
+
     this.calipsoService
       .runContainer(
         this.calipsoService.getLoggedUserName(),
         experiment_serial_number
       )
       .subscribe(data => {
-        this.containers.push(data);
-        this.statusActiveExperiments[experiment_serial_number] = Status.running;
+        if (data != null) {
+          this.containers.push(data);
+          //if max number of containers
+          this.max_num_machines_exceeded = (this.containers.length >= data.max_num_container);
+          this.statusActiveExperiments[experiment_serial_number] = Status.running;
+        } else {
+
+          this.statusActiveExperiments[experiment_serial_number] = Status.idle;
+        }
+        this.safe_locked_button = false;
       });
   }
 
   public stop_and_remove_container(experiment_serial_number: string) {
+    var temporalyActiveExperiments: { [key: string]: Status } = {};
+    this.safe_locked_button = true;
+
     this.statusActiveExperiments[experiment_serial_number] = Status.busy;
 
     var c = this.containers.find(
@@ -118,6 +140,8 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
         });
 
         this.statusActiveExperiments[cdata.calipso_experiment] = Status.idle;
+        this.safe_locked_button = false;
+        this.max_num_machines_exceeded = false;
       });
     });
   }
@@ -129,9 +153,11 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
     if (c == null) alert("error win up");
     else {
-      var paramenters = btoa("un=" +c.guacamole_username + "&up=" + c.guacamole_password);
+      var paramenters = btoa(
+        "un=" + c.guacamole_username + "&up=" + c.guacamole_password
+      );
       window.open(
-        this.calipsoService.guacamoleUrl+"guac_access.html?t=" + paramenters,
+        this.calipsoService.guacamoleUrl + "guac_access.html?t=" + paramenters,
         c.container_name,
         "menubar=no, location=no, toolbar=no, scrollbars=yes, height=500"
       );

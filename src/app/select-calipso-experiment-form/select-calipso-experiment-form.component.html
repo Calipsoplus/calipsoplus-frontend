@@ -5,7 +5,18 @@
 
   <!-- experiments list -->
   <div class="col">
-    <h1>Experiments</h1>
+
+    <div class="row">
+      <h1 class="col-sm-4">Proposals</h1>
+      <h3 class="col-sm-4">
+        <div *ngIf="max_num_machines_exceeded">
+          <span class="badge badge-warning center-text">The number of machines per user has been exceeded.</span>
+        </div>
+      </h3>
+      <h1 class="col-sm-4"></h1>
+
+    </div>
+
     <table class="table">
       <thead>
         <tr class="d-flex">
@@ -26,14 +37,25 @@
           <td class="col-sm-1">{{experiment.beam_line}}</td>
           <td class="col-sm-2">
             <div [ngSwitch]="statusActiveExperiments[experiment.serial_number]">
-              <button *ngSwitchCase="0" class="btn btn-primary" (click)="run(experiment.serial_number)">Launch!</button>
+              <div *ngSwitchCase="0" class="btn-group mr-3">
+                <button [disabled]="max_num_machines_exceeded || safe_locked_button" class="btn btn-outline-primary" (click)="run(experiment.serial_number)"
+                  type="button" class="btn btn-primary">Launch !</button>
+                <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+                  <button [disabled]="max_num_machines_exceeded || safe_locked_button" class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle></button>
+                  <div class="dropdown-menu" ngbDropdownMenu>
+                    <button class="dropdown-item" (click)="run(experiment.serial_number)">Launch!</button>
+                    <button class="dropdown-item">Link</button>
+                    <button class="dropdown-item">Jupyter</button>
+                  </div>
+                </div>
+              </div>
+
               <button *ngSwitchCase="1" class="btn btn-warning">
                 <span class="fa fa-refresh fa-spin">&nbsp;</span>&nbsp;&nbsp;Wait&nbsp;&nbsp;</button>
 
-              <button *ngSwitchCase="2" class="center-text btn btn-danger" (click)="stop_and_remove_container(experiment.serial_number)">Stop</button>
-              <button *ngSwitchCase="2" class="btn btn-primary" (click)="go_in(experiment.serial_number)">ENTER</button>
+              <button *ngSwitchCase="2" [disabled]="safe_locked_button" class="center-text btn btn-danger" (click)="stop_and_remove_container(experiment.serial_number)">Stop</button>
+              <button *ngSwitchCase="2" [disabled]="safe_locked_button" class="btn btn-primary" (click)="go_in(experiment.serial_number)">ENTER</button>
 
-              <button *ngSwitchCase="3" class="btn btn-danger">Fully</button>
               <li *ngSwitchDefault>Error</li>
             </div>
           </td>
