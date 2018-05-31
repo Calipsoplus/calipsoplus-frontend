@@ -1,10 +1,10 @@
 <div class="col">
   <nav class="navbar navbar-expand-md" style="background-color:white;">
     <a class="col-sm-5 nav-link ml">
-      <img src="assets/alba.png" />
+      <img src="assets/images/alba.png" />
     </a>
     <a class="col-sm-5 nav-link" routerLink="/">
-      <img src="assets/logo.jpg" />
+      <img src="assets/images/logo.jpg" />
     </a>
     <a *ngIf="!calipsoService.isLogged()" class="nav-link ml-auto" routerLink="/login">Login</a>
     <div *ngIf="calipsoService.isLogged()" class="nav-link ml-auto">
