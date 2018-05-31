@@ -1,5 +1,8 @@
 @font-face {
-  font-family: din;
-  src: url(assets/Varela-Regular.ttf);
+  font-family:myFont;
+  src: url(../varela-round-regular.ttf);
 }
 
+html body {
+  font-family:myFont;
+}
