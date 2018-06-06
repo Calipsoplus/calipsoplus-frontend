@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import { CalipsoContainer } from "../calipso-container";
 
 import { Observable } from "rxjs/Observable";
+import { catchError } from "rxjs/operators";
 
 export enum Status {
   idle = 0, // ready
@@ -96,27 +97,38 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   public run(experiment_serial_number: string) {
     this.statusActiveExperiments[experiment_serial_number] = Status.busy;
     this.safe_locked_button = true;
+    let username = this.calipsoService.getLoggedUserName();
 
     this.calipsoService
       .runContainer(
         this.calipsoService.getLoggedUserName(),
         experiment_serial_number
       )
-      .subscribe(data => {
-        if (data != null) {
-          this.containers.push(data);
-          //if max number of containers
-          this.max_num_machines_exceeded = (this.containers.length >= data.max_num_container);
-          this.statusActiveExperiments[experiment_serial_number] = Status.running;
-        } else {
-
+      .subscribe(
+        data => {
+          if (data != null) {
+            this.containers.push(data);
+            //if max number of containers
+            this.max_num_machines_exceeded =
+              this.containers.length >= data.max_num_container;
+            this.statusActiveExperiments[experiment_serial_number] =
+              Status.running;
+          } else {
+            this.statusActiveExperiments[experiment_serial_number] =
+              Status.idle;
+          }
+          this.safe_locked_button = false;
+        },
+        error => {
           this.statusActiveExperiments[experiment_serial_number] = Status.idle;
+          this.safe_locked_button = false;
+          alert("Ooops!");
         }
-        this.safe_locked_button = false;
-      });
+      );
   }
 
   public stop_and_remove_container(experiment_serial_number: string) {
+    let username = this.calipsoService.getLoggedUserName();
     var temporalyActiveExperiments: { [key: string]: Status } = {};
     this.safe_locked_button = true;
 
@@ -126,11 +138,11 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
       x => x.calipso_experiment == experiment_serial_number
     );
 
-    this.calipsoService.stopContainer(c.container_name).subscribe(data => {
+    this.calipsoService.stopContainer(username, c.container_name).subscribe(data => {
       this.containers.find(x => x.id == data.id).container_status =
         data.container_status;
 
-      this.calipsoService.removeContainer(c.container_name).subscribe(cdata => {
+      this.calipsoService.removeContainer(username, c.container_name).subscribe(cdata => {
         this.containers.find(x => x.id == cdata.id).container_status =
           cdata.container_status;
 
