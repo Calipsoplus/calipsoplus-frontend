@@ -126,7 +126,7 @@ export class CalipsoplusService {
         withCredentials: true
       })
       .map(res => {
-        console.log("Respose logout:" + res);
+        localStorage.removeItem("ct");
       });
   }
 
