@@ -25,16 +25,18 @@ export class CalipsoplusService {
   guacamoleUrl = "http://calipsotest.cells.es:8080/"
 
   //backendUrl_calipso = "http://192.168.33.11:8000/";
-  //guacamoleUrl = "http://192.168.33.15:8080/"
-
+  //guacamoleUrl = "http://192.168.33.15:8080/";
 
   authUrl = this.backendUrl_calipso + "login/";
-  facilitiesUrl = this.backendUrl_calipso + "facility/all/";
-  experimentsUrl = this.backendUrl_calipso + "user/$USERNAME/experiment/";
-  runContainersUrl = this.backendUrl_calipso +
-  "container/run/$USERNAME/$EXPERIMENT/";
-  removeContainersUrl = this.backendUrl_calipso + "container/rm/$CONTAINER/";
-  stopContainersUrl = this.backendUrl_calipso + "container/stop/$CONTAINER/";
+  logoutUrl = this.backendUrl_calipso + "logout/";
+  facilitiesUrl = this.backendUrl_calipso + "facility/";
+  experimentsUrl = this.backendUrl_calipso + "experiments/$USERNAME/";
+  runContainersUrl =
+    this.backendUrl_calipso + "container/run/$USERNAME/$EXPERIMENT/";
+  removeContainersUrl =
+    this.backendUrl_calipso + "container/rm/$USERNAME/$CONTAINER/";
+  stopContainersUrl =
+    this.backendUrl_calipso + "container/stop/$USERNAME/$CONTAINER/";
   listContainersUrl = this.backendUrl_calipso + "container/list/$USERNAME/";
 
   DATASETS: CalipsoDataset[] = [
@@ -75,7 +77,9 @@ export class CalipsoplusService {
     username: string
   ): Observable<CalipsoExperiment[]> {
     let url = this.experimentsUrl.replace("$USERNAME", username);
-    return this.http.get<CalipsoExperiment[]>(url);
+    return this.http.get<CalipsoExperiment[]>(url, {
+      withCredentials: true
+    });
   }
 
   public getCalipsoFacilities(): Observable<CalipsoFacility[]> {
@@ -93,17 +97,17 @@ export class CalipsoplusService {
   }
 
   public auth(username: string, password: string) {
-    this.logout();
-    let params = "username=" + username + "&password=" + password;
-    let headers = new HttpHeaders().set(
-      "Content-Type",
-      "application/x-www-form-urlencoded; charset=UTF-8"
-    );
+    var body = `{"username":"${username}","password":"${password}"}`;
+    let headers = new HttpHeaders().set("Content-Type", "application/json");
 
     return this.http
-      .post(this.authUrl, params, { headers: headers })
+      .post(this.authUrl, body, {
+        headers: headers,
+        observe: "response",
+        withCredentials: true
+      })
       .map(res => {
-        this.login(username, JSON.stringify(res));
+        this.login(username, res);
         return res;
       });
   }
@@ -112,37 +116,37 @@ export class CalipsoplusService {
     return of(this.SOFTWARE);
   }
 
-  public logout() {
-    sessionStorage.removeItem("c_username");
-    //sessionStorage.removeItem("c_user_calipso");
+  public unauth() {
+    let headers = new HttpHeaders().set("Content-Type", "application/json");
+    localStorage.removeItem("ct");
+    return this.http
+      .get(this.logoutUrl, {
+        headers: headers,
+        observe: "response",
+        withCredentials: true
+      })
+      .map(res => {
+        console.log("Respose logout:" + res);
+      });
   }
 
-  private login(username: string, json_user: string) {
-    sessionStorage.setItem("c_username", username);
-    //sessionStorage.setItem("c_user_calipso", json_user);
+  private login(username, response) {
+    localStorage.setItem("ct", username);
   }
 
   public getLoggedUserName(): string {
-    return sessionStorage.getItem("c_username");
+    return localStorage.getItem("ct");
   }
 
   public isLogged(): boolean {
-    return "c_username" in sessionStorage;
+    return "ct" in localStorage;
   }
 
   public listContainersActive(
     username: string
   ): Observable<CalipsoContainer[]> {
     let url = this.listContainersUrl.replace("$USERNAME", username);
-    return this.http.get<CalipsoContainer[]>(url);
-  }
-
-  private handleError(error: Response | any) {
-    // In a real world app, you might use a remote logging infrastructure
-    let errMsg: string;
-    errMsg = error.message ? error.message : error.toString();
-    console.error(errMsg);
-    return Observable.throw(errMsg);
+    return this.http.get<CalipsoContainer[]>(url, { withCredentials: true });
   }
 
   public runContainer(
@@ -152,91 +156,44 @@ export class CalipsoplusService {
     let url = this.runContainersUrl.replace("$USERNAME", username);
     let run_url = url.replace("$EXPERIMENT", experiment);
 
-    let params = "";
-    let headers = new HttpHeaders().set(
-      "Content-Type",
-      "application/x-www-form-urlencoded; charset=UTF-8"
-    );
+    let headers = new HttpHeaders().set("Content-Type", "application/json");
 
     return this.http
-      .post<CalipsoContainer>(run_url, params, { headers: headers })
-      .map(res => {
-        return res;
+      .get<CalipsoContainer>(run_url, {
+        headers: headers,
+        withCredentials: true,
+        observe: "response"
       })
-      .catch(this.handleError);
+      .map(res => {
+        return res.body;
+      });
   }
 
   public removeContainer(
+    username: string,
     experiment_serial_number: string
   ): Observable<CalipsoContainer> {
-    let url = this.removeContainersUrl.replace(
-      "$CONTAINER",
-      experiment_serial_number
-    );
-    return this.http.get<CalipsoContainer>(url).map(res => {
-      //return JSON.stringify(res);
-      return res;
-    });
+    let remove_url = this.removeContainersUrl.replace("$USERNAME", username);
+    let url = remove_url.replace("$CONTAINER", experiment_serial_number);
+
+    return this.http
+      .get<CalipsoContainer>(url, { withCredentials: true })
+      .map(res => {
+        return res;
+      });
   }
 
   public stopContainer(
+    username: string,
     experiment_serial_number: string
   ): Observable<CalipsoContainer> {
-    let url = this.stopContainersUrl.replace(
-      "$CONTAINER",
-      experiment_serial_number
-    );
-    return this.http.get<CalipsoContainer>(url).map(res => {
-      //return JSON.stringify(res);
-      return res;
-    });
+    let stop_url = this.stopContainersUrl.replace("$USERNAME", username);
+    let url = stop_url.replace("$CONTAINER", experiment_serial_number);
+
+    return this.http
+      .get<CalipsoContainer>(url, { withCredentials: true })
+      .map(res => {
+        return res;
+      });
   }
 }
-
-/*
-const Authorization = authService.getToken(); //read the token from storahe
-const authReq = req.clone({ headers: req.headers.set('authorization', Authorization) }); // Clone the request to add the authorization header.
-return next.handle(authReq); // Pass on the cloned request instead of the original request.
-*/
-
-/*
-return next.handle(authReq)
-   .catch((error, caught) => {
-      if (error.status === 401) {
-        //logout users, redirect to login page
-        authService.removeTokens();
-        //redirect to the signin page or show login modal here
-        this.router.navigate(['/auth/signin]); //remember to import router class and declare it in the class
-        return Observable.throw(error);
-    } else {
-        return Observable.throw(error);
-    }
-}) as any;
-*/
-
-/*
- refreshToken(): Observable<string> {
-    let refreshAuth = this.getRefreshToken(); //get refresh token from storage
-    let url: string = BASE_URL + "auth/refresh";
-    return this.http.get(url, {
-      headers: new HttpHeaders().set('refreshAuthorization', refreshAuth),
-      observe: 'response'
-    }).map(refreshResponse => {
-      let authToken: string = refreshResponse.headers.get('authorizationToken');
-      let refreshToken: string = refreshResponse.headers.get('refreshToken');
-      //add token to storage
-      this.createToken(authToken, refreshToken); // method for adding token to cookie storage
-      return authToken; //return the new authorization token
-    });
-  }
-  */
-
-/*
-  if (error.status === 419) {
-  return authService.refreshToken().flatmap(t => {
-    this.inflightAuthRequest = null;
-    const authReq = req.clone({ headers: req.headers.set('authorization', t) });
-    return next.handle(authReq); //refresh was success, resend the original request
-  });
-}
-*/
