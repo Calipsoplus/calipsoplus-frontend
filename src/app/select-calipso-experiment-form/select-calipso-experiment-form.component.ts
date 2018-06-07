@@ -149,6 +149,8 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
         this.containers.forEach((item, index) => {
           if (item.container_name === cdata.container_name)
             this.containers.splice(index, 1);
+            this.calipsoService.removeDateAccess(cdata.container_name);
+
         });
 
         this.statusActiveExperiments[cdata.calipso_experiment] = Status.idle;
@@ -165,6 +167,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
     if (c == null) alert("error win up");
     else {
+      this.calipsoService.updateDateAccess(c.container_name);
       var paramenters = btoa(
         "un=" + c.guacamole_username + "&up=" + c.guacamole_password
       );

@@ -33,15 +33,17 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
             x => x.calipso_experiment == element.calipso_experiment
           );
           if (c != null) {
-            if ((c.container_status == "created")) {
+            let date = new Date(c.creation_date);
+            let str_creation_date = this.calipsoService.formatDate(date);
+            let date_access = this.calipsoService.getDateAccess(c.container_name);
+            if (c.container_status == "created") {
               var resource: CalipsoResource = new CalipsoResource(
                 c.calipso_experiment,
                 c.container_name,
-                "192.168.11.12/8080",
-                "01/02/2018",
-                "24/10/2018",
-                "12/05/2018",
-                c.container_info
+                c.host_port,
+                str_creation_date,
+                "-",
+                date_access
               );
               this.resources.push(resource);
             }
@@ -57,6 +59,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
     var c = this.containers.find(x => x.container_name == container_name);
     if (c == null) alert("error win up");
     else {
+      this.calipsoService.updateDateAccess(c.container_name);
       var paramenters = btoa(
         "un=" + c.guacamole_username + "&up=" + c.guacamole_password
       );
