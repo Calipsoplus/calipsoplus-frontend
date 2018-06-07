@@ -196,4 +196,28 @@ export class CalipsoplusService {
         return res;
       });
   }
+
+  public formatDate(date: Date) {
+    let str_date =
+      date.getDate() +
+      "/" +
+      (date.getMonth() + 1) +
+      "/" +
+      date.getFullYear() +
+      " " +
+      date.getHours() +
+      ":" +
+      date.getMinutes();
+    return str_date;
+  }
+  public removeDateAccess(container_name: string) {
+    localStorage.removeItem(container_name);
+  }
+  public updateDateAccess(container_name: string) {
+    let date_access = new Date();
+    localStorage.setItem(container_name, this.formatDate(date_access));
+  }
+  public getDateAccess(container_name: string) {
+    return localStorage.getItem(container_name);
+  }
 }
