@@ -1,0 +1,8 @@
+@font-face {
+  font-family:myFont;
+  src: url(../fonts/varela-round-regular.ttf);
+}
+
+html body {
+  font-family:myFont;
+}

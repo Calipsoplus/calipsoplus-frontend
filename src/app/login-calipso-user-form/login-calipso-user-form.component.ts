@@ -19,14 +19,24 @@ export class LoginCalipsoUserFormComponent implements OnInit {
   ) {}
 
   login() {
-    this.calipsoService.auth(this.username, this.password).subscribe(
-      success => {
-        this.router.navigate(["facility"]);
+    this.calipsoService.unauth().subscribe(
+      resp => {
+        this.calipsoService.auth(this.username, this.password).subscribe(
+          resp => {
+            let keys = resp.headers.keys;
+            this.router.navigate(["/partners"]);
+          },
+          error => {
+            alert("Invalid credentials");
+          }
+        );
       },
       error => {
-        alert("Invalid credentials");
+        alert("Error in logout");
       }
     );
+
+
   }
 
   ngOnInit() {}

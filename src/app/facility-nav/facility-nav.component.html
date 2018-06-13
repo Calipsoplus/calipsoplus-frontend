@@ -1,0 +1,24 @@
+<div class="col">
+  <nav class="navbar navbar-expand-md" style="background-color:white;">
+    <a class="col-sm-5 nav-link ml">
+      <img src="assets/images/alba.png" />
+    </a>
+    <a class="col-sm-5 nav-link" routerLink="/">
+      <img src="assets/images/logo.jpg" />
+    </a>
+    <a *ngIf="!calipsoService.isLogged()" class="nav-link ml-auto" routerLink="/login">Login</a>
+    <div *ngIf="calipsoService.isLogged()" class="nav-link ml-auto">
+      <div class="row">
+        <div class="col">
+          <div ngbDropdown placement="bottom-right">
+            <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{calipsoService.getLoggedUserName()}}</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <a class="nav-link dropdown-menu-right" (click)="logout()" routerLink="/">Logout</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <hr>
+</div>

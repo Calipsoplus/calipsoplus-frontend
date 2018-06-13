@@ -17,49 +17,78 @@ import { CalipsoFacility } from "./calipso-facility";
 import { CalipsoExperiment } from "./calipso-experiment";
 import { CalipsoDataset } from "./calipso-dataset";
 import { CalipsoSoftware } from "./calipso-software";
+import { CalipsoContainer } from "./calipso-container";
 
 @Injectable()
 export class CalipsoplusService {
-  backendUrl = "http://192.168.33.11:8000/";
+  backendUrl_calipso = "https://misapptest.cells.es/calipsoplus-services/";
+  guacamoleUrl = "http://calipsotest.cells.es:8080/"
 
-  authUrl = this.backendUrl + "login/";
-  facilitiesUrl = this.backendUrl + "facilities/all/";
-  experimentsUrl = this.backendUrl + "users/$USER_ID/experiments/";
+  //backendUrl_calipso = "http://192.168.33.11:8000/";
+  //guacamoleUrl = "http://192.168.33.15:8080/";
+
+  authUrl = this.backendUrl_calipso + "login/";
+  logoutUrl = this.backendUrl_calipso + "logout/";
+  facilitiesUrl = this.backendUrl_calipso + "facility/";
+  experimentsUrl = this.backendUrl_calipso + "experiments/$USERNAME/";
+  runContainersUrl =
+    this.backendUrl_calipso + "container/run/$USERNAME/$EXPERIMENT/";
+  removeContainersUrl =
+    this.backendUrl_calipso + "container/rm/$USERNAME/$CONTAINER/";
+  stopContainersUrl =
+    this.backendUrl_calipso + "container/stop/$USERNAME/$CONTAINER/";
+  listContainersUrl = this.backendUrl_calipso + "container/list/$USERNAME/";
 
   DATASETS: CalipsoDataset[] = [
-    { id: 1, subject: "Dataset 1", type : "FAT32", location:"/srv/datasets1/d1A1.dst" },
-    { id: 2, subject: "Dataset 2", type : "FAT64", location:"/srv/datasets1/d1A2.dst" },
-    { id: 3, subject: "Dataset 3", type : "PNG", location:"/srv/datasets2/d2A1.dst" },
-    { id: 4, subject: "Dataset 4", type : "IOS", location:"/srv/datasets2/d2A2.dst" },
-    { id: 5, subject: "Dataset 5", type : "LX64", location:"/srv/datasets3/d3A1.dst" },
-    { id: 6, subject: "Dataset 6", type : "AMD32", location:"/srv/datasets3/d3A2.dst" },
-    { id: 7, subject: "Dataset 7", type : "BIN", location:"/srv/datasets4/d4A1.dst" },
-    { id: 8, subject: "Dataset 8", type : "SET", location:"/srv/datasets4/d4A2.dst" },
-    { id: 9, subject: "Dataset 9", type : "JPS", location:"/srv/datasets4/d4A3.dst" },
-    { id: 10, subject: "Dataset 10", type : "MKR", location:"/srv/datasets5/d5A1.dst" }];
+    {
+      id: 1,
+      subject: "Dataset 1",
+      type: "FAT32",
+      location: "/srv/datasets1/d1A1.dst"
+    },
+    {
+      id: 2,
+      subject: "Dataset 2",
+      type: "FAT64",
+      location: "/srv/datasets1/d1A2.dst"
+    },
+    {
+      id: 3,
+      subject: "Dataset 3",
+      type: "PNG",
+      location: "/srv/datasets2/d2A1.dst"
+    }
+  ];
 
   SOFTWARE: CalipsoSoftware[] = [
-    { id: 1, subject: "Phynix", command:"./phynix.sh" },
-    { id: 2, subject: "Tree", command:"./tree.sh" },
-    { id: 3, subject: "Fixme", command:"./fixme.sh" },
-    { id: 4, subject: "Cati", command:"./cati.sh" },
-    { id: 5, subject: "Jomsa", command:"./jomsa_start.sh" },
-    { id: 6, subject: "Mayson", command:"./mayson.sh" }];
+    { id: 1, subject: "Phynix", command: "./phynix.sh" },
+    { id: 2, subject: "Tree", command: "./tree.sh" },
+    { id: 3, subject: "Fixme", command: "./fixme.sh" },
+    { id: 4, subject: "Cati", command: "./cati.sh" },
+    { id: 5, subject: "Jomsa", command: "./jomsa_start.sh" },
+    { id: 6, subject: "Mayson", command: "./mayson.sh" }
+  ];
+
+  EXPERIMENTS: CalipsoExperiment[] = [];
 
   constructor(private http: HttpClient) {}
 
   public getCalipsoExperiments(
-    user_id: string
+    username: string
   ): Observable<CalipsoExperiment[]> {
-    let url = this.experimentsUrl.replace("$USER_ID", user_id);
-    return this.http.get<CalipsoExperiment[]>(url);
+    let url = this.experimentsUrl.replace("$USERNAME", username);
+    return this.http.get<CalipsoExperiment[]>(url, {
+      withCredentials: true
+    });
   }
 
   public getCalipsoFacilities(): Observable<CalipsoFacility[]> {
     return this.http.get<CalipsoFacility[]>(this.facilitiesUrl);
   }
 
-  public getDatasetsFromExperiment(experiment_id): Observable<CalipsoDataset[]> {
+  public getDatasetsFromExperiment(
+    experiment_id
+  ): Observable<CalipsoDataset[]> {
     return of(this.DATASETS);
   }
 
@@ -68,16 +97,17 @@ export class CalipsoplusService {
   }
 
   public auth(username: string, password: string) {
-    this.logout();
-    let params = "username=" + username + "&password=" + password;
-    let headers = new HttpHeaders().set(
-      "Content-Type",
-      "application/x-www-form-urlencoded; charset=UTF-8"
-    );
+    var body = `{"username":"${username}","password":"${password}"}`;
+    let headers = new HttpHeaders().set("Content-Type", "application/json");
+
     return this.http
-      .post(this.authUrl, params, { headers: headers })
+      .post(this.authUrl, body, {
+        headers: headers,
+        observe: "response",
+        withCredentials: true
+      })
       .map(res => {
-        this.login(username, JSON.stringify(res));
+        this.login(username, res);
         return res;
       });
   }
@@ -86,77 +116,108 @@ export class CalipsoplusService {
     return of(this.SOFTWARE);
   }
 
-  public logout() {
-    sessionStorage.removeItem("c_username");
-    sessionStorage.removeItem("c_user_calipso");
+  public unauth() {
+    let headers = new HttpHeaders().set("Content-Type", "application/json");
+    localStorage.removeItem("ct");
+    return this.http
+      .get(this.logoutUrl, {
+        headers: headers,
+        observe: "response",
+        withCredentials: true
+      })
+      .map(res => {
+        localStorage.removeItem("ct");
+      });
   }
 
-  private login(username: string, json_user: string) {
-    sessionStorage.setItem("c_username", username);
-    sessionStorage.setItem("c_user_calipso", json_user);
+  private login(username, response) {
+    localStorage.setItem("ct", username);
   }
 
   public getLoggedUserName(): string {
-    return sessionStorage.getItem("c_username");
-  }
-
-  public getLoggedCalipsoUser(): string {
-    return sessionStorage.getItem("c_user_calipso");
+    return localStorage.getItem("ct");
   }
 
   public isLogged(): boolean {
-    return "c_username" in sessionStorage;
+    return "ct" in localStorage;
   }
 
-  public getLoogedUserId(): string {
-    return JSON.parse(this.getLoggedCalipsoUser()).user_id;
+  public listContainersActive(
+    username: string
+  ): Observable<CalipsoContainer[]> {
+    let url = this.listContainersUrl.replace("$USERNAME", username);
+    return this.http.get<CalipsoContainer[]>(url, { withCredentials: true });
+  }
+
+  public runContainer(
+    username: string,
+    experiment: string
+  ): Observable<CalipsoContainer> {
+    let url = this.runContainersUrl.replace("$USERNAME", username);
+    let run_url = url.replace("$EXPERIMENT", experiment);
+
+    let headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    return this.http
+      .get<CalipsoContainer>(run_url, {
+        headers: headers,
+        withCredentials: true,
+        observe: "response"
+      })
+      .map(res => {
+        return res.body;
+      });
+  }
+
+  public removeContainer(
+    username: string,
+    experiment_serial_number: string
+  ): Observable<CalipsoContainer> {
+    let remove_url = this.removeContainersUrl.replace("$USERNAME", username);
+    let url = remove_url.replace("$CONTAINER", experiment_serial_number);
+
+    return this.http
+      .get<CalipsoContainer>(url, { withCredentials: true })
+      .map(res => {
+        return res;
+      });
+  }
+
+  public stopContainer(
+    username: string,
+    experiment_serial_number: string
+  ): Observable<CalipsoContainer> {
+    let stop_url = this.stopContainersUrl.replace("$USERNAME", username);
+    let url = stop_url.replace("$CONTAINER", experiment_serial_number);
+
+    return this.http
+      .get<CalipsoContainer>(url, { withCredentials: true })
+      .map(res => {
+        return res;
+      });
+  }
+
+  public formatDate(date: Date) {
+    let str_date =
+      date.getDate() +
+      "/" +
+      (date.getMonth() + 1) +
+      "/" +
+      date.getFullYear() +
+      " " +
+      date.getHours() +
+      ":" +
+      date.getMinutes();
+    return str_date;
+  }
+  public removeDateAccess(container_name: string) {
+    localStorage.removeItem(container_name);
+  }
+  public updateDateAccess(container_name: string) {
+    let date_access = new Date();
+    localStorage.setItem(container_name, this.formatDate(date_access));
+  }
+  public getDateAccess(container_name: string) {
+    return localStorage.getItem(container_name);
   }
 }
-
-/*
-const Authorization = authService.getToken(); //read the token from storahe
-const authReq = req.clone({ headers: req.headers.set('authorization', Authorization) }); // Clone the request to add the authorization header.
-return next.handle(authReq); // Pass on the cloned request instead of the original request.
-*/
-
-/*
-return next.handle(authReq)
-   .catch((error, caught) => {
-      if (error.status === 401) {
-        //logout users, redirect to login page
-        authService.removeTokens();
-        //redirect to the signin page or show login modal here
-        this.router.navigate(['/auth/signin]); //remember to import router class and declare it in the class
-        return Observable.throw(error);
-    } else {
-        return Observable.throw(error);
-    }
-}) as any;
-*/
-
-/*
- refreshToken(): Observable<string> {
-    let refreshAuth = this.getRefreshToken(); //get refresh token from storage
-    let url: string = BASE_URL + "auth/refresh";
-    return this.http.get(url, {
-      headers: new HttpHeaders().set('refreshAuthorization', refreshAuth),
-      observe: 'response'
-    }).map(refreshResponse => {
-      let authToken: string = refreshResponse.headers.get('authorizationToken');
-      let refreshToken: string = refreshResponse.headers.get('refreshToken');
-      //add token to storage
-      this.createToken(authToken, refreshToken); // method for adding token to cookie storage
-      return authToken; //return the new authorization token
-    });
-  }
-  */
-
-/*
-  if (error.status === 419) {
-  return authService.refreshToken().flatmap(t => {
-    this.inflightAuthRequest = null;
-    const authReq = req.clone({ headers: req.headers.set('authorization', t) });
-    return next.handle(authReq); //refresh was success, resend the original request
-  });
-}
-*/
