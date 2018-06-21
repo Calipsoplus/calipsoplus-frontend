@@ -20,12 +20,14 @@
       "prefix": "app",
       "styles": [
         "styles.css"
-        
+
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
+        "test": "environments/environment.test.ts",
+        "demo": "environments/environment.demo.ts",
         "prod": "environments/environment.prod.ts"
       }
     }

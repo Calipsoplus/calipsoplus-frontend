@@ -4,5 +4,8 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  backendUrl_calipso: "http://192.168.33.11:8000/",
+  guacamoleUrl: "http://192.168.33.15:8080/",
+  env : "dev"
 };
