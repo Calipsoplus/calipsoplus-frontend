@@ -138,26 +138,30 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
       x => x.calipso_experiment == experiment_serial_number
     );
 
-    this.calipsoService.stopContainer(username, c.container_name).subscribe(data => {
-      this.containers.find(x => x.id == data.id).container_status =
-        data.container_status;
+    this.calipsoService
+      .stopContainer(username, c.container_name)
+      .subscribe(data => {
+        this.containers.find(x => x.id == data.id).container_status =
+          data.container_status;
 
-      this.calipsoService.removeContainer(username, c.container_name).subscribe(cdata => {
-        this.containers.find(x => x.id == cdata.id).container_status =
-          cdata.container_status;
+        this.calipsoService
+          .removeContainer(username, c.container_name)
+          .subscribe(cdata => {
+            this.containers.find(x => x.id == cdata.id).container_status =
+              cdata.container_status;
 
-        this.containers.forEach((item, index) => {
-          if (item.container_name === cdata.container_name)
-            this.containers.splice(index, 1);
-            this.calipsoService.removeDateAccess(cdata.container_name);
+            this.containers.forEach((item, index) => {
+              if (item.container_name === cdata.container_name)
+                this.containers.splice(index, 1);
+              this.calipsoService.removeDateAccess(cdata.container_name);
+            });
 
-        });
-
-        this.statusActiveExperiments[cdata.calipso_experiment] = Status.idle;
-        this.safe_locked_button = false;
-        this.max_num_machines_exceeded = false;
+            this.statusActiveExperiments[cdata.calipso_experiment] =
+              Status.idle;
+            this.safe_locked_button = false;
+            this.max_num_machines_exceeded = false;
+          });
       });
-    });
   }
 
   public go_in(experiment_serial_number: string) {

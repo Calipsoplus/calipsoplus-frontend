@@ -3,7 +3,7 @@ import { Observable } from "rxjs/Observable";
 import { of } from "rxjs/observable/of";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
-import { catchError } from "rxjs/operators";
+import { environment } from "../environments/environment";
 
 import {
   HttpClientModule,
@@ -21,11 +21,8 @@ import { CalipsoContainer } from "./calipso-container";
 
 @Injectable()
 export class CalipsoplusService {
-  backendUrl_calipso = "https://misapptest.cells.es/calipsoplus-services/";
-  guacamoleUrl = "http://calipsotest.cells.es:8080/"
-
-  //backendUrl_calipso = "http://192.168.33.11:8000/";
-  //guacamoleUrl = "http://192.168.33.15:8080/";
+  backendUrl_calipso = environment.backendUrl_calipso;
+  guacamoleUrl = environment.guacamoleUrl;
 
   authUrl = this.backendUrl_calipso + "login/";
   logoutUrl = this.backendUrl_calipso + "logout/";
