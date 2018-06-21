@@ -35,7 +35,9 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
           if (c != null) {
             let date = new Date(c.creation_date);
             let str_creation_date = this.calipsoService.formatDate(date);
-            let date_access = this.calipsoService.getDateAccess(c.container_name);
+            let date_access = this.calipsoService.getDateAccess(
+              c.container_name
+            );
             if (c.container_status == "created") {
               var resource: CalipsoResource = new CalipsoResource(
                 c.calipso_experiment,
@@ -59,14 +61,10 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
     var c = this.containers.find(x => x.container_name == container_name);
     if (c == null) alert("error win up");
     else {
-      this.calipsoService.updateDateAccess(c.container_name);
-      var paramenters = btoa(
-        "un=" + c.guacamole_username + "&up=" + c.guacamole_password
-      );
-      window.open(
-        this.calipsoService.guacamoleUrl + "guac_access.html?t=" + paramenters,
+      this.calipsoService.go_into_container(
         c.container_name,
-        "menubar=no, location=no, toolbar=no, scrollbars=yes, height=500"
+        c.guacamole_username,
+        c.guacamole_password
       );
     }
   }

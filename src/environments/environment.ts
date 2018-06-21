@@ -9,3 +9,4 @@ export const environment = {
   guacamoleUrl: "http://192.168.33.15:8080/",
   env : "dev"
 };
+

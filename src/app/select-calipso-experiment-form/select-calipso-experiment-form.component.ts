@@ -168,18 +168,12 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     var c = this.containers.find(
       x => x.calipso_experiment == experiment_serial_number
     );
-
     if (c == null) alert("error win up");
-    else {
-      this.calipsoService.updateDateAccess(c.container_name);
-      var paramenters = btoa(
-        "un=" + c.guacamole_username + "&up=" + c.guacamole_password
-      );
-      window.open(
-        this.calipsoService.guacamoleUrl + "guac_access.html?t=" + paramenters,
+    else
+      this.calipsoService.go_into_container(
         c.container_name,
-        "menubar=no, location=no, toolbar=no, scrollbars=yes, height=500"
+        c.guacamole_username,
+        c.guacamole_password
       );
-    }
   }
 }
