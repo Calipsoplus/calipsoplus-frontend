@@ -217,4 +217,18 @@ export class CalipsoplusService {
   public getDateAccess(container_name: string) {
     return localStorage.getItem(container_name);
   }
+
+  public go_into_container(
+    container_name: string,
+    username: string,
+    password: string
+  ) {
+    this.updateDateAccess(container_name);
+    var paramenters = btoa("un=" + username + "&up=" + password);
+    window.open(
+      this.guacamoleUrl + "?t=" + paramenters,
+      container_name,
+      "menubar=no, location=no, toolbar=no, scrollbars=yes, height=500"
+    );
+  }
 }
