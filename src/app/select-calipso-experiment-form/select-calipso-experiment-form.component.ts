@@ -5,8 +5,7 @@ import { CalipsoExperiment } from "../calipso-experiment";
 import { Router } from "@angular/router";
 import { CalipsoContainer } from "../calipso-container";
 
-import { Observable } from "rxjs/Observable";
-import { catchError } from "rxjs/operators";
+import { CalipsoQuota } from "../calipso-quota";
 
 export enum Status {
   idle = 0, // ready
@@ -25,15 +24,48 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   experiments: CalipsoExperiment[];
   containers: CalipsoContainer[];
 
+  used_quota: CalipsoQuota[];
+  user_quota: CalipsoQuota[];
+
   statusActiveExperiments: { [key: string]: Status } = {};
 
   max_num_machines_exceeded: Boolean = false;
+  max_num_cpu_exceeded: Boolean = false;
+  max_memory_exceeded: Boolean = false;
+  max_hdd_exceeded: Boolean = false;
+
   safe_locked_button: Boolean = false;
 
   constructor(
     private calipsoService: CalipsoplusService,
     private router: Router
   ) {}
+
+  public check_quota() {
+    let max_available =
+      this.user_quota[0].max_simultaneous - this.used_quota[0].max_simultaneous;
+    let cpu_available = this.user_quota[0].cpu - this.used_quota[0].cpu;
+    let hdd_available =
+      parseInt(this.user_quota[0].hdd.slice(0, -1)) -
+      parseInt(this.used_quota[0].hdd.slice(0, -1));
+    let memory_available =
+      parseInt(this.user_quota[0].memory.slice(0, -1)) -
+      parseInt(this.used_quota[0].memory.slice(0, -1));
+
+    this.max_num_machines_exceeded = max_available <= 0;
+    this.max_num_cpu_exceeded = cpu_available <= 0;
+    this.max_memory_exceeded = memory_available <= 0;
+    this.max_hdd_exceeded = hdd_available <= 0;
+
+    this.calipsoService
+    .getImageByPublicName("base_image")
+    .subscribe(image_quota => {
+      this.max_num_cpu_exceeded = (cpu_available-image_quota[0].cpu) < 0;
+      this.max_memory_exceeded = (memory_available-parseInt(image_quota[0].memory.slice(0, -1))) < 0;
+      this.max_hdd_exceeded = (hdd_available-parseInt(image_quota[0].hdd.slice(0, -1))) < 0;
+    });
+
+  }
 
   ngOnInit() {
     if (this.calipsoService.isLogged()) {
@@ -45,8 +77,8 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
         this.containers = res;
 
         // get all experiments for a username
-        this.calipsoService.getCalipsoExperiments(username).subscribe(data => {
-          this.experiments = data;
+        this.calipsoService.getCalipsoExperiments(username).subscribe(experiment => {
+          this.experiments = experiment;
 
           // search experiment in container
           this.experiments.forEach(element => {
@@ -57,9 +89,26 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
             if (c == null) {
               this.statusActiveExperiments[element.serial_number] = Status.idle;
             } else {
-              if (c.max_num_container > this.containers.length)
-                this.max_num_machines_exceeded = false;
-              else this.max_num_machines_exceeded = true;
+              this.calipsoService
+                .getCalipsoAvailableImageQuota(username)
+                .subscribe(used => {
+                  this.used_quota = used;
+
+                  this.calipsoService
+                    .getCalipsoQuota(username)
+                    .subscribe(user_quota => {
+                      this.user_quota = user_quota;
+
+
+
+
+
+
+
+
+                      this.check_quota();
+                    });
+                });
 
               switch (c.container_status) {
                 case "busy": {
@@ -108,11 +157,22 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
         data => {
           if (data != null) {
             this.containers.push(data);
-            //if max number of containers
-            this.max_num_machines_exceeded =
-              this.containers.length >= data.max_num_container;
-            this.statusActiveExperiments[experiment_serial_number] =
-              Status.running;
+
+            this.calipsoService
+              .getCalipsoAvailableImageQuota(username)
+              .subscribe(used => {
+                this.used_quota = used;
+
+                this.calipsoService
+                  .getCalipsoQuota(username)
+                  .subscribe(user_quota => {
+                    this.user_quota = user_quota;
+                    this.check_quota();
+
+                    this.statusActiveExperiments[experiment_serial_number] =
+                      Status.running;
+                  });
+              });
           } else {
             this.statusActiveExperiments[experiment_serial_number] =
               Status.idle;
@@ -159,7 +219,19 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
             this.statusActiveExperiments[cdata.calipso_experiment] =
               Status.idle;
             this.safe_locked_button = false;
-            this.max_num_machines_exceeded = false;
+
+            this.calipsoService
+              .getCalipsoAvailableImageQuota(username)
+              .subscribe(used => {
+                this.used_quota = used;
+
+                this.calipsoService
+                  .getCalipsoQuota(username)
+                  .subscribe(user_quota => {
+                    this.user_quota = user_quota;
+                    this.check_quota();
+                  });
+              });
           });
       });
   }
