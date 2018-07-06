@@ -35,8 +35,6 @@ export class LoginCalipsoUserFormComponent implements OnInit {
         alert("Error in logout");
       }
     );
-
-
   }
 
   ngOnInit() {}

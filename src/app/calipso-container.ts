@@ -10,8 +10,8 @@ export class CalipsoContainer {
     public guacamole_username: string,
     public guacamole_password: string,
     public vnc_password: string,
-    public max_num_container: number,
     public creation_date:string,
-    public host_port:string
+    public host_port:string,
+    public public_name:string
   ) {}
 }
