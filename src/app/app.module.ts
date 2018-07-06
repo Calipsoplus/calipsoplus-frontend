@@ -20,6 +20,8 @@ import { MainNavComponent } from './main-nav/main-nav.component';
 import { FacilityNavComponent } from './facility-nav/facility-nav.component';
 import { SelectCalipsoResourceFormComponent } from './select-calipso-resource-form/select-calipso-resource-form.component';
 import { ExperimentNavComponent } from './experiment-nav/experiment-nav.component';
+import { SelectCalipsoQuotaFormComponent } from './select-calipso-quota-form/select-calipso-quota-form.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 
 @NgModule({
@@ -41,7 +43,9 @@ import { ExperimentNavComponent } from './experiment-nav/experiment-nav.componen
     MainNavComponent,
     FacilityNavComponent,
     SelectCalipsoResourceFormComponent,
-    ExperimentNavComponent
+    ExperimentNavComponent,
+    SelectCalipsoQuotaFormComponent,
+    PageNotFoundComponent
   ],
   providers: [CalipsoplusService],
   bootstrap: [AppComponent]
