@@ -5,19 +5,18 @@ import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
 import { environment } from "../environments/environment";
 
-import {
-  HttpClientModule,
-  HttpClient,
-  HttpHeaders,
-  HttpParams
-} from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
-import { CalipsoUser } from "./calipso-user";
 import { CalipsoFacility } from "./calipso-facility";
 import { CalipsoExperiment } from "./calipso-experiment";
 import { CalipsoDataset } from "./calipso-dataset";
 import { CalipsoSoftware } from "./calipso-software";
 import { CalipsoContainer } from "./calipso-container";
+import { CalipsoQuota } from "./calipso-quota";
+import { CalipsoImage } from "./calipso-image";
+
+
+import { Router } from "@angular/router";
 
 @Injectable()
 export class CalipsoplusService {
@@ -27,6 +26,10 @@ export class CalipsoplusService {
   authUrl = this.backendUrl_calipso + "login/";
   logoutUrl = this.backendUrl_calipso + "logout/";
   facilitiesUrl = this.backendUrl_calipso + "facility/";
+
+  quotaUrl = this.backendUrl_calipso + "quota/$USERNAME/";
+  usedQuotaUrl = this.backendUrl_calipso + "used_quota/$USERNAME/";
+  imageQuotaUrl = this.backendUrl_calipso + "image/$PUBLIC_NAME/";
   experimentsUrl = this.backendUrl_calipso + "experiments/$USERNAME/";
   runContainersUrl =
     this.backendUrl_calipso + "container/run/$USERNAME/$EXPERIMENT/";
@@ -68,7 +71,7 @@ export class CalipsoplusService {
 
   EXPERIMENTS: CalipsoExperiment[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   public getCalipsoExperiments(
     username: string
@@ -81,6 +84,21 @@ export class CalipsoplusService {
 
   public getCalipsoFacilities(): Observable<CalipsoFacility[]> {
     return this.http.get<CalipsoFacility[]>(this.facilitiesUrl);
+  }
+
+  public getImageByPublicName(public_name: string): Observable<CalipsoImage[]> {
+    let url = this.imageQuotaUrl.replace("$PUBLIC_NAME", public_name);
+    return this.http.get<CalipsoImage[]>(url, { withCredentials: true });
+  }
+
+  public getCalipsoQuota(username: string): Observable<CalipsoQuota[]> {
+    let url = this.quotaUrl.replace("$USERNAME", username);
+    return this.http.get<CalipsoQuota[]>(url, { withCredentials: true });
+  }
+
+  public getCalipsoAvailableImageQuota(username: string): Observable<CalipsoQuota[]> {
+    let url = this.usedQuotaUrl.replace("$USERNAME", username);
+    return this.http.get<CalipsoQuota[]>(url, { withCredentials: true });
   }
 
   public getDatasetsFromExperiment(
@@ -162,6 +180,7 @@ export class CalipsoplusService {
         observe: "response"
       })
       .map(res => {
+        console.log(res.status);
         return res.body;
       });
   }
