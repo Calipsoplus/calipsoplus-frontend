@@ -10,6 +10,8 @@ import { HomeCalipsoPageComponent } from './home-calipso-page/home-calipso-page.
 
 import { AboutCalipsoPageComponent } from './about-calipso-page/about-calipso-page.component'
 import { PartnersCalipsoPageComponent } from './partners-calipso-page/partners-calipso-page.component'
+import { SelectCalipsoQuotaFormComponent } from './select-calipso-quota-form/select-calipso-quota-form.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
   { path: '', component: HomeCalipsoPageComponent },
@@ -20,10 +22,14 @@ const routes: Routes = [
   { path: 'facility', component: SelectCalipsoFacilityFormComponent },
   { path: 'experiment', component: SelectCalipsoExperimentFormComponent },
   { path: 'resource', component: SelectCalipsoResourceFormComponent },
-
+  { path: 'quota', component: SelectCalipsoQuotaFormComponent },
 
   { path: 'about', component: AboutCalipsoPageComponent },
-  { path: 'partners', component: PartnersCalipsoPageComponent }
+  { path: 'partners', component: PartnersCalipsoPageComponent } ,
+
+  { path: '**', component: PageNotFoundComponent }
+
+
 
 ];
 
