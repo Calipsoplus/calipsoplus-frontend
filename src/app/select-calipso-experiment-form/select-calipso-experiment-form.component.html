@@ -30,14 +30,13 @@
       <h1 class="col-sm-4"></h1>
 
     </div>
-
-    <table class="table">
+    <table class="table sortable">
       <thead>
         <tr class="d-flex">
-          <th class="col-sm-3">Title</th>
-          <th class="col-sm-2">Proposal Id</th>
-          <th class="col-sm-3">Abstract</th>
-          <th class="col-sm-2">Beamline</th>
+          <th class="col-sm-3" (click)="SortnowByField('subject')">Title<span>&nbsp;&nbsp;<img src='assets/images/sort.svg' width="15px" height="15px" /></span></th>
+          <th class="col-sm-2" (click)="SortnowByField('serial_number')">Proposal Id<span>&nbsp;&nbsp;<img src='assets/images/sort.svg' width="15px" height="15px" /></span></th>
+          <th class="col-sm-3" (click)="SortnowByField('body')">Abstract<span>&nbsp;&nbsp;<img src='assets/images/sort.svg' width="15px" height="15px" /></span></th>
+          <th class="col-sm-2" (click)="SortnowByField('beam_line')">Beamline<span>&nbsp;&nbsp;<img src='assets/images/sort.svg' width="15px" height="15px" /></span></th>
           <th class="col-sm-2"></th>
         </tr>
       </thead>
@@ -46,7 +45,7 @@
           <td class="col-sm-3">{{experiment.subject}}</td>
           <td class="col-sm-2">{{experiment.serial_number}}</td>
           <td class="col-sm-3">{{experiment.body | slice:0:106}}
-            <img src='assets/images/magnifier.svg' width="20px" height="20px" alt="<!>" title="{{experiment.body}}" />
+            <img src='assets/images/magnifier.svg' width="15px" height="15px" alt="<!>" title="{{experiment.body}}" />
           </td>
           <td class="col-sm-2">{{experiment.beam_line}}</td>
           <td class="col-sm-2 text-center">
@@ -120,12 +119,7 @@
 
     </div>
     <hr/>
+    <br/><br/><br/><br/><br/>
   </div>
 </div>
 
-
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
