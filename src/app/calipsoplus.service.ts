@@ -17,6 +17,8 @@ import { CalipsoImage } from "./calipso-image";
 
 
 import { Router } from "@angular/router";
+import { CalipsoPaginationExperiment } from "./calipso-pagination-experiment";
+
 
 @Injectable()
 export class CalipsoplusService {
@@ -73,11 +75,11 @@ export class CalipsoplusService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  public getCalipsoExperiments(
-    username: string
-  ): Observable<CalipsoExperiment[]> {
+  public getCalipsoExperiments(username: string, page:Number
+  ): Observable<CalipsoPaginationExperiment> {
     let url = this.experimentsUrl.replace("$USERNAME", username);
-    return this.http.get<CalipsoExperiment[]>(url, {
+    url = url.concat("?page=",page.toString());
+    return this.http.get<CalipsoPaginationExperiment>(url, {
       withCredentials: true
     });
   }
@@ -180,7 +182,6 @@ export class CalipsoplusService {
         observe: "response"
       })
       .map(res => {
-        console.log(res.status);
         return res.body;
       });
   }
