@@ -31,6 +31,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   );
   actual_page: number = 0;
   total_pages: number[] = [];
+  sort_field: string="";
 
   experiments: CalipsoExperiment[];
   containers: CalipsoContainer[];
@@ -46,12 +47,27 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   max_hdd_exceeded: Boolean = false;
 
   safe_locked_button: Boolean = false;
+  last_sorted = '';
 
   constructor(
     private calipsoService: CalipsoplusService,
     private router: Router
   ) {}
 
+  private SortnowByField(sort_field:string){
+    let sort= "";
+
+    if(this.last_sorted!=sort_field){
+        this.sort_field = sort_field;
+    }else {
+      this.sort_field = "-"+sort_field;
+
+    }
+    this.last_sorted = this.sort_field;
+    console.log("sort_field= "+this.sort_field);
+
+    this.load_experiments(this.actual_page);
+  }
   private check_quota() {
     let username = this.calipsoService.getLoggedUserName();
     this.calipsoService
@@ -123,7 +139,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
         // get all experiments for a username
         this.calipsoService
-          .getCalipsoExperiments(username, this.actual_page)
+          .getCalipsoExperiments(username, this.actual_page, this.sort_field)
           .subscribe(experiment => {
             this.pagination = experiment;
             this.experiments = this.pagination.results;
