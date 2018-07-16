@@ -22,9 +22,15 @@ export enum Status {
   styleUrls: ["./select-calipso-experiment-form.component.css"]
 })
 export class SelectCalipsoExperimentFormComponent implements OnInit {
-  pagination: CalipsoPaginationExperiment = new CalipsoPaginationExperiment(0,'','',0,[]);
+  pagination: CalipsoPaginationExperiment = new CalipsoPaginationExperiment(
+    0,
+    "",
+    "",
+    0,
+    []
+  );
   actual_page: number = 0;
-  total_pages: number[]=[];
+  total_pages: number[] = [];
 
   experiments: CalipsoExperiment[];
   containers: CalipsoContainer[];
@@ -85,24 +91,23 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
       });
   }
 
-  public compare_if_disabled(bol:boolean){
-    if(bol)return("disabled");
-    else return("");
+  public compare_if_disabled(bol: boolean) {
+    if (bol) return "disabled";
+    else return "";
   }
-  public compare_if_active(bol:boolean){
-    if(bol)return("active");
-    else return("");
+  public compare_if_active(bol: boolean) {
+    if (bol) return "active";
+    else return "";
   }
 
+  public showPage(page: number) {
+    let total_pages = this.pagination.count / this.pagination.page_size;
+    let medium_pages: boolean = false; //(total_pages/2-1<page)&&(page<total_pages/2+2);
+    let actual: boolean = this.actual_page == page;
+    let near: boolean = this.actual_page - 2 < page && page < this.actual_page + 2;
 
-public showPage(page:number){
-  let total_pages= this.pagination.count/this.pagination.page_size;
-  let medium_pages:boolean = false;//(total_pages/2-1<page)&&(page<total_pages/2+2);
-  let actual:boolean = this.actual_page==page;
-  let near:boolean = (this.actual_page-3<page)&&(page<this.actual_page+3)
-
-  return (page<3||actual||near||medium_pages||page>total_pages-1);
-}
+    return page < 3 || actual || near || medium_pages || page > total_pages - 1;
+  }
 
   public load_experiments(page: number) {
     if (this.experiments) this.experiments.splice(0, this.experiments.length);
@@ -123,9 +128,17 @@ public showPage(page:number){
             this.pagination = experiment;
             this.experiments = this.pagination.results;
 
-            if (this.total_pages) this.total_pages.splice(0, this.total_pages.length);
-            for (let i: number = 0; i < this.pagination.count/this.pagination.page_size; i++) {
-              this.total_pages.push(i+1);
+            if (this.total_pages) {
+              this.total_pages.splice(0, this.total_pages.length);
+            }
+            let points=true;
+            for ( let i: number = 0; i < this.pagination.count / this.pagination.page_size; i++ ) {
+              if(this.showPage(i+1)){
+               this.total_pages.push(i + 1);
+               points = true;
+              }else{
+                if(points){this.total_pages.push(i + 1);points=false;}
+              }
             }
 
             // search experiment in container

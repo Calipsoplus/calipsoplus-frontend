@@ -100,7 +100,13 @@
                 </button>
               </li>
             </div>
-            <div *ngIf="!this.showPage(page)">&nbsp;.</div>
+            <div *ngIf="!this.showPage(page)">
+              <li class="page-item disabled">
+                <button class="page-link">
+                  <span>...</span>
+                </button>
+              </li>
+            </div>
           </div>
 
 
