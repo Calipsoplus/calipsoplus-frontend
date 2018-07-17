@@ -33,8 +33,8 @@
       <div class="col-sm-3">
         <div class="input-group align-vertical">
           <input type="text" (keyup.enter)="search_action(searchkey.value)" class="form-control" value="{{search_key}}" #searchkey
-            placeholder="Search..." /> &nbsp;
-          <span class="fa fa-search"></span>
+            placeholder="Search..." />&nbsp;&nbsp;
+          <span (click)="search_action(searchkey.value)" class="fa fa-search hand"></span>
         </div>
       </div>
     </div>
