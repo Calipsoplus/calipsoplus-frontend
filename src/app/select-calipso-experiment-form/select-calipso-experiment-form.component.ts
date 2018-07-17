@@ -31,7 +31,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   );
   actual_page: number = 0;
   total_pages: number[] = [];
-  sort_field: string="";
+  sort_field: string = "";
 
   experiments: CalipsoExperiment[];
   containers: CalipsoContainer[];
@@ -46,28 +46,33 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   max_memory_exceeded: Boolean = false;
   max_hdd_exceeded: Boolean = false;
 
+  search_key: string = "";
+
   safe_locked_button: Boolean = false;
-  last_sorted = '';
+  last_sorted = "";
 
   constructor(
     private calipsoService: CalipsoplusService,
     private router: Router
   ) {}
 
-  private SortnowByField(sort_field:string){
-    let sort= "";
-
-    if(this.last_sorted!=sort_field){
-        this.sort_field = sort_field;
-    }else {
-      this.sort_field = "-"+sort_field;
-
-    }
-    this.last_sorted = this.sort_field;
-    console.log("sort_field= "+this.sort_field);
-
+  public search_action(search_data:string){
+    this.search_key = search_data;
     this.load_experiments(this.actual_page);
   }
+
+  private sort_by_field(sort_field: string) {
+    let sort = "";
+
+    if (this.last_sorted != sort_field) {
+      this.sort_field = sort_field;
+    } else {
+      this.sort_field = "-" + sort_field;
+    }
+    this.last_sorted = this.sort_field;
+    this.load_experiments(this.actual_page);
+  }
+
   private check_quota() {
     let username = this.calipsoService.getLoggedUserName();
     this.calipsoService
@@ -120,12 +125,16 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     let total_pages = this.pagination.count / this.pagination.page_size;
     let medium_pages: boolean = false; //(total_pages/2-1<page)&&(page<total_pages/2+2);
     let actual: boolean = this.actual_page == page;
-    let near: boolean = this.actual_page - 2 < page && page < this.actual_page + 2;
+    let near: boolean =
+      this.actual_page - 2 < page && page < this.actual_page + 2;
 
     return page < 3 || actual || near || medium_pages || page > total_pages - 1;
   }
 
   public load_experiments(page: number) {
+    if (this.total_pages) {
+      this.total_pages.splice(0, this.total_pages.length);
+    }
     if (this.experiments) this.experiments.splice(0, this.experiments.length);
 
     if (this.calipsoService.isLogged()) {
@@ -139,21 +148,26 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
         // get all experiments for a username
         this.calipsoService
-          .getCalipsoExperiments(username, this.actual_page, this.sort_field)
+          .getCalipsoExperiments(username, this.actual_page, this.sort_field, this.search_key)
           .subscribe(experiment => {
             this.pagination = experiment;
             this.experiments = this.pagination.results;
 
-            if (this.total_pages) {
-              this.total_pages.splice(0, this.total_pages.length);
-            }
-            let points=true;
-            for ( let i: number = 0; i < this.pagination.count / this.pagination.page_size; i++ ) {
-              if(this.showPage(i+1)){
-               this.total_pages.push(i + 1);
-               points = true;
-              }else{
-                if(points){this.total_pages.push(i + 1);points=false;}
+
+            let points = true;
+            for (
+              let i: number = 0;
+              i < this.pagination.count / this.pagination.page_size;
+              i++
+            ) {
+              if (this.showPage(i + 1)) {
+                this.total_pages.push(i + 1);
+                points = true;
+              } else {
+                if (points) {
+                  this.total_pages.push(i + 1);
+                  points = false;
+                }
               }
             }
 
