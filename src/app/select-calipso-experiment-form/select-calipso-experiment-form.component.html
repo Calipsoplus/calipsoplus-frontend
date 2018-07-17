@@ -7,9 +7,8 @@
   <div class="col">
 
     <div class="row">
-      <h1 class="col-sm-4">Proposals</h1>
+      <h1 class="col-sm-4"></h1>
       <h5 class="col-sm-4 text-center">
-
         <div *ngIf="max_num_machines_exceeded||max_num_cpu_exceeded||max_memory_exceeded||max_hdd_exceeded">
           <span class="badge badge-primary">Warning</span>
         </div>
@@ -25,30 +24,50 @@
         <div *ngIf="max_hdd_exceeded">
           <span class="badge badge-warning">The storage per user has been exceeded.</span>
         </div>
-
       </h5>
-      <h1 class="col-sm-4"></h1>
-
+      <div class="col-sm-4"></div>
     </div>
+    <div class="row">
+      <h1 class="col-sm-4">Proposals</h1>
+      <div class="col-sm-5"></div>
+      <div class="col-sm-3">
+        <div class="input-group align-vertical">
+          <input type="text" (keyup.enter)="search_action(searchkey.value)" class="form-control" value="{{search_key}}" #searchkey
+            placeholder="Search..." />&nbsp;&nbsp;
+          <span (click)="search_action(searchkey.value)" class="fa fa-search hand"></span>
+        </div>
+      </div>
+    </div>
+
     <table class="table sortable">
       <thead>
         <tr class="d-flex">
-          <th class="col-sm-3" (click)="SortnowByField('subject')">Title<span>&nbsp;&nbsp;<img src='assets/images/sort.svg' width="15px" height="15px" /></span></th>
-          <th class="col-sm-2" (click)="SortnowByField('serial_number')">Proposal Id<span>&nbsp;&nbsp;<img src='assets/images/sort.svg' width="15px" height="15px" /></span></th>
-          <th class="col-sm-3" (click)="SortnowByField('body')">Abstract<span>&nbsp;&nbsp;<img src='assets/images/sort.svg' width="15px" height="15px" /></span></th>
-          <th class="col-sm-2" (click)="SortnowByField('beam_line')">Beamline<span>&nbsp;&nbsp;<img src='assets/images/sort.svg' width="15px" height="15px" /></span></th>
-          <th class="col-sm-2"></th>
+
+          <th class="col-sm-2" (click)="sort_by_field('serial_number')">Proposal Id &nbsp;&nbsp;
+            <i class="fas fa-sort"></i>
+          </th>
+          <th class="col-sm-3" (click)="sort_by_field('subject')">Title &nbsp;&nbsp;
+            <i class="fas fa-sort"></i>
+          </th>
+          <th class="col-sm-3" (click)="sort_by_field('body')">Abstract &nbsp;&nbsp;
+            <i class="fas fa-sort"></i>
+          </th>
+          <th class="col-sm-2" (click)="sort_by_field('beam_line')">Beamline &nbsp;&nbsp;
+            <i class="fas fa-sort"></i>
+          </th>
+          <th class="col-sm-2 text-center"><i class="fas fa-laptop"></i>
+            </th>
         </tr>
       </thead>
       <tbody>
         <tr class="d-flex" *ngFor="let experiment of experiments">
-          <td class="col-sm-3">{{experiment.subject}}</td>
           <td class="col-sm-2">{{experiment.serial_number}}</td>
-          <td class="col-sm-3">{{experiment.body | slice:0:106}}
-            <img src='assets/images/magnifier.svg' width="15px" height="15px" alt="<!>" title="{{experiment.body}}" />
+          <td class="col-sm-3">{{experiment.subject}}</td>
+          <td class="col-sm-3">{{experiment.body | slice:0:106}} &nbsp;&nbsp;
+             <a *ngIf="experiment.body.length>100" class="far fa-eye" title="{{experiment.body}}"></a>
           </td>
           <td class="col-sm-2">{{experiment.beam_line}}</td>
-          <td class="col-sm-2 text-center">
+          <td class="col-sm-2 disabled text-center">
             <div [ngSwitch]="statusActiveExperiments[experiment.serial_number]">
               <div *ngSwitchCase="0" class="btn-group mr-3">
                 <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button"
@@ -119,7 +138,10 @@
 
     </div>
     <hr/>
-    <br/><br/><br/><br/><br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
   </div>
 </div>
-

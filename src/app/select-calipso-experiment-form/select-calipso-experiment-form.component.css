@@ -1,8 +1,16 @@
 .sortable th{
   cursor: pointer;
   background-color: rgb(244, 244, 244);
-  color:rgb(44, 44, 44);
+  color:rgb(44, 44, 70);
 }
-.btn{
-  font-size: medium;
+
+.align-vertical {
+  align-items: center;
+
 }
+
+.hand{
+  cursor: pointer;
+}
+
+

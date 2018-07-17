@@ -10,28 +10,35 @@
     <table class="table">
       <thead>
         <tr class="d-flex">
-          <th class="col"  *ngFor="let resource of resources">RESOURCE</th>
+          <th class="col" *ngFor="let resource of resources">RESOURCE</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="d-flex" >
+        <tr class="d-flex">
           <td class="col" *ngFor="let resource of resources">
-              <b>Proposal ID : </b>{{resource.experiment}}<br/>
-              <b>Machine name: </b>{{resource.machine_name}}<br/>
-              <b>IP Address/Port : </b>{{resource.machine_ip}}<br/>
-              <b>Creation Date : </b>{{resource.creation_date}}<br/>
-              <b>Expiration Date : </b>{{resource.last_accessed_date}}<br/>
-              <b>Last Access : </b>{{resource.expiration_date}}<br/>
-              <br/>
-              <button class="btn btn-lg btn-primary" (click)="go_in(resource.machine_name)">ENTER</button>
+            <b>Proposal ID : </b>{{resource.experiment}}
+            <br/>
+            <b>Machine name: </b>{{resource.machine_name}}
+            <br/>
+            <b>IP Address/Port : </b>{{resource.machine_ip}}
+            <br/>
+            <b>Creation Date : </b>{{resource.creation_date}}
+            <br/>
+            <b>Expiration Date : </b>{{resource.last_accessed_date}}
+            <br/>
+            <b>Last Access : </b>{{resource.expiration_date}}
+            <br/>
+            <br/>
+            <button class="btn btn-lg btn-primary" (click)="go_in(resource.machine_name)">ENTER</button>
           </td>
         </tr>
       </tbody>
     </table>
     <div *ngIf="!resources.length">
-        <div class="text-center col">
-        <h2>No resources</h2>
-        </div>
-     </div>
+      <hr>
+      <div class="text-center col">
+        <h2>No resources found</h2>
+      </div>
+    </div>
   </div>
 </div>
