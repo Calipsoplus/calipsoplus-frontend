@@ -4,7 +4,6 @@
 }
 
 html body {
-  font-size: 1em;
-  font-family:myFont;
+  font-family:myFont !important;
 }
 

@@ -3,4 +3,9 @@
   background-color: rgb(244, 244, 244);
   color:rgb(44, 44, 44);
 }
+.align-vertical {
+  align-items: center;
+
+}
+
 

@@ -57,6 +57,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   ) {}
 
   public search_action(search_data:string){
+    this.actual_page=1;
     this.search_key = search_data;
     this.load_experiments(this.actual_page);
   }
