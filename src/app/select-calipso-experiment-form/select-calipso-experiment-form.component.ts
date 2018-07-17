@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import { CalipsoContainer } from "../calipso-container";
 
 import { CalipsoQuota } from "../calipso-quota";
+import { CalipsoPaginationExperiment } from "../calipso-pagination-experiment";
 
 export enum Status {
   idle = 0, // ready
@@ -21,6 +22,17 @@ export enum Status {
   styleUrls: ["./select-calipso-experiment-form.component.css"]
 })
 export class SelectCalipsoExperimentFormComponent implements OnInit {
+  pagination: CalipsoPaginationExperiment = new CalipsoPaginationExperiment(
+    0,
+    "",
+    "",
+    0,
+    []
+  );
+  actual_page: number = 0;
+  total_pages: number[] = [];
+  sort_field: string="";
+
   experiments: CalipsoExperiment[];
   containers: CalipsoContainer[];
 
@@ -35,12 +47,27 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   max_hdd_exceeded: Boolean = false;
 
   safe_locked_button: Boolean = false;
+  last_sorted = '';
 
   constructor(
     private calipsoService: CalipsoplusService,
     private router: Router
   ) {}
 
+  private SortnowByField(sort_field:string){
+    let sort= "";
+
+    if(this.last_sorted!=sort_field){
+        this.sort_field = sort_field;
+    }else {
+      this.sort_field = "-"+sort_field;
+
+    }
+    this.last_sorted = this.sort_field;
+    console.log("sort_field= "+this.sort_field);
+
+    this.load_experiments(this.actual_page);
+  }
   private check_quota() {
     let username = this.calipsoService.getLoggedUserName();
     this.calipsoService
@@ -80,8 +107,29 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
       });
   }
 
-  ngOnInit() {
+  public compare_if_disabled(bol: boolean) {
+    if (bol) return "disabled";
+    else return "";
+  }
+  public compare_if_active(bol: boolean) {
+    if (bol) return "active";
+    else return "";
+  }
+
+  public showPage(page: number) {
+    let total_pages = this.pagination.count / this.pagination.page_size;
+    let medium_pages: boolean = false; //(total_pages/2-1<page)&&(page<total_pages/2+2);
+    let actual: boolean = this.actual_page == page;
+    let near: boolean = this.actual_page - 2 < page && page < this.actual_page + 2;
+
+    return page < 3 || actual || near || medium_pages || page > total_pages - 1;
+  }
+
+  public load_experiments(page: number) {
+    if (this.experiments) this.experiments.splice(0, this.experiments.length);
+
     if (this.calipsoService.isLogged()) {
+      this.actual_page = page;
       let username = this.calipsoService.getLoggedUserName();
       this.safe_locked_button = false;
 
@@ -91,9 +139,23 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
         // get all experiments for a username
         this.calipsoService
-          .getCalipsoExperiments(username)
+          .getCalipsoExperiments(username, this.actual_page, this.sort_field)
           .subscribe(experiment => {
-            this.experiments = experiment;
+            this.pagination = experiment;
+            this.experiments = this.pagination.results;
+
+            if (this.total_pages) {
+              this.total_pages.splice(0, this.total_pages.length);
+            }
+            let points=true;
+            for ( let i: number = 0; i < this.pagination.count / this.pagination.page_size; i++ ) {
+              if(this.showPage(i+1)){
+               this.total_pages.push(i + 1);
+               points = true;
+              }else{
+                if(points){this.total_pages.push(i + 1);points=false;}
+              }
+            }
 
             // search experiment in container
             this.experiments.forEach(element => {
@@ -138,6 +200,10 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     } else {
       this.router.navigate(["login"]);
     }
+  }
+
+  ngOnInit() {
+    this.load_experiments(1);
   }
 
   public run(experiment_serial_number: string) {

@@ -11,7 +11,7 @@
       <h5 class="col-sm-4 text-center">
 
         <div *ngIf="max_num_machines_exceeded||max_num_cpu_exceeded||max_memory_exceeded||max_hdd_exceeded">
-            <span class="badge badge-primary">Warning</span>
+          <span class="badge badge-primary">Warning</span>
         </div>
         <div *ngIf="max_num_machines_exceeded">
           <span class="badge badge-warning">The number of machines per user has been exceeded.</span>
@@ -30,14 +30,13 @@
       <h1 class="col-sm-4"></h1>
 
     </div>
-
-    <table class="table">
+    <table class="table sortable">
       <thead>
         <tr class="d-flex">
-          <th class="col-sm-3">Title</th>
-          <th class="col-sm-2">Proposal Id</th>
-          <th class="col-sm-4">Abstract</th>
-          <th class="col-sm-1">Beamline</th>
+          <th class="col-sm-3" (click)="SortnowByField('subject')">Title<span>&nbsp;&nbsp;<img src='assets/images/sort.svg' width="15px" height="15px" /></span></th>
+          <th class="col-sm-2" (click)="SortnowByField('serial_number')">Proposal Id<span>&nbsp;&nbsp;<img src='assets/images/sort.svg' width="15px" height="15px" /></span></th>
+          <th class="col-sm-3" (click)="SortnowByField('body')">Abstract<span>&nbsp;&nbsp;<img src='assets/images/sort.svg' width="15px" height="15px" /></span></th>
+          <th class="col-sm-2" (click)="SortnowByField('beam_line')">Beamline<span>&nbsp;&nbsp;<img src='assets/images/sort.svg' width="15px" height="15px" /></span></th>
           <th class="col-sm-2"></th>
         </tr>
       </thead>
@@ -45,17 +44,18 @@
         <tr class="d-flex" *ngFor="let experiment of experiments">
           <td class="col-sm-3">{{experiment.subject}}</td>
           <td class="col-sm-2">{{experiment.serial_number}}</td>
-          <td class="col-sm-4">{{experiment.body | slice:0:106}}
-            <img src='assets/images/magnifier.svg' width="20px" height="20px" alt="<!>" title="{{experiment.body}}" />
+          <td class="col-sm-3">{{experiment.body | slice:0:106}}
+            <img src='assets/images/magnifier.svg' width="15px" height="15px" alt="<!>" title="{{experiment.body}}" />
           </td>
-          <td class="col-sm-1">{{experiment.beam_line}}</td>
+          <td class="col-sm-2">{{experiment.beam_line}}</td>
           <td class="col-sm-2 text-center">
             <div [ngSwitch]="statusActiveExperiments[experiment.serial_number]">
               <div *ngSwitchCase="0" class="btn-group mr-3">
-                <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button" class="btn btn-outline-primary" (click)="run(experiment.serial_number)"
-                  type="button" class="btn btn-primary">Launch !</button>
+                <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button"
+                  class="btn btn-outline-primary" (click)="run(experiment.serial_number)" type="button" class="btn btn-primary">Launch !</button>
                 <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
-                  <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button" class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle></button>
+                  <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button"
+                    class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle></button>
                   <div class="dropdown-menu" ngbDropdownMenu>
                     <button class="dropdown-item" (click)="run(experiment.serial_number)">Launch!</button>
                     <button class="dropdown-item">Link</button>
@@ -76,5 +76,50 @@
         </tr>
       </tbody>
     </table>
+
+    <hr/>
+
+    <div class="col-sm-12">
+      <nav aria-label="experiments pagination">
+        <ul class="pagination pagination-sm justify-content-center ">
+          <li class="page-item {{compare_if_disabled(actual_page==1)}}">
+            <button class="page-link " (click)="load_experiments(this.actual_page-1)">
+              <span aria-hidden="true">&laquo;</span>
+
+            </button>
+
+          </li>
+
+
+          <div *ngFor="let page of total_pages">
+            <div *ngIf="this.showPage(page)">
+              <li class="page-item {{compare_if_active(actual_page==page)}}">
+                <button class="page-link" (click)="load_experiments(page)">
+                  <span>{{page}}</span>
+                </button>
+              </li>
+            </div>
+            <div *ngIf="!this.showPage(page)">
+              <li class="page-item disabled">
+                <button class="page-link">
+                  <span>...</span>
+                </button>
+              </li>
+            </div>
+          </div>
+
+
+          <li class="page-item {{compare_if_disabled(actual_page>=pagination.count/pagination.page_size)}}">
+            <button class="page-link" (click)="load_experiments(this.actual_page+1)">
+              <span aria-hidden="true">&raquo;</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+    </div>
+    <hr/>
+    <br/><br/><br/><br/><br/>
   </div>
 </div>
+
