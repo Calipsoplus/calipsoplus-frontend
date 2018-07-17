@@ -75,10 +75,12 @@ export class CalipsoplusService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  public getCalipsoExperiments(username: string, page:Number, order:string
+  public getCalipsoExperiments(username: string, page:Number, order:string, search_data:string
   ): Observable<CalipsoPaginationExperiment> {
     let url = this.experimentsUrl.replace("$USERNAME", username);
     url = url.concat("?page=",page.toString(),"&ordering=",order.toString());
+    if(search_data!="")url = url.concat("&search=",search_data.toString());
+
     return this.http.get<CalipsoPaginationExperiment>(url, {
       withCredentials: true
     });
