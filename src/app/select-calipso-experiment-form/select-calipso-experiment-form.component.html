@@ -63,7 +63,7 @@
         <tr class="d-flex" *ngFor="let experiment of experiments">
           <td class="col-sm-2">{{experiment.serial_number}}</td>
           <td class="col-sm-3">{{experiment.subject}}</td>
-          <td class="col-sm-3">{{experiment.body | slice:0:106}} &nbsp;&nbsp;
+          <td class="col-sm-3">{{experiment.body | slice:0:106}} &nbsp;
              <a *ngIf="experiment.body.length>100" class="far fa-eye" title="{{experiment.body}}"></a>
           </td>
           <td class="col-sm-2">{{experiment.beam_line}}</td>
