@@ -6,11 +6,16 @@
 
 .align-vertical {
   align-items: center;
-
 }
 
 .hand{
   cursor: pointer;
 }
 
-
+.table tbody tr:hover td, .table tbody tr:hover th {
+  background-color:  rgb(241, 241, 233);
+}
+.column_selected{
+  background-color: rgb(234, 234, 240) !important;
+  color: rgb(53, 53, 92) !important;
+}
