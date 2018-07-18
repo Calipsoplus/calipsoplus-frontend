@@ -62,7 +62,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     this.load_experiments(this.actual_page);
   }
 
-  private sort_by_field(sort_field: string) {
+  public sort_by_field(sort_field: string) {
     let sort = "";
 
     if (this.last_sorted != sort_field) {
