@@ -39,32 +39,36 @@
       </div>
     </div>
 
-    <table class="table sortable">
+    <table class="table sortable table-hover">
       <thead>
         <tr class="d-flex">
-
-          <th class="col-sm-2" (click)="sort_by_field('serial_number')">Proposal Id &nbsp;&nbsp;
+          <th class="col-sm-2 {{if_is_sorted('serial_number')}}" (click)="sort_by_field('serial_number')">
+            Proposal Id &nbsp;&nbsp;
             <i class="fas fa-sort"></i>
           </th>
-          <th class="col-sm-3" (click)="sort_by_field('subject')">Title &nbsp;&nbsp;
+          <th class="col-sm-3 {{if_is_sorted('subject')}}" (click)="sort_by_field('subject')">
+            Title &nbsp;&nbsp;
             <i class="fas fa-sort"></i>
           </th>
-          <th class="col-sm-3" (click)="sort_by_field('body')">Abstract &nbsp;&nbsp;
+          <th class="col-sm-3 {{if_is_sorted('body')}} " (click)="sort_by_field('body')">
+            Abstract &nbsp;&nbsp;
             <i class="fas fa-sort"></i>
           </th>
-          <th class="col-sm-2" (click)="sort_by_field('beam_line')">Beamline &nbsp;&nbsp;
+          <th class="col-sm-2 {{if_is_sorted('beam_line')}}" (click)="sort_by_field('beam_line')">
+            Beamline &nbsp;&nbsp;
             <i class="fas fa-sort"></i>
           </th>
-          <th class="col-sm-2 text-center"><i class="fas fa-laptop"></i>
-            </th>
+          <th class="col-sm-2 text-center">
+            <i class="fas fa-laptop"></i>
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr class="d-flex" *ngFor="let experiment of experiments">
           <td class="col-sm-2">{{experiment.serial_number}}</td>
           <td class="col-sm-3">{{experiment.subject}}</td>
-          <td class="col-sm-3">{{experiment.body | slice:0:106}} &nbsp;&nbsp;
-             <a *ngIf="experiment.body.length>100" class="far fa-eye" title="{{experiment.body}}"></a>
+          <td class="col-sm-3">{{experiment.body | slice:0:106}} &nbsp;
+            <a *ngIf="experiment.body.length>100" class="far fa-eye" title="{{experiment.body}}"></a>
           </td>
           <td class="col-sm-2">{{experiment.beam_line}}</td>
           <td class="col-sm-2 disabled text-center">

@@ -32,6 +32,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   actual_page: number = 0;
   total_pages: number[] = [];
   sort_field: string = "";
+  header_column_sorted: string = "serial_number";
 
   experiments: CalipsoExperiment[];
   containers: CalipsoContainer[];
@@ -56,14 +57,21 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     private router: Router
   ) {}
 
-  public search_action(search_data:string){
-    this.actual_page=1;
+  public search_action(search_data: string) {
+    this.actual_page = 1;
     this.search_key = search_data;
     this.load_experiments(this.actual_page);
   }
 
-  private sort_by_field(sort_field: string) {
+  public if_is_sorted(sort_field:string){
+    if(sort_field==this.header_column_sorted){
+      return  "column_selected";
+    }else return "";
+  }
+
+  public sort_by_field(sort_field: string) {
     let sort = "";
+    this.header_column_sorted = sort_field;
 
     if (this.last_sorted != sort_field) {
       this.sort_field = sort_field;
@@ -149,11 +157,15 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
         // get all experiments for a username
         this.calipsoService
-          .getCalipsoExperiments(username, this.actual_page, this.sort_field, this.search_key)
+          .getCalipsoExperiments(
+            username,
+            this.actual_page,
+            this.sort_field,
+            this.search_key
+          )
           .subscribe(experiment => {
             this.pagination = experiment;
             this.experiments = this.pagination.results;
-
 
             let points = true;
             for (
