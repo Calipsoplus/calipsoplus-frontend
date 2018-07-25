@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { CalipsoplusService } from "../calipsoplus.service";
 import { CalipsoExperiment } from "../calipso-experiment";
 
@@ -22,6 +22,9 @@ export enum Status {
   styleUrls: ["./select-calipso-experiment-form.component.css"]
 })
 export class SelectCalipsoExperimentFormComponent implements OnInit {
+  @Input() only_favorites: boolean = false;
+  @Input() title: string = "Proposals";
+
   pagination: CalipsoPaginationExperiment = new CalipsoPaginationExperiment(
     0,
     "",
@@ -29,7 +32,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     0,
     []
   );
-  actual_page: number = 0;
+  actual_page: number = 1;
   total_pages: number[] = [];
   sort_field: string = "";
   header_column_sorted: string = "serial_number";
@@ -57,20 +60,40 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     private router: Router
   ) {}
 
+  public star_on(serial: string, id: string) {
+    this.calipsoService.favorite_experiment(id, 1).subscribe(data => {
+      var c = this.experiments.find(x => x.serial_number == serial);
+      if (c != null) {
+        c.favorite = true;
+      } else this.load_experiments(this.actual_page);
+    });
+  }
+
+  public star_off(serial: string, id: string) {
+    this.calipsoService.favorite_experiment(id, 0).subscribe(data => {
+      var c = this.experiments.find(x => x.serial_number == serial);
+      if (c != null) {
+        c.favorite = false;
+      } else this.load_experiments(this.actual_page);
+    });
+  }
+
   public search_action(search_data: string) {
     this.actual_page = 1;
     this.search_key = search_data;
     this.load_experiments(this.actual_page);
   }
 
-  public if_is_sorted(sort_field:string){
-    if(sort_field==this.header_column_sorted){
-      return  "column_selected";
-    }else return "";
+  public if_is_sorted(sort_field: string) {
+    if (sort_field == this.header_column_sorted) {
+      return "column_selected";
+    } else return "";
   }
 
   public sort_by_field(sort_field: string) {
     let sort = "";
+    this.actual_page = 1;
+
     this.header_column_sorted = sort_field;
 
     if (this.last_sorted != sort_field) {
@@ -141,6 +164,9 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   }
 
   public load_experiments(page: number) {
+    let filter = "";
+    if (this.only_favorites) filter = "1";
+
     if (this.total_pages) {
       this.total_pages.splice(0, this.total_pages.length);
     }
@@ -161,7 +187,8 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
             username,
             this.actual_page,
             this.sort_field,
-            this.search_key
+            this.search_key,
+            filter
           )
           .subscribe(experiment => {
             this.pagination = experiment;
@@ -230,7 +257,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.load_experiments(1);
+    this.load_experiments(this.actual_page);
   }
 
   public run(experiment_serial_number: string) {

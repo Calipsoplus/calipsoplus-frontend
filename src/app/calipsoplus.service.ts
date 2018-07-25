@@ -15,10 +15,8 @@ import { CalipsoContainer } from "./calipso-container";
 import { CalipsoQuota } from "./calipso-quota";
 import { CalipsoImage } from "./calipso-image";
 
-
 import { Router } from "@angular/router";
 import { CalipsoPaginationExperiment } from "./calipso-pagination-experiment";
-
 
 @Injectable()
 export class CalipsoplusService {
@@ -28,6 +26,8 @@ export class CalipsoplusService {
   authUrl = this.backendUrl_calipso + "login/";
   logoutUrl = this.backendUrl_calipso + "logout/";
   facilitiesUrl = this.backendUrl_calipso + "facility/";
+
+  favoriteUrl = this.backendUrl_calipso + "favorite/$ID/";
 
   quotaUrl = this.backendUrl_calipso + "quota/$USERNAME/";
   usedQuotaUrl = this.backendUrl_calipso + "used_quota/$USERNAME/";
@@ -75,11 +75,41 @@ export class CalipsoplusService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  public getCalipsoExperiments(username: string, page:Number, order:string, search_data:string
+  public favorite_experiment(id: string, value: number) {
+    let url = this.favoriteUrl.replace("$ID", id);
+
+    var body = `{"favorite":"${value}"}`;
+    let headers = new HttpHeaders().set("Content-Type", "application/json");
+
+    let server_token = this.getCookie("csrftoken");
+    headers.append("X-CSRFToken", server_token);
+
+    console.log("passsing server_token:" + server_token);
+
+    return this.http
+      .put(url, body, {
+        headers: headers,
+        withCredentials: true,
+        observe: "response"
+      })
+      .map(res => {
+        return res;
+      });
+  }
+
+  public getCalipsoExperiments(
+    username: string,
+    page: Number,
+    order: string,
+    search_data: string,
+    filter: string
   ): Observable<CalipsoPaginationExperiment> {
     let url = this.experimentsUrl.replace("$USERNAME", username);
-    url = url.concat("?page=",page.toString(),"&ordering=",order.toString());
-    if(search_data!="")url = url.concat("&search=",search_data.toString());
+    url = url.concat("?page=", page.toString(), "&ordering=", order.toString());
+    if (search_data != "") url = url.concat("&search=", search_data.toString());
+
+    if (filter != "")
+      url = url.concat("&calipsouserexperiment__favorite=" + filter);
 
     return this.http.get<CalipsoPaginationExperiment>(url, {
       withCredentials: true
@@ -100,7 +130,9 @@ export class CalipsoplusService {
     return this.http.get<CalipsoQuota[]>(url, { withCredentials: true });
   }
 
-  public getCalipsoAvailableImageQuota(username: string): Observable<CalipsoQuota[]> {
+  public getCalipsoAvailableImageQuota(
+    username: string
+  ): Observable<CalipsoQuota[]> {
     let url = this.usedQuotaUrl.replace("$USERNAME", username);
     return this.http.get<CalipsoQuota[]>(url, { withCredentials: true });
   }
@@ -129,6 +161,16 @@ export class CalipsoplusService {
         this.login(username, res);
         return res;
       });
+  }
+
+  getCookie(name) {
+    let value = "; " + document.cookie;
+    let parts = value.split("; " + name + "=");
+    if (parts.length == 2)
+      return parts
+        .pop()
+        .split(";")
+        .shift();
   }
 
   public getAvalilableSoftware(): Observable<CalipsoSoftware[]> {
@@ -174,7 +216,6 @@ export class CalipsoplusService {
   ): Observable<CalipsoContainer> {
     let url = this.runContainersUrl.replace("$USERNAME", username);
     let run_url = url.replace("$EXPERIMENT", experiment);
-
     let headers = new HttpHeaders().set("Content-Type", "application/json");
 
     return this.http
