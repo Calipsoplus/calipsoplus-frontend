@@ -3,6 +3,7 @@
 <div class="row col">
   <app-experiment-nav></app-experiment-nav>
 
+
   <!-- experiments list -->
   <div class="col">
 
@@ -13,22 +14,22 @@
           <span class="badge badge-primary">Warning</span>
         </div>
         <div *ngIf="max_num_machines_exceeded">
-          <span class="badge badge-warning">The number of machines per user has been exceeded.</span>
+          <span class="badge badge-warning">The number of machines per user has been reached.</span>
         </div>
         <div *ngIf="max_num_cpu_exceeded">
-          <span class="badge badge-warning">The number of cpu per user has been exceeded.</span>
+          <span class="badge badge-warning">The number of cpu per user has been reached.</span>
         </div>
         <div *ngIf="max_memory_exceeded">
-          <span class="badge badge-warning">The memory per user has been exceeded.</span>
+          <span class="badge badge-warning">The memory per user has been reached.</span>
         </div>
         <div *ngIf="max_hdd_exceeded">
-          <span class="badge badge-warning">The storage per user has been exceeded.</span>
+          <span class="badge badge-warning">The storage per user has been reached.</span>
         </div>
       </h5>
       <div class="col-sm-4"></div>
     </div>
     <div class="row">
-      <h1 class="col-sm-4">Proposals</h1>
+      <h1 class="col-sm-4">{{title}}</h1>
       <div class="col-sm-5"></div>
       <div class="col-sm-3">
         <div class="input-group align-vertical">
@@ -42,11 +43,14 @@
     <table class="table sortable table-hover">
       <thead>
         <tr class="d-flex">
+          <th class="col-sm-1  text-center" (click)="sort_by_field('calipsouserexperiment__favorite')">
+            <i class="fas fa-star"></i>
+          </th>
           <th class="col-sm-2 {{if_is_sorted('serial_number')}}" (click)="sort_by_field('serial_number')">
             Proposal Id &nbsp;&nbsp;
             <i class="fas fa-sort"></i>
           </th>
-          <th class="col-sm-3 {{if_is_sorted('subject')}}" (click)="sort_by_field('subject')">
+          <th class="col-sm-2 {{if_is_sorted('subject')}}" (click)="sort_by_field('subject')">
             Title &nbsp;&nbsp;
             <i class="fas fa-sort"></i>
           </th>
@@ -65,8 +69,15 @@
       </thead>
       <tbody>
         <tr class="d-flex" *ngFor="let experiment of experiments">
-          <td class="col-sm-2">{{experiment.serial_number}}</td>
-          <td class="col-sm-3">{{experiment.subject}}</td>
+          <td class="col-sm-1  text-center">
+            <i *ngIf="!experiment.favorite" (click)="star_on(experiment.serial_number,experiment.id)" class="far fa-star"></i>
+            <i *ngIf="experiment.favorite" (click)="star_off(experiment.serial_number,experiment.id)" class="fa fa-star"></i>
+          </td>
+
+          <td class="col-sm-2">
+            {{experiment.serial_number}}
+          </td>
+          <td class="col-sm-2">{{experiment.subject}}</td>
           <td class="col-sm-3">{{experiment.body | slice:0:106}} &nbsp;
             <a *ngIf="experiment.body.length>100" class="far fa-eye" title="{{experiment.body}}"></a>
           </td>
