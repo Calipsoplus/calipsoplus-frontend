@@ -79,12 +79,18 @@ export class CalipsoplusService {
     let url = this.favoriteUrl.replace("$ID", id);
 
     var body = `{"favorite":"${value}"}`;
-    let headers = new HttpHeaders().set("Content-Type", "application/json");
 
     let server_token = this.getCookie("csrftoken");
-    headers.append("X-CSRFToken", server_token);
 
-    console.log("passsing server_token:" + server_token);
+    if(server_token==undefined){
+      server_token="none"
+      console.log("token_not_found!");
+    }
+
+    let headers = new HttpHeaders(
+      {'Content-Type':'application/json',
+      'X-CSRFToken':server_token}
+      );
 
     return this.http
       .put(url, body, {
