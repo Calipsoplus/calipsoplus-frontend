@@ -19,3 +19,8 @@
   background-color: rgb(234, 234, 240) !important;
   color: rgb(53, 53, 92) !important;
 }
+
+.fa-star {
+  color: darkslateblue;
+  cursor: pointer;
+}
