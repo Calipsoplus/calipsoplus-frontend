@@ -41,14 +41,14 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
               this.available_quota[index].memory =
                 parseInt(this.quotas[index].memory.slice(0, -1)) -
                 parseInt(this.used_quota[index].memory.slice(0, -1)) +
-                "g";
+                "G";
               this.available_quota[index].max_simultaneous =
                 this.quotas[index].max_simultaneous -
                 this.used_quota[index].max_simultaneous;
               this.available_quota[index].hdd =
                 parseInt(this.quotas[index].hdd.slice(0, -1)) -
                 parseInt(this.used_quota[index].hdd.slice(0, -1)) +
-                "g";
+                "G";
             }
           });
       });
