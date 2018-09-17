@@ -5,7 +5,9 @@
 
 export const environment = {
   production: false,
-  backendUrl_calipso: "http://192.168.33.11:8000/",
+  //backendUrl_calipso: "http://192.168.33.11:8000/",
+  //backendUrl_calipso: "http://vagrant-ubuntu-trusty-64:8000/",
+  backendUrl_calipso: "https://vagrant-ubuntu-trusty-64/calipso/",
   guacamoleUrl: "http://192.168.33.15:8080/",
   env : "dev"
 };
