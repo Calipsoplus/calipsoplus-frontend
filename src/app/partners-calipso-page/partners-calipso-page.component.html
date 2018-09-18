@@ -1,5 +1,5 @@
 <app-main-nav></app-main-nav>
-<div class="container" >
+<div class="container">
   <h1 class="mt-5">
     Partners involved</h1>
   <ul>
@@ -8,7 +8,14 @@
       <p class="lead">
         {{ facility.description }}
       </p>
-      <a routerLink="/experiment">{{ facility.url }}</a>
+
+      <div *ngIf="isLogged()" class="nav-link ml-auto">
+        <a href="#" (click)="!!enterFacility()">{{ facility.url }}</a>
+      </div>
+      <div *ngIf="!isLogged()" class="nav-link ml-auto">
+          {{ facility.url }} (login to enter)
+      </div>
+
     </li>
   </ul>
 
