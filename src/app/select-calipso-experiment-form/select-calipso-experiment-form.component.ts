@@ -22,8 +22,10 @@ export enum Status {
   styleUrls: ["./select-calipso-experiment-form.component.css"]
 })
 export class SelectCalipsoExperimentFormComponent implements OnInit {
-  @Input() only_favorites: boolean = false;
-  @Input() title: string = "Proposals";
+  @Input()
+  only_favorites: boolean = false;
+  @Input()
+  title: string = "Proposals";
 
   pagination: CalipsoPaginationExperiment = new CalipsoPaginationExperiment(
     0,
@@ -178,81 +180,87 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
       this.safe_locked_button = false;
 
       //get all containers active from user
-      this.calipsoService.listContainersActive(username).subscribe(res => {
-        this.containers = res;
+      this.calipsoService.listContainersActive(username).subscribe(
+        res => {
+          this.containers = res;
 
-        // get all experiments for a username
-        this.calipsoService
-          .getCalipsoExperiments(
-            username,
-            this.actual_page,
-            this.sort_field,
-            this.search_key,
-            filter
-          )
-          .subscribe(experiment => {
-            this.pagination = experiment;
-            this.experiments = this.pagination.results;
+          // get all experiments for a username
+          this.calipsoService
+            .getCalipsoExperiments(
+              username,
+              this.actual_page,
+              this.sort_field,
+              this.search_key,
+              filter
+            )
+            .subscribe(experiment => {
+              this.pagination = experiment;
+              this.experiments = this.pagination.results;
 
-            let points = true;
-            for (
-              let i: number = 0;
-              i < this.pagination.count / this.pagination.page_size;
-              i++
-            ) {
-              if (this.showPage(i + 1)) {
-                this.total_pages.push(i + 1);
-                points = true;
-              } else {
-                if (points) {
+              let points = true;
+              for (
+                let i: number = 0;
+                i < this.pagination.count / this.pagination.page_size;
+                i++
+              ) {
+                if (this.showPage(i + 1)) {
                   this.total_pages.push(i + 1);
-                  points = false;
+                  points = true;
+                } else {
+                  if (points) {
+                    this.total_pages.push(i + 1);
+                    points = false;
+                  }
                 }
               }
-            }
 
-            // search experiment in container
-            this.experiments.forEach(element => {
-              var c = this.containers.find(
-                x => x.calipso_experiment == element.serial_number
-              );
-              this.check_quota();
-              if (c == null) {
-                this.statusActiveExperiments[element.serial_number] =
-                  Status.idle;
-              } else {
+              // search experiment in container
+              this.experiments.forEach(element => {
+                var c = this.containers.find(
+                  x => x.calipso_experiment == element.serial_number
+                );
                 this.check_quota();
+                if (c == null) {
+                  this.statusActiveExperiments[element.serial_number] =
+                    Status.idle;
+                } else {
+                  this.check_quota();
 
-                switch (c.container_status) {
-                  case "busy": {
-                    this.statusActiveExperiments[element.serial_number] =
-                      Status.busy;
-                    break;
+                  switch (c.container_status) {
+                    case "busy": {
+                      this.statusActiveExperiments[element.serial_number] =
+                        Status.busy;
+                      break;
+                    }
+                    case "created": {
+                      this.statusActiveExperiments[element.serial_number] =
+                        Status.running;
+                      break;
+                    }
+                    case "stopped":
+                    case "removed": {
+                      this.statusActiveExperiments[element.serial_number] =
+                        Status.idle;
+                      break;
+                    }
+                    default: {
+                      this.statusActiveExperiments[element.serial_number] =
+                        Status.error;
+                      break;
+                    }
                   }
-                  case "created": {
-                    this.statusActiveExperiments[element.serial_number] =
-                      Status.running;
-                    break;
-                  }
-                  case "stopped":
-                  case "removed": {
-                    this.statusActiveExperiments[element.serial_number] =
-                      Status.idle;
-                    break;
-                  }
-                  default: {
-                    this.statusActiveExperiments[element.serial_number] =
-                      Status.error;
-                    break;
-                  }
+                  this.safe_locked_button = false;
                 }
-                this.safe_locked_button = false;
-              }
+              });
             });
-          });
-      });
+        },
+        err => {
+          this.router.navigate(["/"]);
+          //console.log("Secutiry error");
+        }
+      );
     } else {
-      this.router.navigate(["login"]);
+      this.router.navigate(["/"]);
     }
   }
 
