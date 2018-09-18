@@ -6,7 +6,7 @@
     <a class="col-sm-5 nav-link" routerLink="/">
       <img src="assets/images/logo.jpg" />
     </a>
-    <a *ngIf="!calipsoService.isLogged()" class="nav-link ml-auto" routerLink="/login">Login</a>
+    <a *ngIf="!calipsoService.isLogged()" class="nav-link ml-auto">login</a>
     <div *ngIf="calipsoService.isLogged()" class="nav-link ml-auto">
       <div class="row">
         <div class="col">

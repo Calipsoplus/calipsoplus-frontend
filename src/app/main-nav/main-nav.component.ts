@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { CalipsoplusService } from "../calipsoplus.service";
 import { Router } from "@angular/router";
+import { environment } from "../../environments/environment";
 
 @Component({
   selector: "app-main-nav",
@@ -13,7 +14,36 @@ export class MainNavComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.router.url == "/autologin") {
+      this.calipsoService.unauthUmbrella().subscribe(unauth_resp => {
+        this.calipsoService.getUmbrellaSession().subscribe(
+          session_resp => {
+            let username = session_resp.uid;
+            let EAAHash = session_resp.EAAHash;
+
+            this.calipsoService.authWithEAAHash(username, EAAHash).subscribe(
+              user_resp => {
+                //console.log(user_resp);
+                this.calipsoService.login(username);
+                this.router.navigate(["/partners"]);
+              },
+              error => {
+                if (error.status == 404) {
+                  //console.log("User in UO not found or not linked..");
+                  this.calipsoService.goExternalLoginWOU();
+                }
+              }
+            );
+          },
+          error => {
+            //console.log("No session found.. go to umbrella page");
+            this.calipsoService.goExternalLoginUmbrella();
+          }
+        );
+      });
+    }
+  }
   public getUserName(): string {
     return this.calipsoService.getLoggedUserName();
   }
@@ -23,13 +53,37 @@ export class MainNavComponent implements OnInit {
   }
 
   public logout() {
-    this.calipsoService.unauth().subscribe(
-      resp => {
-        this.router.navigate(["/"]);
-      },
-      error => {
-        alert("Error in logout");
-      }
-    );
+    //console.log("login_local:"+this.calipsoService.calipsoSettings.local_auth);
+
+    if (this.calipsoService.calipsoSettings.local_auth) {
+      this.calipsoService.unauth().subscribe(
+        resp => {
+          this.router.navigate(["/"]);
+        },
+        error => {
+          //console.log("Error in UO logout");
+        }
+      );
+    } else {
+      this.calipsoService.unauthUmbrella().subscribe(
+        resp => {
+          //console.log("logout donet from umbrella");
+          localStorage.removeItem("ct");
+          window.location.href =
+            environment.backendUrl_calipso +
+            "Shibboleth.sso/Logout?return=" +
+            environment.frontend_calipso;
+        },
+        error => {
+          //console.log("Error in umbrella logout");
+        }
+      );
+    }
+  }
+
+  public login() {
+    if (this.calipsoService.calipsoSettings.local_auth) {
+      this.router.navigate(["/login"]);
+    } else this.calipsoService.goExternalLoginUmbrella();
   }
 }
