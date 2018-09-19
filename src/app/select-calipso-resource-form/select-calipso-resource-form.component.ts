@@ -65,7 +65,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
 
   public go_in(container_name: string) {
     var c = this.containers.find(x => x.container_name == container_name);
-    if (c == null) alert("error win up");
+    if (c == null) console.log("error win up");
     else {
       this.calipsoService.go_into_container(
         c.container_name,

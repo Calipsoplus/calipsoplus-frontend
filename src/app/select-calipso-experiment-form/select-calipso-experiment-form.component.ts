@@ -296,7 +296,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
         error => {
           this.statusActiveExperiments[experiment_serial_number] = Status.idle;
           this.safe_locked_button = false;
-          alert("Ooops!");
+          console.log("Ooops!");
         }
       );
   }
@@ -343,7 +343,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     var c = this.containers.find(
       x => x.calipso_experiment == experiment_serial_number
     );
-    if (c == null) alert("error win up");
+    if (c == null) console.log("error win up");
     else
       this.calipsoService.go_into_container(
         c.container_name,

@@ -29,7 +29,7 @@ export class LoginCalipsoUserFormComponent implements OnInit {
         );
       },
       error => {
-        alert("Error in logout");
+        console.log("Error in logout");
       }
     );
   }
