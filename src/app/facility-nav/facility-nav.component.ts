@@ -1,6 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { CalipsoplusService } from "../calipsoplus.service";
 import { Router } from "@angular/router";
+import { environment } from "../../environments/environment";
+
+
 
 @Component({
   selector: "app-facility-nav",
@@ -23,14 +26,36 @@ export class FacilityNavComponent implements OnInit {
     return this.calipsoService.isLogged();
   }
 
+
   public logout() {
-    this.calipsoService.unauth().subscribe(
-      resp => {
-        this.router.navigate(["/"]);
-      },
-      error => {
-        alert("Error in logout");
-      }
-    );
+    if (this.calipsoService.calipsoSettings.local_auth) {
+      this.calipsoService.unauth().subscribe(
+        resp => {
+          this.router.navigate(["/"]);
+        },
+        error => {
+          //console.log("Error in UO logout");
+        }
+      );
+    } else {
+      this.calipsoService.unauthUmbrella().subscribe(
+        resp => {
+          //console.log("logout donet from umbrella");
+          localStorage.removeItem("ct");
+          window.location.href =
+            environment.backendUrl_calipso +
+            "Shibboleth.sso/Logout?return=" +
+            environment.frontend_calipso;
+        },
+        error => {
+          //console.log("Error in umbrella logout");
+        }
+      );
+    }
   }
+
+
+
+
+
 }
