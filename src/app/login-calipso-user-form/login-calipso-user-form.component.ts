@@ -1,8 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { CalipsoplusService } from "../calipsoplus.service";
-import { CalipsoUser } from "../calipso-user";
-import { error } from "util";
 
 @Component({
   selector: "app-login-calipso-user-form",
@@ -23,7 +21,6 @@ export class LoginCalipsoUserFormComponent implements OnInit {
       resp => {
         this.calipsoService.auth(this.username, this.password).subscribe(
           resp => {
-            let keys = resp.headers.keys;
             this.router.navigate(["/partners"]);
           },
           error => {
@@ -32,7 +29,7 @@ export class LoginCalipsoUserFormComponent implements OnInit {
         );
       },
       error => {
-        alert("Error in logout");
+        console.log("Error in logout");
       }
     );
   }

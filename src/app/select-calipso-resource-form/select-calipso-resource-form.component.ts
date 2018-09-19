@@ -25,41 +25,47 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
       let username = this.calipsoService.getLoggedUserName();
 
       //get all containers active from user
-      this.calipsoService.listContainersActive(username).subscribe(res => {
-        this.containers = res;
+      this.calipsoService.listContainersActive(username).subscribe(
+        res => {
+          this.containers = res;
 
-        this.containers.forEach(element => {
-          var c = this.containers.find(
-            x => x.calipso_experiment == element.calipso_experiment
-          );
-          if (c != null) {
-            let date = new Date(c.creation_date);
-            let str_creation_date = this.calipsoService.formatDate(date);
-            let date_access = this.calipsoService.getDateAccess(
-              c.container_name
+          this.containers.forEach(element => {
+            var c = this.containers.find(
+              x => x.calipso_experiment == element.calipso_experiment
             );
-            if (c.container_status == "created") {
-              var resource: CalipsoResource = new CalipsoResource(
-                c.calipso_experiment,
-                c.container_name,
-                c.host_port,
-                str_creation_date,
-                "-",
-                date_access
+            if (c != null) {
+              let date = new Date(c.creation_date);
+              let str_creation_date = this.calipsoService.formatDate(date);
+              let date_access = this.calipsoService.getDateAccess(
+                c.container_name
               );
-              this.resources.push(resource);
+              if (c.container_status == "created") {
+                var resource: CalipsoResource = new CalipsoResource(
+                  c.calipso_experiment,
+                  c.container_name,
+                  c.host_port,
+                  str_creation_date,
+                  "-",
+                  date_access
+                );
+                this.resources.push(resource);
+              }
             }
-          }
-        });
-      });
+          });
+        },
+        err => {
+          this.router.navigate(["/"]);
+          //console.log("Secutiry error");
+        }
+      );
     } else {
-      this.router.navigate(["login"]);
+      this.router.navigate(["/"]);
     }
   }
 
   public go_in(container_name: string) {
     var c = this.containers.find(x => x.container_name == container_name);
-    if (c == null) alert("error win up");
+    if (c == null) console.log("error win up");
     else {
       this.calipsoService.go_into_container(
         c.container_name,

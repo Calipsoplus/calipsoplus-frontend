@@ -17,14 +17,23 @@ import { CalipsoImage } from "./calipso-image";
 
 import { Router } from "@angular/router";
 import { CalipsoPaginationExperiment } from "./calipso-pagination-experiment";
+import { CalipsoUmbrellaSession } from "./calipso-umbrella-session";
+import { CalipsoSettings } from "./calipso-settings";
 
 @Injectable()
 export class CalipsoplusService {
-  backendUrl_calipso = environment.backendUrl_calipso;
+  backendUrl_calipso = environment.backendUrl_calipso + environment.backendUrl_basehref;
   guacamoleUrl = environment.guacamoleUrl;
 
   authUrl = this.backendUrl_calipso + "login/";
+  umbrellaLoginUrl = this.backendUrl_calipso + "umbrella/login/";
+
+  umbrellaSessionUrl = this.backendUrl_calipso + "umbrella/session/";
+  uoUserFromHashUrl = this.backendUrl_calipso + "umbrella/wuo/";
+
+  umbrellaLogoutUrl = this.backendUrl_calipso + "umbrella/logout/";
   logoutUrl = this.backendUrl_calipso + "logout/";
+
   facilitiesUrl = this.backendUrl_calipso + "facility/";
 
   favoriteUrl = this.backendUrl_calipso + "favorite/$ID/";
@@ -40,6 +49,14 @@ export class CalipsoplusService {
   stopContainersUrl =
     this.backendUrl_calipso + "container/stop/$USERNAME/$CONTAINER/";
   listContainersUrl = this.backendUrl_calipso + "container/list/$USERNAME/";
+
+  settingsCalipsoUrl = this.backendUrl_calipso + "settings/";
+
+  UOWebUrl = "https://useroffice.cells.es/Welcome";
+
+
+  calipsoSettings:CalipsoSettings=new CalipsoSettings(false);
+
 
   DATASETS: CalipsoDataset[] = [
     {
@@ -82,15 +99,15 @@ export class CalipsoplusService {
 
     let server_token = this.getCookie("csrftoken");
 
-    if(server_token==undefined){
-      server_token="none"
-      console.log("token_not_found!");
+    if (server_token == undefined) {
+      server_token = "none";
+      //console.log("token_not_found!");
     }
 
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json',
-      'X-CSRFToken':server_token}
-      );
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json",
+      "X-CSRFToken": server_token
+    });
 
     return this.http
       .put(url, body, {
@@ -118,6 +135,12 @@ export class CalipsoplusService {
       url = url.concat("&calipsouserexperiment__favorite=" + filter);
 
     return this.http.get<CalipsoPaginationExperiment>(url, {
+      withCredentials: true
+    });
+  }
+
+  public getCalipsoSettings(): Observable<CalipsoSettings> {
+    return this.http.get<CalipsoSettings>(this.settingsCalipsoUrl, {
       withCredentials: true
     });
   }
@@ -164,7 +187,7 @@ export class CalipsoplusService {
         withCredentials: true
       })
       .map(res => {
-        this.login(username, res);
+        this.login(username);
         return res;
       });
   }
@@ -197,7 +220,21 @@ export class CalipsoplusService {
       });
   }
 
-  private login(username, response) {
+  public unauthUmbrella() {
+    let headers = new HttpHeaders().set("Content-Type", "application/json");
+    localStorage.removeItem("ct");
+    return this.http
+      .get(this.umbrellaLogoutUrl, {
+        headers: headers,
+        observe: "response",
+        withCredentials: true
+      })
+      .map(res => {
+        //console.log("unauth umbrella");
+      });
+  }
+
+  public login(username) {
     localStorage.setItem("ct", username);
   }
 
@@ -300,4 +337,57 @@ export class CalipsoplusService {
       "menubar=no, location=no, toolbar=no, scrollbars=yes, height=500"
     );
   }
+
+  public getUmbrellaSession(): Observable<CalipsoUmbrellaSession> {
+    return this.http
+      .get<CalipsoUmbrellaSession>(this.umbrellaSessionUrl, {
+        withCredentials: true
+      })
+      .map(res => {
+        return res;
+      });
+  }
+
+  public authWithEAAHash(username: string, eaahash: string) {
+    var body = `{"EAAHash":"${eaahash}", "uid":"${username}"}`;
+
+    let server_token = this.getCookie("csrftoken");
+
+    if (server_token == undefined) {
+      server_token = "none";
+      //console.log("token_not_found!");
+    }
+
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json",
+      "X-CSRFToken": server_token
+    });
+
+    return this.http
+      .post(this.uoUserFromHashUrl, body, {
+        headers: headers,
+        observe: "response",
+        withCredentials: true
+      })
+      .map(res => {
+        return res;
+      })
+      .catch(function(e) {
+        //console.log("Error: ", e);
+        throw e;
+      });
+  }
+
+  public goExternalLoginUmbrella() {
+    //console.log("Go to umbrella login page");
+    window.location.href = this.umbrellaLoginUrl;
+  }
+
+  public goExternalLoginWOU(){
+    //console.log("Go to UO page");
+    window.location.href = this.UOWebUrl;
+  }
+
+
+
 }

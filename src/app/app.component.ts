@@ -9,11 +9,13 @@ import { CalipsoplusService } from "./calipsoplus.service";
 export class AppComponent {
   title = "CALIPSOplus";
 
-
-  constructor() {}
+  constructor(private calipsoService: CalipsoplusService) {}
 
   ngOnInit() {
+    //console.log("getCalipsoSettings");
+    this.calipsoService.getCalipsoSettings().subscribe(settings => {
+      this.calipsoService.calipsoSettings = settings;
+      //console.log("settings:" + this.calipsoService.calipsoSettings.local_auth);
+    });
   }
-
-
 }
