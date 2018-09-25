@@ -187,7 +187,7 @@ export class CalipsoplusService {
         withCredentials: true
       })
       .map(res => {
-        this.login(username);
+        this.login(username,"local");
         return res;
       });
   }
@@ -217,12 +217,12 @@ export class CalipsoplusService {
       })
       .map(res => {
         localStorage.removeItem("ct");
+        localStorage.removeItem("cb");
       });
   }
 
   public unauthUmbrella() {
     let headers = new HttpHeaders().set("Content-Type", "application/json");
-    localStorage.removeItem("ct");
     return this.http
       .get(this.umbrellaLogoutUrl, {
         headers: headers,
@@ -230,13 +230,20 @@ export class CalipsoplusService {
         withCredentials: true
       })
       .map(res => {
-        //console.log("unauth umbrella");
+        localStorage.removeItem("ct");
+        localStorage.removeItem("cb");
       });
   }
 
-  public login(username) {
+  public login(username:string,local_login:string) {
     localStorage.setItem("ct", username);
+    localStorage.setItem("cb", local_login);
   }
+
+  public getLoginType() {
+    return localStorage.getItem("cb");
+  }
+
 
   public getLoggedUserName(): string {
     return localStorage.getItem("ct");
