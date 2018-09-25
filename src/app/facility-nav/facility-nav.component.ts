@@ -32,7 +32,7 @@ export class FacilityNavComponent implements OnInit {
     if (this.calipsoService.getLoginType()=='local') {
       this.calipsoService.unauth().subscribe(
         resp => {
-          console.log("logout donet from UO");
+          //console.log("logout done from UO");
           this.router.navigate(["/"]);
         },
         error => {
@@ -42,7 +42,7 @@ export class FacilityNavComponent implements OnInit {
     } else {
       this.calipsoService.unauthUmbrella().subscribe(
         resp => {
-          console.log("logout donet from umbrella");
+          //console.log("logout done from umbrella");
           window.location.href =
             environment.backendUrl_calipso +
             "Shibboleth.sso/Logout?return=" +
