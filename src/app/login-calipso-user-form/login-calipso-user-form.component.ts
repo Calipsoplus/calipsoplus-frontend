@@ -10,13 +10,18 @@ import { CalipsoplusService } from "../calipsoplus.service";
 export class LoginCalipsoUserFormComponent implements OnInit {
   username: string;
   password: string;
+  showme: boolean;
+
+  public toggle_ShowMeLocalLogin(){
+    this.showme = !this.showme;
+  }
 
   constructor(
     private router: Router,
     private calipsoService: CalipsoplusService
   ) {}
 
-  login() {
+  login_UO() {
     this.calipsoService.unauth().subscribe(
       resp => {
         this.calipsoService.auth(this.username, this.password).subscribe(
@@ -33,6 +38,14 @@ export class LoginCalipsoUserFormComponent implements OnInit {
       }
     );
   }
+
+  public isSettingsLocalLogin(){
+      return this.calipsoService.calipsoSettings.local_auth;
+  }
+
+ public login_umbrella(){
+    this.calipsoService.goExternalLoginUmbrella();
+ }
 
   ngOnInit() {}
 }
