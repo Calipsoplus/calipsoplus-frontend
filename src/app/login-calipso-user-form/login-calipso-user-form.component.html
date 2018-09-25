@@ -1,33 +1,38 @@
 <app-main-nav></app-main-nav>
+<div class="container">
 
+  <h4 class="center-all">Click on the logo bellow to sign in with your UmbrellaID</h4>
 
-<h2 class=" center-all">Enter your credentials</h2>
-<form class="form-signin center-all" #calipsoForm="ngForm">
-  <p>
-    Use your Digital User Office credentials to access the Portal
-  </p>
-
-  <div class="form-group">
-    <label for="username" class="sr-only">User name</label>
-    <input [(ngModel)]="username" type="text" id="username" class="form-control" placeholder="User name" name="username" required
-      autofocus #bk_name="ngModel">
-
-    <div [hidden]="bk_name.valid || bk_name.pristine" class="alert alert-danger">
-      username is required
+  <div class="row text-center">
+    <div class="col">
+      <a class="nav-link dropdown-menu-right" (click)="!!login_umbrella()" href="#">
+        <img src="assets/images/umbrella.logo.jpg" width="auto" />
+      </a>
     </div>
   </div>
 
-  <div class="form-group">
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input [(ngModel)]="password" name="password" type="password" id="inputPassword" class="form-control" placeholder="Password"
-      required>
+  <div *ngIf="this.isSettingsLocalLogin()">
+    <h5 class="center-all">Or</h5>
+    <h4 class="center-all">Click <a href="#" (click)="!!toggle_ShowMeLocalLogin()">here</a> to sign in with your local
+      account</h4>
+    <div *ngIf="showme">
+      <form class="form-signin center-all" #calipsoForm="ngForm">
+        <br />
+        <div class="form-group">
+          <label for="username" class="sr-only">User name</label>
+          <input [(ngModel)]="username" type="text" id="username" class="form-control" placeholder="User name" name="username"
+            required autofocus #bk_name="ngModel">
+          <div [hidden]="bk_name.valid || bk_name.pristine" class="alert alert-danger">
+            username is required
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword" class="sr-only">Password</label>
+          <input [(ngModel)]="password" name="password" type="password" id="inputPassword" class="form-control"
+            placeholder="Password" required>
+        </div>
+        <button [disabled]="!calipsoForm.form.valid" class="btn btn-lg btn-primary btn-block" (click)="login_UO()">Login</button>
+      </form>
+    </div>
   </div>
-
-  <div class="checkbox mb-3">
-    <label>
-      <!--input type="checkbox" value="remember-me"> Remember me-->
-    </label>
-  </div>
-
-  <button [disabled]="!calipsoForm.form.valid" class="btn btn-lg btn-primary btn-block" (click)="login()">Login</button>
-</form>
+</div>
