@@ -86,14 +86,15 @@
             <div [ngSwitch]="statusActiveExperiments[experiment.serial_number]">
               <div *ngSwitchCase="0" class="btn-group mr-3">
                 <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button"
-                  class="btn btn-outline-primary" (click)="run(experiment.serial_number)" type="button" class="btn btn-primary">Launch !</button>
+                  class="btn btn-outline-primary" (click)="run(experiment.serial_number, 'base_image')" type="button" class="btn btn-primary">Launch !</button>
                 <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
                   <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button"
                     class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle></button>
                   <div class="dropdown-menu" ngbDropdownMenu>
-                    <button class="dropdown-item" (click)="run(experiment.serial_number)">Launch!</button>
-                    <button class="dropdown-item">Link</button>
-                    <button class="dropdown-item">Jupyter</button>
+                    <!--let image of available_images -->
+                    <button class="dropdown-item" (click)="run(experiment.serial_number,'base_image')">Launch!</button>
+                    <!--button class="dropdown-item">Link</button-->
+                    <button class="dropdown-item" (click)="run(experiment.serial_number,'base_jupyter')">Jupyter</button>
                   </div>
                 </div>
               </div>
