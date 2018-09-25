@@ -25,7 +25,7 @@ export class MainNavComponent implements OnInit {
             this.calipsoService.authWithEAAHash(username, EAAHash).subscribe(
               user_resp => {
                 //console.log(user_resp);
-                this.calipsoService.login(username);
+                this.calipsoService.login(username,"umbrella");
                 this.router.navigate(["/partners"]);
               },
               error => {
@@ -54,10 +54,10 @@ export class MainNavComponent implements OnInit {
 
   public logout() {
     //console.log("login_local:"+this.calipsoService.calipsoSettings.local_auth);
-
-    if (this.calipsoService.calipsoSettings.local_auth) {
+    if (this.calipsoService.getLoginType()=='local') {
       this.calipsoService.unauth().subscribe(
         resp => {
+          console.log("logout donet from UO");
           this.router.navigate(["/"]);
         },
         error => {
@@ -67,8 +67,7 @@ export class MainNavComponent implements OnInit {
     } else {
       this.calipsoService.unauthUmbrella().subscribe(
         resp => {
-          //console.log("logout donet from umbrella");
-          localStorage.removeItem("ct");
+          console.log("logout donet from umbrella");
           window.location.href =
             environment.backendUrl_calipso +
             "Shibboleth.sso/Logout?return=" +
@@ -82,8 +81,6 @@ export class MainNavComponent implements OnInit {
   }
 
   public login() {
-    if (this.calipsoService.calipsoSettings.local_auth) {
-      this.router.navigate(["/login"]);
-    } else this.calipsoService.goExternalLoginUmbrella();
+    this.router.navigate(["/login"]);
   }
 }

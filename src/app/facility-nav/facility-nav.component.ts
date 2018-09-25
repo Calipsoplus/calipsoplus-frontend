@@ -28,9 +28,11 @@ export class FacilityNavComponent implements OnInit {
 
 
   public logout() {
-    if (this.calipsoService.calipsoSettings.local_auth) {
+    //console.log("login_local:"+this.calipsoService.calipsoSettings.local_auth);
+    if (this.calipsoService.getLoginType()=='local') {
       this.calipsoService.unauth().subscribe(
         resp => {
+          console.log("logout donet from UO");
           this.router.navigate(["/"]);
         },
         error => {
@@ -40,8 +42,7 @@ export class FacilityNavComponent implements OnInit {
     } else {
       this.calipsoService.unauthUmbrella().subscribe(
         resp => {
-          //console.log("logout donet from umbrella");
-          localStorage.removeItem("ct");
+          console.log("logout donet from umbrella");
           window.location.href =
             environment.backendUrl_calipso +
             "Shibboleth.sso/Logout?return=" +
