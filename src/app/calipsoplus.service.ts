@@ -398,6 +398,11 @@ export class CalipsoplusService {
     window.location.href = this.UOWebUrl;
   }
 
+  public openURL(url:string, name:string){
+    window.open(
+      url,"_blank"
+    );
+  }
 
 
 }
