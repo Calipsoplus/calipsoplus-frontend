@@ -86,13 +86,13 @@
             <div [ngSwitch]="statusActiveExperiments[experiment.serial_number]">
               <div *ngSwitchCase="0" class="btn-group mr-3">
                 <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button"
-                  class="btn btn-outline-primary" (click)="run(experiment.serial_number, 'base_image')" type="button" class="btn btn-primary">Launch !</button>
+                  class="btn btn-outline-primary" (click)="run(experiment.serial_number, 'base_image')" type="button" class="btn btn-primary">Desktop</button>
                 <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
                   <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button"
                     class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle></button>
                   <div class="dropdown-menu" ngbDropdownMenu>
                     <!--let image of available_images -->
-                    <button class="dropdown-item" (click)="run(experiment.serial_number,'base_image')">Launch!</button>
+                    <button class="dropdown-item" (click)="run(experiment.serial_number,'base_image')">Desktop</button>
                     <!--button class="dropdown-item">Link</button-->
                     <button class="dropdown-item" (click)="run(experiment.serial_number,'base_jupyter')">Jupyter</button>
                   </div>
@@ -103,7 +103,7 @@
                 <span class="fa fa-refresh fa-spin">&nbsp;</span>&nbsp;&nbsp;Wait&nbsp;&nbsp;</button>
 
               <button *ngSwitchCase="2" [disabled]="safe_locked_button" class="center-text btn btn-danger" (click)="stop_and_remove_container(experiment.serial_number)">Stop</button>
-              <button *ngSwitchCase="2" [disabled]="safe_locked_button" class="btn btn-primary" (click)="go_in(experiment.serial_number)">ENTER</button>
+              <button *ngSwitchCase="2" [disabled]="safe_locked_button" class="btn btn-primary" (click)="go_in(experiment.serial_number)">{{getContainerType(experiment.serial_number)}}</button>
 
               <li *ngSwitchDefault>Error</li>
             </div>

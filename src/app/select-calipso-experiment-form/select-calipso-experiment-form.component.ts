@@ -107,7 +107,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     this.load_experiments(this.actual_page);
   }
 
-  private check_quota() {
+  private check_quota(base_image: string) {
     let username = this.calipsoService.getLoggedUserName();
     this.calipsoService
       .getCalipsoAvailableImageQuota(username)
@@ -131,7 +131,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
           this.max_num_machines_exceeded = max_available <= 0;
 
           this.calipsoService
-            .getImageByPublicName("base_image")
+            .getImageByPublicName(base_image)
             .subscribe(image_quota => {
               this.max_num_cpu_exceeded =
                 cpu_available - image_quota[0].cpu < 0;
@@ -219,12 +219,12 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
                 var c = this.containers.find(
                   x => x.calipso_experiment == element.serial_number
                 );
-                this.check_quota();
+                //TODO:this.check_quota(c.public_name);
                 if (c == null) {
                   this.statusActiveExperiments[element.serial_number] =
                     Status.idle;
                 } else {
-                  this.check_quota();
+                  this.check_quota(c.public_name);
 
                   switch (c.container_status) {
                     case "busy": {
@@ -268,13 +268,12 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     this.load_experiments(this.actual_page);
   }
 
-  public run(experiment_serial_number,base_image: string) {
+  public run(experiment_serial_number, base_image: string) {
     this.statusActiveExperiments[experiment_serial_number] = Status.busy;
     this.safe_locked_button = true;
     let username = this.calipsoService.getLoggedUserName();
 
     //maybe check de base image for its
-
 
     this.calipsoService
       .runContainer(
@@ -287,7 +286,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
           if (data != null) {
             this.containers.push(data);
 
-            this.check_quota();
+            this.check_quota(data.public_name);
 
             this.statusActiveExperiments[experiment_serial_number] =
               Status.running;
@@ -338,7 +337,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
               Status.idle;
             this.safe_locked_button = false;
 
-            this.check_quota();
+            this.check_quota(c.public_name);
           });
       });
   }
@@ -348,11 +347,33 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
       x => x.calipso_experiment == experiment_serial_number
     );
     if (c == null) console.log("error win up");
-    else
+    else if (c.host_port == "") {
       this.calipsoService.go_into_container(
         c.container_name,
         c.guacamole_username,
         c.guacamole_password
       );
+    } else {
+      this.calipsoService.openURL(c.host_port, c.container_name);
+    }
+  }
+
+  public getContainerType(serial_number: string) {
+    var c = this.containers.find(x => x.calipso_experiment == serial_number);
+    let type = "Default";
+
+    if (c != null) {
+      switch (c.public_name) {
+        case "base_image": {
+          type = "Desktop";
+          break;
+        }
+        case "base_jupyter": {
+          type = "Jupyter";
+          break;
+        }
+      }
+    }
+    return type;
   }
 }
