@@ -43,7 +43,7 @@ export class CalipsoplusService {
   imageQuotaUrl = this.backendUrl_calipso + "image/$PUBLIC_NAME/";
   experimentsUrl = this.backendUrl_calipso + "experiments/$USERNAME/";
   runContainersUrl =
-    this.backendUrl_calipso + "container/run/$USERNAME/$EXPERIMENT/";
+    this.backendUrl_calipso + "container/run/$USERNAME/$EXPERIMENT/$BASE_IMAGE/";
   removeContainersUrl =
     this.backendUrl_calipso + "container/rm/$USERNAME/$CONTAINER/";
   stopContainersUrl =
@@ -262,10 +262,13 @@ export class CalipsoplusService {
 
   public runContainer(
     username: string,
-    experiment: string
+    experiment: string,
+    base_image: string
   ): Observable<CalipsoContainer> {
     let url = this.runContainersUrl.replace("$USERNAME", username);
-    let run_url = url.replace("$EXPERIMENT", experiment);
+    let mid_url = url.replace("$EXPERIMENT", experiment);
+    let run_url = mid_url.replace("$BASE_IMAGE",base_image)
+
     let headers = new HttpHeaders().set("Content-Type", "application/json");
 
     return this.http
@@ -395,6 +398,11 @@ export class CalipsoplusService {
     window.location.href = this.UOWebUrl;
   }
 
+  public openURL(url:string, name:string){
+    window.open(
+      url,"_blank"
+    );
+  }
 
 
 }
