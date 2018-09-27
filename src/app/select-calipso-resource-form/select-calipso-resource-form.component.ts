@@ -43,7 +43,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
                 var resource: CalipsoResource = new CalipsoResource(
                   c.calipso_experiment,
                   c.container_name,
-                  c.host_port,
+                  c.public_name,
                   str_creation_date,
                   "-",
                   date_access
@@ -66,12 +66,14 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
   public go_in(container_name: string) {
     var c = this.containers.find(x => x.container_name == container_name);
     if (c == null) console.log("error win up");
-    else {
+    else if (c.host_port == "") {
       this.calipsoService.go_into_container(
         c.container_name,
         c.guacamole_username,
         c.guacamole_password
       );
+    } else {
+      this.calipsoService.openURL(c.host_port, c.container_name);
     }
   }
 }
