@@ -28,7 +28,8 @@
         "dev": "environments/environment.ts",
         "test": "environments/environment.test.ts",
         "demo": "environments/environment.demo.ts",
-        "prod": "environments/environment.prod.ts"
+        "prod": "environments/environment.prod.ts",
+        "docker": "environments/environment.docker.ts"
       }
     }
   ],
@@ -61,7 +62,7 @@
     "component": {},
     "serve": {
       "port": 8001,
-      "host": "192.168.33.10"
+      "host": "web-front"
     }
   }
 }
