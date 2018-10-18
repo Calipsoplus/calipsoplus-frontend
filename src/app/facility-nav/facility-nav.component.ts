@@ -26,6 +26,9 @@ export class FacilityNavComponent implements OnInit {
     return this.calipsoService.isLogged();
   }
 
+  public getMyLogo():String {
+    return environment.logo_facility;
+  }
 
   public logout() {
     //console.log("login_local:"+this.calipsoService.calipsoSettings.local_auth);
