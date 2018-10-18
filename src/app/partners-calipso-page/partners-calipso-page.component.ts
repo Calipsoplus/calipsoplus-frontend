@@ -22,9 +22,10 @@ export class PartnersCalipsoPageComponent implements OnInit {
       .subscribe(facilities => (this.facilities = facilities));
   }
 
-  public enterFacility() {
+  public enterFacility(url:String) {
     if (this.calipsoService.isLogged()) {
-      this.router.navigate(["/experiment"]);
+      window.location.href = url+"/experiment";
+      //this.router.navigate(["/experiment"]);
     } else {
       //console.log("You are not logged");
     }
