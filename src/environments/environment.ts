@@ -4,7 +4,6 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  logo_facility: "https://www.cells.es/logo.png",
   production: false,
   frontend_calipso: "http://192.168.33.10:8001/",
   backendUrl_calipso: "https://vagrant-ubuntu-trusty-64/",

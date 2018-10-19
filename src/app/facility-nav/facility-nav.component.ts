@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { CalipsoplusService } from "../calipsoplus.service";
 import { Router } from "@angular/router";
 import { environment } from "../../environments/environment";
+import { LOGO_FACILITY } from "../calipso-constants";
 
 
 
@@ -27,7 +28,7 @@ export class FacilityNavComponent implements OnInit {
   }
 
   public getMyLogo():String {
-    return environment.logo_facility;
+    return LOGO_FACILITY;
   }
 
   public logout() {
