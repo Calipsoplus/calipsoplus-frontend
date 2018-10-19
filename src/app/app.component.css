@@ -1,0 +1,31 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+.footer-basic-centered{
+  position: fixed;
+  bottom: 0;
+	background-color: #292c2f;
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
+	box-sizing: border-box;
+	width: 100%;
+	text-align: center;
+	font: normal 18px sans-serif;
+	padding: 15px;
+  margin-top: 80px;
+  z-index: 1;
+}
+
+.footer-basic-centered .footer-company-name{
+	color:  #8f9296;
+	font-size: 14px;
+	margin: 0;
+}
+
+.prevent_footer{
+  margin-bottom:65px;
+}
+
+.underline{
+  text-decoration: underline;
+}
+
+

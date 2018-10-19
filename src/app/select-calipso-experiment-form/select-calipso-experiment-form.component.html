@@ -1,0 +1,163 @@
+<app-facility-nav></app-facility-nav>
+
+<div class="row col">
+  <app-experiment-nav></app-experiment-nav>
+
+
+  <!-- experiments list -->
+  <div class="col">
+
+    <div class="row">
+      <h1 class="col-sm-4"></h1>
+      <h5 class="col-sm-4 text-center">
+        <div *ngIf="max_num_machines_exceeded||max_num_cpu_exceeded||max_memory_exceeded||max_hdd_exceeded">
+          <span class="badge badge-primary">Warning</span>
+        </div>
+        <div *ngIf="max_num_machines_exceeded">
+          <span class="badge badge-warning">The number of machines per user has been reached.</span>
+        </div>
+        <div *ngIf="max_num_cpu_exceeded">
+          <span class="badge badge-warning">The number of cpu per user has been reached.</span>
+        </div>
+        <div *ngIf="max_memory_exceeded">
+          <span class="badge badge-warning">The memory per user has been reached.</span>
+        </div>
+        <div *ngIf="max_hdd_exceeded">
+          <span class="badge badge-warning">The storage per user has been reached.</span>
+        </div>
+      </h5>
+      <div class="col-sm-4"></div>
+    </div>
+    <div class="row">
+      <h1 class="col-sm-4">{{title}}</h1>
+      <div class="col-sm-5"></div>
+      <div class="col-sm-3">
+        <div class="input-group align-vertical">
+          <input type="text" (keyup.enter)="search_action(searchkey.value)" class="form-control" value="{{search_key}}" #searchkey
+            placeholder="Search..." />&nbsp;&nbsp;
+          <span (click)="search_action(searchkey.value)" class="fa fa-search hand"></span>
+        </div>
+      </div>
+    </div>
+
+    <table class="table sortable table-hover">
+      <thead>
+        <tr class="d-flex">
+          <th class="col-sm-1  text-center" (click)="sort_by_field('calipsouserexperiment__favorite')">
+            <i class="fas fa-star"></i>
+          </th>
+          <th class="col-sm-2 {{if_is_sorted('serial_number')}}" (click)="sort_by_field('serial_number')">
+            Proposal Id &nbsp;&nbsp;
+            <i class="fas fa-sort"></i>
+          </th>
+          <th class="col-sm-2 {{if_is_sorted('subject')}}" (click)="sort_by_field('subject')">
+            Title &nbsp;&nbsp;
+            <i class="fas fa-sort"></i>
+          </th>
+          <th class="col-sm-3 {{if_is_sorted('body')}} " (click)="sort_by_field('body')">
+            Abstract &nbsp;&nbsp;
+            <i class="fas fa-sort"></i>
+          </th>
+          <th class="col-sm-2 {{if_is_sorted('beam_line')}}" (click)="sort_by_field('beam_line')">
+            Beamline &nbsp;&nbsp;
+            <i class="fas fa-sort"></i>
+          </th>
+          <th class="col-sm-2 text-center">
+            <i class="fas fa-laptop"></i>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="d-flex" *ngFor="let experiment of experiments">
+          <td class="col-sm-1  text-center">
+            <i *ngIf="!experiment.favorite" (click)="star_on(experiment.serial_number,experiment.id)" class="far fa-star"></i>
+            <i *ngIf="experiment.favorite" (click)="star_off(experiment.serial_number,experiment.id)" class="fa fa-star"></i>
+          </td>
+
+          <td class="col-sm-2">
+            {{experiment.serial_number}}
+          </td>
+          <td class="col-sm-2">{{experiment.subject}}</td>
+          <td class="col-sm-3">{{experiment.body | slice:0:106}} &nbsp;
+            <a *ngIf="experiment.body.length>100" class="far fa-eye" title="{{experiment.body}}"></a>
+          </td>
+          <td class="col-sm-2">{{experiment.beam_line}}</td>
+          <td class="col-sm-2 disabled text-center">
+            <div [ngSwitch]="statusActiveExperiments[experiment.serial_number]">
+              <div *ngSwitchCase="0" class="btn-group mr-3">
+                <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button"
+                  class="btn btn-outline-primary" (click)="run(experiment.serial_number, 'base_image')" type="button" class="btn btn-primary">Desktop</button>
+                <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+                  <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button"
+                    class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle></button>
+                  <div class="dropdown-menu" ngbDropdownMenu>
+                    <!--let image of available_images -->
+                    <button class="dropdown-item" (click)="run(experiment.serial_number,'base_image')">Desktop</button>
+                    <!--button class="dropdown-item">Link</button-->
+                    <button class="dropdown-item" (click)="run(experiment.serial_number,'base_jupyter')">Jupyter</button>
+                  </div>
+                </div>
+              </div>
+
+              <button *ngSwitchCase="1" class="btn btn-warning">
+                <span class="fa fa-refresh fa-spin">&nbsp;</span>&nbsp;&nbsp;Wait&nbsp;&nbsp;</button>
+
+              <button *ngSwitchCase="2" [disabled]="safe_locked_button" class="center-text btn btn-danger" (click)="stop_and_remove_container(experiment.serial_number)">Stop</button>
+              <button *ngSwitchCase="2" [disabled]="safe_locked_button" class="btn btn-primary" (click)="go_in(experiment.serial_number)">{{getContainerType(experiment.serial_number)}}</button>
+
+              <li *ngSwitchDefault>Error</li>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr/>
+
+    <div class="col-sm-12">
+      <nav aria-label="experiments pagination">
+        <ul class="pagination pagination-sm justify-content-center ">
+          <li class="page-item {{compare_if_disabled(actual_page==1)}}">
+            <button class="page-link " (click)="load_experiments(this.actual_page-1)">
+              <span aria-hidden="true">&laquo;</span>
+
+            </button>
+
+          </li>
+
+
+          <div *ngFor="let page of total_pages">
+            <div *ngIf="this.showPage(page)">
+              <li class="page-item {{compare_if_active(actual_page==page)}}">
+                <button class="page-link" (click)="load_experiments(page)">
+                  <span>{{page}}</span>
+                </button>
+              </li>
+            </div>
+            <div *ngIf="!this.showPage(page)">
+              <li class="page-item disabled">
+                <button class="page-link">
+                  <span>...</span>
+                </button>
+              </li>
+            </div>
+          </div>
+
+
+          <li class="page-item {{compare_if_disabled(actual_page>=pagination.count/pagination.page_size)}}">
+            <button class="page-link" (click)="load_experiments(this.actual_page+1)">
+              <span aria-hidden="true">&raquo;</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+    </div>
+    <hr/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+  </div>
+</div>

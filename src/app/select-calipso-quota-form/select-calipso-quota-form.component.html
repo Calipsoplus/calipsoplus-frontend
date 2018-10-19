@@ -1,0 +1,76 @@
+<app-facility-nav>
+</app-facility-nav>
+
+<div class="row col">
+  <app-experiment-nav></app-experiment-nav>
+
+  <!-- quota list -->
+
+  <div class="col">
+
+    <div class="row">
+      <h1 class="col-sm-4">Quotas</h1>
+      <h3 class="col-sm-4">
+      </h3>
+      <h1 class="col-sm-4"></h1>
+    </div>
+    <table class="table">
+      <thead>
+        <tr class="d-flex">
+          <th class="col" *ngFor="let quota of quotas">Your default quota</th>
+          <th class="col" *ngFor="let quota of quotas">Your used quota</th>
+          <th class="col" *ngFor="let quota of quotas">Your available quota</th>
+          <th class="col" *ngFor="let image of image_selected">Default image</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="d-flex">
+          <td class="col" *ngFor="let quota of quotas">
+            <b>machines : </b> {{ quota.max_simultaneous }}
+            <br/>
+            <b>cpus : </b> {{ quota.cpu }}
+            <br/>
+            <b>memory : </b> {{ quota.memory }}
+            <br/>
+            <b>storage: </b> {{ quota.hdd }}
+            <br/>
+            <br/>
+          </td>
+          <td class="col" *ngFor="let used of used_quota">
+            <b>machines : </b> {{ used.max_simultaneous }}
+            <br/>
+            <b>cpus : </b> {{ used.cpu }}
+            <br/>
+            <b>memory : </b> {{ used.memory }}
+            <br/>
+            <b>storage: </b> {{ used.hdd }}
+            <br/>
+            <br/>
+          </td>
+          <td class="col" *ngFor="let available of available_quota">
+            <b>machines : </b> {{ available.max_simultaneous }}
+            <br/>
+            <b>cpus : </b> {{ available.cpu }}
+            <br/>
+            <b>memory : </b> {{ available.memory }}
+            <br/>
+            <b>storage: </b> {{ available.hdd }}
+            <br/>
+            <br/>
+          </td>
+          <td class="col" *ngFor="let image of image_selected">
+            <b>-</b>
+            <br/>
+            <b>cpus : </b> {{ image.cpu }}
+            <br/>
+            <b>memory : </b> {{ image.memory }}
+            <br/>
+            <b>storage: </b> {{ image.hdd }}
+            <br/>
+            <br/>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
