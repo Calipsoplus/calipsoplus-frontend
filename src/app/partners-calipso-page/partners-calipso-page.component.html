@@ -10,10 +10,10 @@
       </p>
 
       <div *ngIf="isLogged()" class="nav-link ml-auto">
-        <a href="#" (click)="!!enterFacility()">{{ facility.url }}</a>
+        <a href="#" (click)="!!enterFacility(facility.url)">{{ facility.name }}</a>
       </div>
       <div *ngIf="!isLogged()" class="nav-link ml-auto">
-          {{ facility.url }} (login to enter)
+          {{ facility.name }} (login to enter)
       </div>
 
     </li>
