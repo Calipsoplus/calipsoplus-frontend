@@ -15,17 +15,17 @@ import { SelectCalipsoFavoriteFormComponent } from "./select-calipso-favorite-fo
 import { MainNavComponent } from "./main-nav/main-nav.component";
 
 const routes: Routes = [
-  { path: "", component: HomeCalipsoPageComponent },
+  { path: "", component: PartnersCalipsoPageComponent },
   { path: "login", component: LoginCalipsoUserFormComponent },
   { path: "logout", component: LoginCalipsoUserFormComponent },
-  { path: "facility", component: SelectCalipsoFacilityFormComponent },
+  //{ path: "facility", component: SelectCalipsoFacilityFormComponent },
   { path: "experiment", component: SelectCalipsoExperimentFormComponent },
   { path: "resource", component: SelectCalipsoResourceFormComponent },
   { path: "quota", component: SelectCalipsoQuotaFormComponent },
   { path: "favorite", component: SelectCalipsoFavoriteFormComponent },
-  { path: "autologin", component: PartnersCalipsoPageComponent },
-  { path: "about", component: AboutCalipsoPageComponent },
-  { path: "partners", component: PartnersCalipsoPageComponent },
+  { path: "autologin", component: LoginCalipsoUserFormComponent },
+  //{ path: "about", component: AboutCalipsoPageComponent },
+  //{ path: "partners", component: PartnersCalipsoPageComponent },
 
   { path: "**", component: PageNotFoundComponent }
 ];
