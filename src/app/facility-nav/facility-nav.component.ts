@@ -4,8 +4,6 @@ import { Router } from "@angular/router";
 import { environment } from "../../environments/environment";
 import { LOGO_FACILITY } from "../calipso-constants";
 
-
-
 @Component({
   selector: "app-facility-nav",
   templateUrl: "./facility-nav.component.html",
@@ -27,13 +25,9 @@ export class FacilityNavComponent implements OnInit {
     return this.calipsoService.isLogged();
   }
 
-  public getMyLogo():String {
-    return LOGO_FACILITY;
-  }
-
   public logout() {
     //console.log("login_local:"+this.calipsoService.calipsoSettings.local_auth);
-    if (this.calipsoService.getLoginType()=='local') {
+    if (this.calipsoService.getLoginType() == "local") {
       this.calipsoService.unauth().subscribe(
         resp => {
           //console.log("logout done from UO");
@@ -58,9 +52,4 @@ export class FacilityNavComponent implements OnInit {
       );
     }
   }
-
-
-
-
-
 }

@@ -1,20 +1,22 @@
 <app-main-nav></app-main-nav>
 <div class="container">
-  <h1 class="mt-5">
-    Partners involved</h1>
+  <h4>
+    Partners involved
+  </h4>
+  <br>
   <ul>
     <li style="list-style-type: none;" *ngFor="let facility of facilities">
-      <h3 class="mt-5">{{ facility.name }}</h3>
-      <p class="lead">
+        <a href="#" (click)="!!enterFacility(facility.url)"><h5>{{ facility.name }}</h5></a>
+      <p>
         {{ facility.description }}
       </p>
 
-      <div *ngIf="isLogged()" class="nav-link ml-auto">
+      <!--div *ngIf="isLogged()" class="nav-link ml-auto">
         <a href="#" (click)="!!enterFacility(facility.url)">{{ facility.name }}</a>
       </div>
       <div *ngIf="!isLogged()" class="nav-link ml-auto">
           {{ facility.name }} (login to enter)
-      </div>
+      </div-->
 
     </li>
   </ul>

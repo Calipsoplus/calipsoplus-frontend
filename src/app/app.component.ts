@@ -14,7 +14,7 @@ export class AppComponent {
   ngOnInit() {
     //console.log("getCalipsoSettings");
     this.calipsoService.getCalipsoSettings().subscribe(settings => {
-      this.calipsoService.calipsoSettings = settings;
+      this.calipsoService.defaultCalipsoSettings = settings;
       //console.log("settings:" + this.calipsoService.calipsoSettings.local_auth);
     });
   }

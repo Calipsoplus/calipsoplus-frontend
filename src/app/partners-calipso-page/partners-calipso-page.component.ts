@@ -23,13 +23,8 @@ export class PartnersCalipsoPageComponent implements OnInit {
   }
 
   public enterFacility(url:String) {
-    if (this.calipsoService.isLogged()) {
-      window.location.href = url+"/experiment";
-      //this.router.navigate(["/experiment"]);
-    } else {
-      //console.log("You are not logged");
-    }
-  }
+      window.location.href = url+"login";
+   }
   public isLogged() {
     return this.calipsoService.isLogged();
   }
