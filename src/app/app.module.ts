@@ -23,7 +23,7 @@ import { ExperimentNavComponent } from './experiment-nav/experiment-nav.componen
 import { SelectCalipsoQuotaFormComponent } from './select-calipso-quota-form/select-calipso-quota-form.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SelectCalipsoFavoriteFormComponent } from './select-calipso-favorite-form/select-calipso-favorite-form.component';
-
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 @NgModule({
@@ -32,6 +32,7 @@ import { SelectCalipsoFavoriteFormComponent } from './select-calipso-favorite-fo
     FormsModule,
     AppRoutingModule,
     HttpClientModule,
+    FontAwesomeModule,
     NgbModule.forRoot()
   ],
   declarations: [
