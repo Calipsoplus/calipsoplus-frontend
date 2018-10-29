@@ -8,6 +8,14 @@ import { CalipsoContainer } from "../calipso-container";
 import { CalipsoQuota } from "../calipso-quota";
 import { CalipsoPaginationExperiment } from "../calipso-pagination-experiment";
 
+
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
+
+library.add(fas, far);
+
 export enum Status {
   idle = 0, // ready
   busy = 1, // waitting
@@ -26,6 +34,8 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   only_favorites: boolean = false;
   @Input()
   title: string = "Proposals";
+
+
 
   pagination: CalipsoPaginationExperiment = new CalipsoPaginationExperiment(
     0,
@@ -265,7 +275,10 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.load_experiments(this.actual_page);
+    if (this.calipsoService.isLogged()){
+    this.load_experiments(this.actual_page);}else{
+      this.router.navigate(["/login"]);
+    }
   }
 
   public run(experiment_serial_number, base_image: string) {
