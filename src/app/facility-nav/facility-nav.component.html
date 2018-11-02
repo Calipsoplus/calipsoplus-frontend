@@ -1,9 +1,9 @@
-<div class="col">
+<div class="col-12">
   <nav class="navbar navbar-expand-md" style="background-color:white;">
-    <a class="col-sm-4 nav-link">
-      <img src={{calipsoService.getMyLogo()}} width="228px"/>
+    <a class="col-4 nav-link">
+      <img src={{calipsoService.getMyLogo()}} width="228px" />
     </a>
-    <a class="col-sm-4 nav-link" routerLink="/">
+    <a class="col-4 nav-link" routerLink="/">
       <img src="assets/images/logo.jpg" />
     </a>
     <a *ngIf="!calipsoService.isLogged()" class="col-4 nav-link ml-auto">login</a>
