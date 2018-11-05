@@ -295,8 +295,7 @@ export class CalipsoplusService {
         withCredentials: true
       })
       .map(res => {
-        sessionStorage.removeItem("ct");
-        sessionStorage.removeItem("cb");
+        this.removeStorage();
       });
   }
 
@@ -309,9 +308,13 @@ export class CalipsoplusService {
         withCredentials: true
       })
       .map(res => {
-        sessionStorage.removeItem("ct");
-        sessionStorage.removeItem("cb");
+        this.removeStorage();
       });
+  }
+
+  public removeStorage(){
+    sessionStorage.removeItem("ct");
+    sessionStorage.removeItem("cb");
   }
 
   public login(username: string, local_login: string) {
@@ -479,4 +482,37 @@ export class CalipsoplusService {
   public openURL(url: string, name: string) {
     window.open(url, "_blank");
   }
+
+  public logout() {
+    //console.log("login_local:"+this.calipsoService.calipsoSettings.local_auth);
+    this.removeStorage();
+
+    if (this.getLoginType() == "local") {
+      this.unauth().subscribe(
+        resp => {
+          //console.log("logout done from UO");
+          this.router.navigate(["/login"]);
+        },
+        error => {
+          //console.log("Error in UO logout");
+        }
+      );
+    } else {
+      this.unauthUmbrella().subscribe(
+        resp => {
+          //console.log("logout done from umbrella");
+          window.location.href =
+            environment.backendUrl_calipso +
+            "Shibboleth.sso/Logout?return=" +
+            environment.frontend_calipso;
+        },
+        error => {
+          //console.log("Error in umbrella logout");
+        }
+      );
+    }
+  }
+
+
+
 }

@@ -8,11 +8,9 @@ import { CalipsoContainer } from "../calipso-container";
 import { CalipsoQuota } from "../calipso-quota";
 import { CalipsoPaginationExperiment } from "../calipso-pagination-experiment";
 
-
-
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { far } from '@fortawesome/free-regular-svg-icons';
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { far } from "@fortawesome/free-regular-svg-icons";
 
 library.add(fas, far);
 
@@ -34,8 +32,6 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   only_favorites: boolean = false;
   @Input()
   title: string = "Proposals";
-
-
 
   pagination: CalipsoPaginationExperiment = new CalipsoPaginationExperiment(
     0,
@@ -265,19 +261,21 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
             });
         },
         err => {
-          this.router.navigate(["/"]);
-          //console.log("Secutiry error");
+          this.calipsoService.logout();
+
+          console.log("Security error");
         }
       );
     } else {
-      this.router.navigate(["/"]);
+      this.calipsoService.logout();
     }
   }
 
   ngOnInit() {
-    if (this.calipsoService.isLogged()){
-    this.load_experiments(this.actual_page);}else{
-      this.router.navigate(["/login"]);
+    if (this.calipsoService.isLogged()) {
+      this.load_experiments(this.actual_page);
+    } else {
+      this.router.navigate(["/"]);
     }
   }
 
@@ -383,6 +381,10 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
         }
         case "base_jupyter": {
           type = "Jupyter";
+          break;
+        }
+        case "base_image_ubuntu": {
+          type = "Ubuntu";
           break;
         }
       }

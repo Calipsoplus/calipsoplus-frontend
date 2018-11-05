@@ -114,6 +114,9 @@
             <div style="padding: 0.5em">
               <div [ngSwitch]="statusActiveExperiments[experiment.serial_number]">
                 <div *ngSwitchCase="0">
+                    <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button"
+                    (click)="run(experiment.serial_number, 'base_image_ubuntu')" class="btn btn-primary btn-sm">Ubuntu</button>
+                  &nbsp;
                   <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button"
                     (click)="run(experiment.serial_number, 'base_image')" class="btn btn-primary btn-sm">Desktop</button>
                   &nbsp;
