@@ -91,52 +91,181 @@
           </td>
           <td class="col-sm-2">{{experiment.beam_line}}</td>
           <td class="col-sm-1">
-            <a data-toggle="collapse" [attr.href]="'#x'+experiment.serial_number" [attr.aria-controls]="'x'+experiment.serial_number"
-              aria-expanded="true">
-              <div [ngSwitch]="statusActiveExperiments[experiment.serial_number]">
-                <div *ngSwitchCase="0" class="btn-group mr-3">
-                  <fa-icon [icon]="['fa','arrow-circle-right']" style="color:black;"></fa-icon>
-                </div>
-                <div *ngSwitchCase="1" class="btn-group mr-3">
-                  <fa-icon [icon]="['fa', 'cog']" [spin]="true" style="color:black;"></fa-icon>
-                </div>
-                <div *ngSwitchCase="2" class="btn-group mr-3">
-                  <fa-icon [icon]="['fa','cog']" style="color:blue;"></fa-icon>
-                </div>
-              </div>
-
-            </a>
+            <label data-toggle="collapse" [attr.href]="'#x'+experiment.serial_number" [attr.aria-controls]="'x'+experiment.serial_number"
+              class="switch">
+              <input type="checkbox">
+              <span class="slider round"></span>
+            </label>
 
           </td>
         </tr>
-        <tr colspan="6" class="text-center">
-          <div class="collapse" [attr.id]="'x'+experiment.serial_number">
-            <div style="padding: 0.5em">
-              <div [ngSwitch]="statusActiveExperiments[experiment.serial_number]">
-                <div *ngSwitchCase="0">
-                    <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button"
-                    (click)="run(experiment.serial_number, 'base_image_ubuntu')" class="btn btn-primary btn-sm">Ubuntu</button>
-                  &nbsp;
-                  <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button"
-                    (click)="run(experiment.serial_number, 'base_image')" class="btn btn-primary btn-sm">Desktop</button>
-                  &nbsp;
-                  <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button"
-                    (click)="run(experiment.serial_number, 'base_jupyter')" class="btn btn-primary btn-sm">Jupyter</button>
+
+        <tr *ngFor="let session of experiment.sessions">
+
+          <div style="border: solid none none solid" class="collapse" [attr.id]="'x'+experiment.serial_number">
+
+            <div class="row " style="padding: 0.6em">
+              <div class="col-12">
+                <div class="row mark">
+                  <div class="col-1"></div>
+                  <div class="col-2">{{session.session_number}}</div>
+                  <div class="col-3">{{session.start_date| date:'MM/dd/yyyy HH:MM'}}</div>
+
+                  <div class="col-3 ">{{session.end_date| date:'MM/dd/yyyy HH:MM'}}</div>
+                  <div class="col-2 ">{{session.subject}}</div>
+                  <div class="col-1">
+                    <a data-toggle="collapse" [attr.href]="'#x'+session.session_number" [attr.aria-controls]="'x'+session.session_number"
+                      aria-expanded="true">
+                      <div [ngSwitch]="statusActiveSessions[session.session_number]">
+                        <div *ngSwitchCase="0" class="btn-group mr-3">
+                          <fa-icon [icon]="['fa','arrow-circle-right']" style="color:black;"></fa-icon>
+                        </div>
+                        <div *ngSwitchCase="1" class="btn-group mr-3">
+                          <fa-icon [icon]="['fa', 'cog']" [spin]="true" style="color:black;"></fa-icon>
+                        </div>
+                        <div *ngSwitchCase="2" class="btn-group mr-3">
+                          <fa-icon [icon]="['fa','cog']" style="color:blue;"></fa-icon>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
                 </div>
-                <button *ngSwitchCase="1" class="btn btn-warning btn-sm">
-                  <fa-icon [icon]="['fa', 'spinner']" [spin]="true" style="color:black;"></fa-icon>
-                  &nbsp;&nbsp;Wait
-                </button>
-                <button *ngSwitchCase="2" [disabled]="safe_locked_button" class="center-text btn btn-danger btn-sm"
-                  (click)="stop_and_remove_container(experiment.serial_number)">Stop</button>
-                &nbsp;
-                <button *ngSwitchCase="2" [disabled]="safe_locked_button" class="btn btn-success btn-sm" (click)="go_in(experiment.serial_number)">{{getContainerType(experiment.serial_number)}}</button>
-                <li *ngSwitchDefault>Error</li>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <div style="padding:1em;" class="text-center col collapse" [attr.id]="'x'+session.session_number">
+
+                  <div [ngSwitch]="statusActiveSessions[session.session_number]">
+                    <div *ngSwitchCase="0">
+
+                      <a style="padding:1em;" *ngIf="!(max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button)"
+                        href="#" (click)="!!run(session.session_number, 'base_image_ubuntu')">
+                        <img width="50px" class="zoom" src="assets/images/ubuntu.png" />
+                      </a>
+
+                      <a style="padding:1em;" *ngIf="!(max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button)"
+                        href="#" (click)="!!run(session.session_number, 'base_image')">
+                        <img width="50px" class="zoom" src="assets/images/desktop.png" />
+                      </a>
+
+                      <a style="padding:1em;" *ngIf="!(max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button)"
+                        href="#" (click)="!!run(session.session_number, 'base_jupyter')">
+                        <img width="50px" class="zoom" src="assets/images/jupyter.png" />
+                      </a>
+
+                      <a style="padding:1em;" *ngIf="(max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button)">
+                        <img width="50px" src="assets/images/ubuntu_mono.png" />
+                      </a>
+
+                      <a style="padding:1em;" *ngIf="(max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button)">
+                        <img width="50px" src="assets/images/desktop_mono.png" />
+                      </a>
+
+                      <a style="padding:1em;" *ngIf="(max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button)">
+                        <img width="50px" src="assets/images/jupyter_mono.png" />
+                      </a>
+
+                    </div>
+
+                    <div *ngSwitchCase="1">
+
+                      <div *ngIf="safe_locked_button">
+
+                        <a style="padding:1em;" *ngIf="!(this.actualRunningContainer[session.session_number]=='base_image_ubuntu')">
+                          <img width="50px" width="50px" src="assets/images/ubuntu_mono.png" />
+                        </a>
+
+                        <a style="padding:1em;" *ngIf="(this.actualRunningContainer[session.session_number]=='base_image_ubuntu')">
+                          <img style="cursor:pointer;" (click)="go_in(session.session_number)" width="50px" class="myspinner"
+                            width="50px" src="assets/images/ubuntu.png" />
+                        </a>
+
+                        <a style="padding:1em;" *ngIf="!(this.actualRunningContainer[session.session_number]=='base_image')">
+                          <img width="50px" width="50px" src="assets/images/desktop_mono.png" />
+                        </a>
+                        <a style="padding:1em;" *ngIf="(this.actualRunningContainer[session.session_number]=='base_image')">
+                          <img style="cursor: pointer;" (click)="go_in(session.session_number)" width="50px" class="myspinner"
+                            width="50px" src="assets/images/desktop.png" />
+                        </a>
+                        <a style="padding:1em;" *ngIf="!(this.actualRunningContainer[session.session_number]=='base_jupyter')">
+                          <img width="50px" width="50px" src="assets/images/jupyter_mono.png" />
+                        </a>
+                        <a style="padding:1em;" *ngIf="(this.actualRunningContainer[session.session_number]=='base_jupyter')">
+                          <img style="cursor: pointer;" (click)="go_in(session.session_number)" width="50px" class="myspinner"
+                            width="50px" src="assets/images/jupyter.png" />
+                        </a>
+
+                      </div>
+
+                    </div>
+
+
+
+                    <div *ngSwitchCase="2">
+
+                      <div *ngIf="safe_locked_button">
+                        <a style="padding:1em;">
+                          <img width="50px" width="50px" src="assets/images/ubuntu_mono.png" />
+                        </a>
+                        <a style="padding:1em;">
+                          <img width="50px" width="50px" src="assets/images/desktop_mono.png" />
+                        </a>
+                        <a style="padding:1em;">
+                          <img width="50px" width="50px" src="assets/images/jupyter_mono.png" />
+                        </a>
+                        &nbsp;&nbsp;
+                        <a *ngSwitchCase="2">
+                          <img style="cursor: pointer;" width="20px" width="20px" src="assets/images/stop_mono.png" />
+                        </a>
+                      </div>
+
+                      <div *ngIf="!safe_locked_button">
+                        <a *ngIf="!(this.actualRunningContainer[session.session_number]=='base_image_ubuntu')" style="padding:1em;">
+                          <img width="50px" height="50px" src="assets/images/ubuntu_mono.png" />
+                        </a>
+                        <a *ngIf="(this.actualRunningContainer[session.session_number]=='base_image_ubuntu')" style="padding:1em;">
+                          <img style="cursor: pointer;" class="zoom" (click)="go_in(session.session_number)" width="50px"
+                          height="50px" src="assets/images/ubuntu.png" />
+                        </a>
+                        <a *ngIf="!(this.actualRunningContainer[session.session_number]=='base_image')" style="padding:1em;">
+
+                          <img width="50px" width="50px" src="assets/images/desktop_mono.png" />
+                        </a>
+                        <a *ngIf=" (this.actualRunningContainer[session.session_number]=='base_image')" style="padding:1em;">
+                          <img style="cursor: pointer;" class="zoom" (click)="go_in(session.session_number)" width="50px"
+                          height="50px" src="assets/images/desktop.png" />
+                        </a>
+                        <a *ngIf="!(this.actualRunningContainer[session.session_number]=='base_jupyter')" style="padding:1em;">
+
+                          <img width="50px" height="50px" src="assets/images/jupyter_mono.png" />
+                        </a>
+                        <a style="padding:1em;" *ngIf="(this.actualRunningContainer[session.session_number]=='base_jupyter')">
+                          <img style="cursor: pointer;" class="zoom" (click)="go_in(session.session_number)" width="50px"
+                          height="50px" src="assets/images/jupyter.png" />
+                        </a>
+                        &nbsp;&nbsp;
+                        <a *ngSwitchCase="2" title="Stop">
+                          <img style="cursor: pointer;" class="zoom" (click)="stop_and_remove_container(session.session_number)"
+                            width="20px" height="20px" src="assets/images/stop.png" />
+                        </a>
+                      </div>
+
+                    </div>
+                    <li *ngSwitchDefault>Error</li>
+
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+
         </tr>
+
+
       </tbody>
+
+
     </table>
 
     <hr>
