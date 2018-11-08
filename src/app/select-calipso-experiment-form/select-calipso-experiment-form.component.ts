@@ -325,7 +325,6 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   public stop_and_remove_container(session_serial_number: string) {
     let username = this.calipsoService.getLoggedUserName();
-    var temporalyActiveExperiments: { [key: string]: Status } = {};
     this.safe_locked_button = true;
 
     this.statusActiveSessions[session_serial_number] = Status.busy;
@@ -347,9 +346,10 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
               cdata.container_status;
 
             this.containers.forEach((item, index) => {
-              if (item.container_name === cdata.container_name)
+              if (item.container_name === cdata.container_name) {
                 this.containers.splice(index, 1);
-              this.calipsoService.removeDateAccess(cdata.container_name);
+                this.calipsoService.removeDateAccess(cdata.container_name);
+              }
             });
 
             this.statusActiveSessions[cdata.calipso_experiment] = Status.idle;
@@ -398,4 +398,6 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     }
     return type;
   }
+
+
 }

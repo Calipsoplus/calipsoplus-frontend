@@ -118,7 +118,7 @@
                       aria-expanded="true">
                       <div [ngSwitch]="statusActiveSessions[session.session_number]">
                         <div *ngSwitchCase="0" class="btn-group mr-3">
-                          <fa-icon [icon]="['fa','arrow-circle-right']" style="color:black;"></fa-icon>
+                          <fa-icon [icon]="['fa','arrow-circle-down']" style="color:black;"></fa-icon>
                         </div>
                         <div *ngSwitchCase="1" class="btn-group mr-3">
                           <fa-icon [icon]="['fa', 'cog']" [spin]="true" style="color:black;"></fa-icon>
@@ -215,9 +215,7 @@
                           <img width="50px" width="50px" src="assets/images/jupyter_mono.png" />
                         </a>
                         &nbsp;&nbsp;
-                        <a *ngSwitchCase="2">
-                          <img style="cursor: pointer;" width="20px" width="20px" src="assets/images/stop_mono.png" />
-                        </a>
+                        <img style="cursor: pointer;" width="20px" width="20px" src="assets/images/stop_mono.png" />
                       </div>
 
                       <div *ngIf="!safe_locked_button">
@@ -226,7 +224,7 @@
                         </a>
                         <a *ngIf="(this.actualRunningContainer[session.session_number]=='base_image_ubuntu')" style="padding:1em;">
                           <img style="cursor: pointer;" class="zoom" (click)="go_in(session.session_number)" width="50px"
-                          height="50px" src="assets/images/ubuntu.png" />
+                            height="50px" src="assets/images/ubuntu.png" />
                         </a>
                         <a *ngIf="!(this.actualRunningContainer[session.session_number]=='base_image')" style="padding:1em;">
 
@@ -234,7 +232,7 @@
                         </a>
                         <a *ngIf=" (this.actualRunningContainer[session.session_number]=='base_image')" style="padding:1em;">
                           <img style="cursor: pointer;" class="zoom" (click)="go_in(session.session_number)" width="50px"
-                          height="50px" src="assets/images/desktop.png" />
+                            height="50px" src="assets/images/desktop.png" />
                         </a>
                         <a *ngIf="!(this.actualRunningContainer[session.session_number]=='base_jupyter')" style="padding:1em;">
 
@@ -242,10 +240,10 @@
                         </a>
                         <a style="padding:1em;" *ngIf="(this.actualRunningContainer[session.session_number]=='base_jupyter')">
                           <img style="cursor: pointer;" class="zoom" (click)="go_in(session.session_number)" width="50px"
-                          height="50px" src="assets/images/jupyter.png" />
+                            height="50px" src="assets/images/jupyter.png" />
                         </a>
                         &nbsp;&nbsp;
-                        <a *ngSwitchCase="2" title="Stop">
+                        <a title="Stop">
                           <img style="cursor: pointer;" class="zoom" (click)="stop_and_remove_container(session.session_number)"
                             width="20px" height="20px" src="assets/images/stop.png" />
                         </a>
