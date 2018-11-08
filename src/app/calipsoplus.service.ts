@@ -405,14 +405,14 @@ export class CalipsoplusService {
     return str_date;
   }
   public removeDateAccess(container_name: string) {
-    sessionStorage.removeItem(container_name);
+    localStorage.removeItem(container_name);
   }
   public updateDateAccess(container_name: string) {
     let date_access = new Date();
-    sessionStorage.setItem(container_name, this.formatDate(date_access));
+    localStorage.setItem(container_name, this.formatDate(date_access));
   }
   public getDateAccess(container_name: string) {
-    return sessionStorage.getItem(container_name);
+    return localStorage.getItem(container_name);
   }
 
   public go_into_container(
@@ -480,6 +480,7 @@ export class CalipsoplusService {
   }
 
   public openURL(url: string, name: string) {
+    this.updateDateAccess(name);
     window.open(url, "_blank");
   }
 
