@@ -194,13 +194,13 @@ export class CalipsoplusService {
       });
   }
 
-  public getMyLogo(): String {
+  public getMyLogo(): string {
     return LOGO_FACILITY;
   }
 
   public getCalipsoExperiments(
     username: string,
-    page: Number,
+    page: number,
     order: string,
     search_data: string,
     filter: string
