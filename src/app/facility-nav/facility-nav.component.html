@@ -1,19 +1,19 @@
-<div class="col">
+<div class="col-12">
   <nav class="navbar navbar-expand-md" style="background-color:white;">
-    <a class="col-sm-5 nav-link ml">
-      <img src="assets/images/alba.png" />
+    <a class="col-4 nav-link">
+      <img src={{calipsoService.getMyLogo()}} width="228px" />
     </a>
-    <a class="col-sm-5 nav-link" routerLink="/">
+    <a class="col-4 nav-link" routerLink="/">
       <img src="assets/images/logo.jpg" />
     </a>
-    <a *ngIf="!calipsoService.isLogged()" class="nav-link ml-auto">login</a>
-    <div *ngIf="calipsoService.isLogged()" class="nav-link ml-auto">
+    <a *ngIf="!calipsoService.isLogged()" class="col-4 nav-link ml-auto">login</a>
+    <div *ngIf="calipsoService.isLogged()" class="nav-link ml-auto text-right col-4">
       <div class="row">
         <div class="col">
           <div ngbDropdown placement="bottom-right">
-            <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{calipsoService.getLoggedUserName()}}</button>
+            <button class="btn btn-outline-primary  btn-sm" id="dropdownBasic1" ngbDropdownToggle>{{calipsoService.getLoggedUserName()}}</button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <a class="nav-link dropdown-menu-right" (click)="this.logout()" routerLink="/">Logout</a>
+              <a class="nav-link dropdown-menu-right  btn-sm" (click)="this.logout()" routerLink="/">Logout</a>
             </div>
           </div>
         </div>

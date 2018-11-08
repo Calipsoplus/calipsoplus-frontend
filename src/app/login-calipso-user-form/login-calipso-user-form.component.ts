@@ -18,7 +18,7 @@ export class LoginCalipsoUserFormComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private calipsoService: CalipsoplusService
+    public calipsoService: CalipsoplusService
   ) {}
 
   login_UO() {
@@ -26,7 +26,7 @@ export class LoginCalipsoUserFormComponent implements OnInit {
       resp => {
         this.calipsoService.auth(this.username, this.password).subscribe(
           resp => {
-            this.router.navigate(["/partners"]);
+            this.router.navigate(["/experiment"]);
           },
           error => {
             alert("Invalid credentials");
@@ -40,12 +40,16 @@ export class LoginCalipsoUserFormComponent implements OnInit {
   }
 
   public isSettingsLocalLogin(){
-      return this.calipsoService.calipsoSettings.local_auth;
+      return this.calipsoService.defaultCalipsoSettings.local_auth;
   }
 
  public login_umbrella(){
     this.calipsoService.goExternalLoginUmbrella();
  }
 
-  ngOnInit() {}
+  ngOnInit() {
+      if (this.calipsoService.isLogged()){
+        this.router.navigate(["/experiment"]);
+      }
+  }
 }
