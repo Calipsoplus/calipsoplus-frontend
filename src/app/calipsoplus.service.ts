@@ -486,19 +486,21 @@ export class CalipsoplusService {
 
   public logout() {
     //console.log("login_local:"+this.calipsoService.calipsoSettings.local_auth);
-    this.removeStorage();
+
 
     if (this.getLoginType() == "local") {
+      this.removeStorage();
       this.unauth().subscribe(
         resp => {
           //console.log("logout done from UO");
-          this.router.navigate(["/login"]);
+          this.router.navigate(["/"]);
         },
         error => {
           //console.log("Error in UO logout");
         }
       );
     } else {
+      this.removeStorage();
       this.unauthUmbrella().subscribe(
         resp => {
           //console.log("logout done from umbrella");
