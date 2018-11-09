@@ -22,7 +22,7 @@ export class PartnersCalipsoPageComponent implements OnInit {
       .subscribe(facilities => (this.facilities = facilities));
   }
 
-  public enterFacility(url:String) {
+  public enterFacility(url:string) {
       window.location.href = url+"login";
    }
   public isLogged() {
