@@ -194,13 +194,13 @@ export class CalipsoplusService {
       });
   }
 
-  public getMyLogo(): String {
+  public getMyLogo(): string {
     return LOGO_FACILITY;
   }
 
   public getCalipsoExperiments(
     username: string,
-    page: Number,
+    page: number,
     order: string,
     search_data: string,
     filter: string
@@ -405,14 +405,14 @@ export class CalipsoplusService {
     return str_date;
   }
   public removeDateAccess(container_name: string) {
-    sessionStorage.removeItem(container_name);
+    localStorage.removeItem(container_name);
   }
   public updateDateAccess(container_name: string) {
     let date_access = new Date();
-    sessionStorage.setItem(container_name, this.formatDate(date_access));
+    localStorage.setItem(container_name, this.formatDate(date_access));
   }
   public getDateAccess(container_name: string) {
-    return sessionStorage.getItem(container_name);
+    return localStorage.getItem(container_name);
   }
 
   public go_into_container(
@@ -480,24 +480,27 @@ export class CalipsoplusService {
   }
 
   public openURL(url: string, name: string) {
+    this.updateDateAccess(name);
     window.open(url, "_blank");
   }
 
   public logout() {
     //console.log("login_local:"+this.calipsoService.calipsoSettings.local_auth);
-    this.removeStorage();
+
 
     if (this.getLoginType() == "local") {
+      this.removeStorage();
       this.unauth().subscribe(
         resp => {
           //console.log("logout done from UO");
-          this.router.navigate(["/login"]);
+          this.router.navigate(["/"]);
         },
         error => {
           //console.log("Error in UO logout");
         }
       );
     } else {
+      this.removeStorage();
       this.unauthUmbrella().subscribe(
         resp => {
           //console.log("logout done from umbrella");

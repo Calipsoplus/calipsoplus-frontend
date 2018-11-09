@@ -83,4 +83,8 @@ export class MainNavComponent implements OnInit {
   public login() {
     this.router.navigate(["/login"]);
   }
+
+  public getFrontendUrl(){
+    return environment.frontend_calipso;
+  }
 }
