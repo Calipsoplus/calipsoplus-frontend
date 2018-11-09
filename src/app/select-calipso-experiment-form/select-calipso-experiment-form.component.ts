@@ -202,78 +202,80 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
             this.search_key,
             filter
           )
-          .subscribe(experiment => {
-            this.pagination = experiment;
-            this.experiments = this.pagination.results;
+          .subscribe(
+            experiment => {
+              this.pagination = experiment;
+              this.experiments = this.pagination.results;
 
-            let points = true;
-            for (
-              let i: number = 0;
-              i < this.pagination.count / this.pagination.page_size;
-              i++
-            ) {
-              if (this.showPage(i + 1)) {
-                this.total_pages.push(i + 1);
-                points = true;
-              } else {
-                if (points) {
+              let points = true;
+              for (
+                let i: number = 0;
+                i < this.pagination.count / this.pagination.page_size;
+                i++
+              ) {
+                if (this.showPage(i + 1)) {
                   this.total_pages.push(i + 1);
-                  points = false;
+                  points = true;
+                } else {
+                  if (points) {
+                    this.total_pages.push(i + 1);
+                    points = false;
+                  }
                 }
               }
-            }
 
-            // search experiment in container
-            this.experiments.forEach(element => {
-              this.sessions = element.sessions;
-              this.sessions.forEach(sselement => {
-                var c = this.containers.find(
-                  x => x.calipso_experiment == sselement.session_number
-                );
+              // search experiment in container
+              this.experiments.forEach(element => {
+                this.sessions = element.sessions;
+                this.sessions.forEach(sselement => {
+                  var c = this.containers.find(
+                    x => x.calipso_experiment == sselement.session_number
+                  );
 
-                if (c == null) {
-                  this.statusActiveSessions[sselement.session_number] =
-                    Status.idle;
-                } else {
-                  this.check_quota(c.public_name);
-                  this.actualRunningContainer[sselement.session_number] = "";
+                  if (c == null) {
+                    this.statusActiveSessions[sselement.session_number] =
+                      Status.idle;
+                  } else {
+                    this.check_quota(c.public_name);
+                    this.actualRunningContainer[sselement.session_number] = "";
 
-                  switch (c.container_status) {
-                    case "busy": {
-                      this.statusActiveSessions[sselement.session_number] =
-                        Status.busy;
-                      break;
-                    }
-                    case "created": {
-                      this.statusActiveSessions[sselement.session_number] =
-                        Status.running;
-                      this.actualRunningContainer[sselement.session_number] =
-                        c.public_name;
+                    switch (c.container_status) {
+                      case "busy": {
+                        this.statusActiveSessions[sselement.session_number] =
+                          Status.busy;
+                        break;
+                      }
+                      case "created": {
+                        this.statusActiveSessions[sselement.session_number] =
+                          Status.running;
+                        this.actualRunningContainer[sselement.session_number] =
+                          c.public_name;
 
-                      break;
+                        break;
+                      }
+                      case "stopped":
+                      case "removed": {
+                        this.statusActiveSessions[sselement.session_number] =
+                          Status.idle;
+                        break;
+                      }
+                      default: {
+                        this.statusActiveSessions[sselement.session_number] =
+                          Status.error;
+                        break;
+                      }
                     }
-                    case "stopped":
-                    case "removed": {
-                      this.statusActiveSessions[sselement.session_number] =
-                        Status.idle;
-                      break;
-                    }
-                    default: {
-                      this.statusActiveSessions[sselement.session_number] =
-                        Status.error;
-                      break;
-                    }
+                    this.safe_locked_button = false;
                   }
-                  this.safe_locked_button = false;
-                }
+                });
               });
-            });
-          });
-        err => {
-          this.calipsoService.logout();
+            },
+            err => {
+              this.calipsoService.logout();
 
-          console.log("Security error");
-        };
+              console.log("Security error");
+            }
+          );
       });
     } else {
       this.calipsoService.logout();
@@ -398,6 +400,4 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     }
     return type;
   }
-
-
 }
