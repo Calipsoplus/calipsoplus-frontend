@@ -77,7 +77,7 @@
           "options": {
             "browserTarget": "calipsoplus-app:build",
             "port": 8001,
-            "host": "192.168.33.10"
+            "host": "web-front"
           },
           "configurations": {
             "test": {
