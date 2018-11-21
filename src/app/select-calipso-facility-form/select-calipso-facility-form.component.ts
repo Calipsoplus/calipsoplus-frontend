@@ -15,7 +15,7 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
 
 
   facilities: CalipsoFacility[];
-  selectedVal: Number;
+  selectedVal: number;
 
   constructor(private calipsoService: CalipsoplusService, private router: Router) { }
 
