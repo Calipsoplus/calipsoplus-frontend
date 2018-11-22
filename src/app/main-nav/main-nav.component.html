@@ -1,31 +1,8 @@
 <div class="col">
-  <nav class="navbar navbar-expand-md" style="background-color: #e3f2fd;">
-    <a class="nav-link" routerLink="">Home</a>
-    <a class="nav-link" routerLink="/about">About</a>
-    <a class="nav-link" routerLink="/partners">Partners</a>
-
-
-    <button *ngIf="!isLogged()" class="btn btn-outline-primary  ml-auto" (click)="login()">Login</button>
-
-
-    <div *ngIf="isLogged()" class="nav-link ml-auto">
-      <div class="row">
-        <div class="col">
-          <div ngbDropdown placement="bottom-right">
-            <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{getUserName()}}</button>
-            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <a class="nav-link dropdown-menu-right" (click)="!!logout()" href="#">Logout</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
   <div class="row text-center">
-    <div class="col">
-      <img src="assets/images/logo.jpg" width="auto" />
+    <div class="col"><a href="{{this.getFrontendUrl()}}">
+        <img src="assets/images/logo.jpg" width="auto" />
+      </a>
     </div>
   </div>
-
-
 </div>

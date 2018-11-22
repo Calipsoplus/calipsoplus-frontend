@@ -8,6 +8,13 @@ import { CalipsoContainer } from "../calipso-container";
 import { CalipsoQuota } from "../calipso-quota";
 import { CalipsoPaginationExperiment } from "../calipso-pagination-experiment";
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { far } from "@fortawesome/free-regular-svg-icons";
+import { CalipsoSession } from "../calipso-sessions";
+
+library.add(fas, far);
+
 export enum Status {
   idle = 0, // ready
   busy = 1, // waitting
@@ -40,21 +47,24 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   header_column_sorted: string = "serial_number";
 
   experiments: CalipsoExperiment[];
+  sessions: CalipsoSession[];
   containers: CalipsoContainer[];
 
   used_quota: CalipsoQuota[];
   user_quota: CalipsoQuota[];
 
-  statusActiveExperiments: { [key: string]: Status } = {};
+  statusActiveSessions: { [key: string]: Status } = {};
 
-  max_num_machines_exceeded: Boolean = false;
-  max_num_cpu_exceeded: Boolean = false;
-  max_memory_exceeded: Boolean = false;
-  max_hdd_exceeded: Boolean = false;
+  actualRunningContainer: { [key: string]: string } = {};
+
+  max_num_machines_exceeded: boolean = false;
+  max_num_cpu_exceeded: boolean = false;
+  max_memory_exceeded: boolean = false;
+  max_hdd_exceeded: boolean = false;
 
   search_key: string = "";
 
-  safe_locked_button: Boolean = false;
+  safe_locked_button: boolean = false;
   last_sorted = "";
 
   constructor(
@@ -180,20 +190,20 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
       this.safe_locked_button = false;
 
       //get all containers active from user
-      this.calipsoService.listContainersActive(username).subscribe(
-        res => {
-          this.containers = res;
+      this.calipsoService.listContainersActive(username).subscribe(res => {
+        this.containers = res;
 
-          // get all experiments for a username
-          this.calipsoService
-            .getCalipsoExperiments(
-              username,
-              this.actual_page,
-              this.sort_field,
-              this.search_key,
-              filter
-            )
-            .subscribe(experiment => {
+        // get all experiments for a username
+        this.calipsoService
+          .getCalipsoExperiments(
+            username,
+            this.actual_page,
+            this.sort_field,
+            this.search_key,
+            filter
+          )
+          .subscribe(
+            experiment => {
               this.pagination = experiment;
               this.experiments = this.pagination.results;
 
@@ -216,69 +226,82 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
               // search experiment in container
               this.experiments.forEach(element => {
-                var c = this.containers.find(
-                  x => x.calipso_experiment == element.serial_number
-                );
-                //TODO:this.check_quota(c.public_name);
-                if (c == null) {
-                  this.statusActiveExperiments[element.serial_number] =
-                    Status.idle;
-                } else {
-                  this.check_quota(c.public_name);
+                this.sessions = element.sessions;
+                this.sessions.forEach(sselement => {
+                  var c = this.containers.find(
+                    x => x.calipso_experiment == sselement.session_number
+                  );
 
-                  switch (c.container_status) {
-                    case "busy": {
-                      this.statusActiveExperiments[element.serial_number] =
-                        Status.busy;
-                      break;
+                  if (c == null) {
+                    this.statusActiveSessions[sselement.session_number] =
+                      Status.idle;
+                  } else {
+                    this.check_quota(c.public_name);
+                    this.actualRunningContainer[sselement.session_number] = "";
+
+                    switch (c.container_status) {
+                      case "busy": {
+                        this.statusActiveSessions[sselement.session_number] =
+                          Status.busy;
+                        break;
+                      }
+                      case "created": {
+                        this.statusActiveSessions[sselement.session_number] =
+                          Status.running;
+                        this.actualRunningContainer[sselement.session_number] =
+                          c.public_name;
+
+                        break;
+                      }
+                      case "stopped":
+                      case "removed": {
+                        this.statusActiveSessions[sselement.session_number] =
+                          Status.idle;
+                        break;
+                      }
+                      default: {
+                        this.statusActiveSessions[sselement.session_number] =
+                          Status.error;
+                        break;
+                      }
                     }
-                    case "created": {
-                      this.statusActiveExperiments[element.serial_number] =
-                        Status.running;
-                      break;
-                    }
-                    case "stopped":
-                    case "removed": {
-                      this.statusActiveExperiments[element.serial_number] =
-                        Status.idle;
-                      break;
-                    }
-                    default: {
-                      this.statusActiveExperiments[element.serial_number] =
-                        Status.error;
-                      break;
-                    }
+                    this.safe_locked_button = false;
                   }
-                  this.safe_locked_button = false;
-                }
+                });
               });
-            });
-        },
-        err => {
-          this.router.navigate(["/"]);
-          //console.log("Secutiry error");
-        }
-      );
+            },
+            err => {
+              this.calipsoService.logout();
+
+              console.log("Security error");
+            }
+          );
+      });
+    } else {
+      this.calipsoService.logout();
+    }
+  }
+
+  ngOnInit() {
+    if (this.calipsoService.isLogged()) {
+      this.load_experiments(this.actual_page);
     } else {
       this.router.navigate(["/"]);
     }
   }
 
-  ngOnInit() {
-    this.load_experiments(this.actual_page);
-  }
+  public run(session_serial_number, base_image: string) {
+    this.statusActiveSessions[session_serial_number] = Status.busy;
+    this.actualRunningContainer[session_serial_number] = base_image;
 
-  public run(experiment_serial_number, base_image: string) {
-    this.statusActiveExperiments[experiment_serial_number] = Status.busy;
     this.safe_locked_button = true;
-    let username = this.calipsoService.getLoggedUserName();
 
     //maybe check de base image for its
 
     this.calipsoService
       .runContainer(
         this.calipsoService.getLoggedUserName(),
-        experiment_serial_number,
+        session_serial_number,
         base_image
       )
       .subscribe(
@@ -288,31 +311,28 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
             this.check_quota(data.public_name);
 
-            this.statusActiveExperiments[experiment_serial_number] =
-              Status.running;
+            this.statusActiveSessions[session_serial_number] = Status.running;
           } else {
-            this.statusActiveExperiments[experiment_serial_number] =
-              Status.idle;
+            this.statusActiveSessions[session_serial_number] = Status.idle;
           }
           this.safe_locked_button = false;
         },
         error => {
-          this.statusActiveExperiments[experiment_serial_number] = Status.idle;
+          this.statusActiveSessions[session_serial_number] = Status.idle;
           this.safe_locked_button = false;
           console.log("Ooops!");
         }
       );
   }
 
-  public stop_and_remove_container(experiment_serial_number: string) {
+  public stop_and_remove_container(session_serial_number: string) {
     let username = this.calipsoService.getLoggedUserName();
-    var temporalyActiveExperiments: { [key: string]: Status } = {};
     this.safe_locked_button = true;
 
-    this.statusActiveExperiments[experiment_serial_number] = Status.busy;
+    this.statusActiveSessions[session_serial_number] = Status.busy;
 
     var c = this.containers.find(
-      x => x.calipso_experiment == experiment_serial_number
+      x => x.calipso_experiment == session_serial_number
     );
 
     this.calipsoService
@@ -328,13 +348,13 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
               cdata.container_status;
 
             this.containers.forEach((item, index) => {
-              if (item.container_name === cdata.container_name)
+              if (item.container_name === cdata.container_name) {
                 this.containers.splice(index, 1);
-              this.calipsoService.removeDateAccess(cdata.container_name);
+                this.calipsoService.removeDateAccess(cdata.container_name);
+              }
             });
 
-            this.statusActiveExperiments[cdata.calipso_experiment] =
-              Status.idle;
+            this.statusActiveSessions[cdata.calipso_experiment] = Status.idle;
             this.safe_locked_button = false;
 
             this.check_quota(c.public_name);
@@ -342,9 +362,9 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
       });
   }
 
-  public go_in(experiment_serial_number: string) {
+  public go_in(session_serial_number: string) {
     var c = this.containers.find(
-      x => x.calipso_experiment == experiment_serial_number
+      x => x.calipso_experiment == session_serial_number
     );
     if (c == null) console.log("error win up");
     else if (c.host_port == "") {
@@ -370,6 +390,10 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
         }
         case "base_jupyter": {
           type = "Jupyter";
+          break;
+        }
+        case "base_image_ubuntu": {
+          type = "Ubuntu";
           break;
         }
       }

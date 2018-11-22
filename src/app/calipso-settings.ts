@@ -1,3 +1,3 @@
 export class CalipsoSettings {
-  constructor(public local_auth: Boolean) {}
+  constructor(public local_auth: boolean) {}
 }

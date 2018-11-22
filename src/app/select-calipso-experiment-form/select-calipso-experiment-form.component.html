@@ -33,86 +33,240 @@
       <div class="col-sm-5"></div>
       <div class="col-sm-3">
         <div class="input-group align-vertical">
-          <input type="text" (keyup.enter)="search_action(searchkey.value)" class="form-control" value="{{search_key}}" #searchkey
-            placeholder="Search..." />&nbsp;&nbsp;
-          <span (click)="search_action(searchkey.value)" class="fa fa-search hand"></span>
+          <input type="text" (keyup.enter)="search_action(searchkey.value)" class="form-control" value="{{search_key}}"
+            #searchkey placeholder="Search..." />&nbsp;&nbsp;
+          <a href="#" (click)="!!search_action(searchkey.value)">
+            <fa-icon style="color:black;" [icon]="['fa', 'search']"></fa-icon>
+          </a>
         </div>
       </div>
     </div>
 
-    <table class="table sortable table-hover">
+    <table class="table sortable">
       <thead>
         <tr class="d-flex">
           <th class="col-sm-1  text-center" (click)="sort_by_field('calipsouserexperiment__favorite')">
-            <i class="fas fa-star"></i>
+            <fa-icon [icon]="['fa', 'star']"></fa-icon>
           </th>
           <th class="col-sm-2 {{if_is_sorted('serial_number')}}" (click)="sort_by_field('serial_number')">
             Proposal Id &nbsp;&nbsp;
-            <i class="fas fa-sort"></i>
+            <fa-icon [icon]="['fas', 'sort']"></fa-icon>
           </th>
-          <th class="col-sm-2 {{if_is_sorted('subject')}}" (click)="sort_by_field('subject')">
+          <th class="col-sm-3 {{if_is_sorted('subject')}}" (click)="sort_by_field('subject')">
             Title &nbsp;&nbsp;
-            <i class="fas fa-sort"></i>
+            <fa-icon [icon]="['fas', 'sort']"></fa-icon>
           </th>
           <th class="col-sm-3 {{if_is_sorted('body')}} " (click)="sort_by_field('body')">
             Abstract &nbsp;&nbsp;
-            <i class="fas fa-sort"></i>
+            <fa-icon [icon]="['fas', 'sort']"></fa-icon>
           </th>
           <th class="col-sm-2 {{if_is_sorted('beam_line')}}" (click)="sort_by_field('beam_line')">
             Beamline &nbsp;&nbsp;
-            <i class="fas fa-sort"></i>
+            <fa-icon [icon]="['fas', 'sort']"></fa-icon>
           </th>
-          <th class="col-sm-2 text-center">
-            <i class="fas fa-laptop"></i>
+          <th class="col-sm-1">
+            <fa-icon [icon]="['fas', 'laptop']"></fa-icon>
           </th>
         </tr>
       </thead>
-      <tbody>
-        <tr class="d-flex" *ngFor="let experiment of experiments">
-          <td class="col-sm-1  text-center">
-            <i *ngIf="!experiment.favorite" (click)="star_on(experiment.serial_number,experiment.id)" class="far fa-star"></i>
-            <i *ngIf="experiment.favorite" (click)="star_off(experiment.serial_number,experiment.id)" class="fa fa-star"></i>
-          </td>
+      <tbody *ngFor="let experiment of experiments">
 
+        <tr class="d-flex">
+          <td class="col-sm-1  text-center">
+            <a *ngIf="!experiment.favorite" href="#" (click)="!!star_on(experiment.serial_number,experiment.id)">
+              <fa-icon [icon]="['far', 'star']" style="color:black;"></fa-icon>
+            </a>
+            <a *ngIf="experiment.favorite" href="#" (click)="!!star_off(experiment.serial_number,experiment.id)">
+              <fa-icon [icon]="['fa', 'star']" style="color:black;"></fa-icon>
+            </a>
+          </td>
           <td class="col-sm-2">
             {{experiment.serial_number}}
           </td>
-          <td class="col-sm-2">{{experiment.subject}}</td>
+          <td class="col-sm-3">{{experiment.subject}}</td>
           <td class="col-sm-3">{{experiment.body | slice:0:106}} &nbsp;
-            <a *ngIf="experiment.body.length>100" class="far fa-eye" title="{{experiment.body}}"></a>
+            <a *ngIf="experiment.body.length>100" title="{{experiment.body}}">
+              <fa-icon [icon]="['far', 'eye']" style="color:black;"></fa-icon>
+            </a>
           </td>
           <td class="col-sm-2">{{experiment.beam_line}}</td>
-          <td class="col-sm-2 disabled text-center">
-            <div [ngSwitch]="statusActiveExperiments[experiment.serial_number]">
-              <div *ngSwitchCase="0" class="btn-group mr-3">
-                <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button"
-                  class="btn btn-outline-primary" (click)="run(experiment.serial_number, 'base_image')" type="button" class="btn btn-primary">Desktop</button>
-                <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
-                  <button [disabled]="max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button"
-                    class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle></button>
-                  <div class="dropdown-menu" ngbDropdownMenu>
-                    <!--let image of available_images -->
-                    <button class="dropdown-item" (click)="run(experiment.serial_number,'base_image')">Desktop</button>
-                    <!--button class="dropdown-item">Link</button-->
-                    <button class="dropdown-item" (click)="run(experiment.serial_number,'base_jupyter')">Jupyter</button>
+          <td class="col-sm-1">
+            <label data-toggle="collapse" [attr.href]="'#x'+experiment.serial_number" [attr.aria-controls]="'x'+experiment.serial_number"
+              class="switch">
+              <input type="checkbox">
+              <span class="slider round"></span>
+            </label>
+
+          </td>
+        </tr>
+
+        <tr *ngFor="let session of experiment.sessions">
+
+          <div style="border: solid none none solid" class="collapse" [attr.id]="'x'+experiment.serial_number">
+
+            <div class="row " style="padding: 0.6em">
+              <div class="col-12">
+                <div class="row mark">
+                  <div class="col-1"></div>
+                  <div class="col-2">{{session.session_number}}</div>
+                  <div class="col-3">{{session.start_date| date:'MM/dd/yyyy HH:MM'}}</div>
+
+                  <div class="col-3 ">{{session.end_date| date:'MM/dd/yyyy HH:MM'}}</div>
+                  <div class="col-2 ">{{session.subject}}</div>
+                  <div class="col-1">
+                    <a data-toggle="collapse" [attr.href]="'#x'+session.session_number" [attr.aria-controls]="'x'+session.session_number"
+                      aria-expanded="true">
+                      <div [ngSwitch]="statusActiveSessions[session.session_number]">
+                        <div *ngSwitchCase="0" class="btn-group mr-3">
+                          <fa-icon [icon]="['fa','arrow-circle-down']" style="color:black;"></fa-icon>
+                        </div>
+                        <div *ngSwitchCase="1" class="btn-group mr-3">
+                          <fa-icon [icon]="['fa', 'cog']" [spin]="true" style="color:black;"></fa-icon>
+                        </div>
+                        <div *ngSwitchCase="2" class="btn-group mr-3">
+                          <fa-icon [icon]="['fa','cog']" style="color:blue;"></fa-icon>
+                        </div>
+                      </div>
+                    </a>
                   </div>
                 </div>
               </div>
-
-              <button *ngSwitchCase="1" class="btn btn-warning">
-                <span class="fa fa-refresh fa-spin">&nbsp;</span>&nbsp;&nbsp;Wait&nbsp;&nbsp;</button>
-
-              <button *ngSwitchCase="2" [disabled]="safe_locked_button" class="center-text btn btn-danger" (click)="stop_and_remove_container(experiment.serial_number)">Stop</button>
-              <button *ngSwitchCase="2" [disabled]="safe_locked_button" class="btn btn-primary" (click)="go_in(experiment.serial_number)">{{getContainerType(experiment.serial_number)}}</button>
-
-              <li *ngSwitchDefault>Error</li>
             </div>
-          </td>
+            <div class="col-12">
+              <div class="row">
+                <div style="padding:1em;" class="text-center col collapse" [attr.id]="'x'+session.session_number">
+
+                  <div [ngSwitch]="statusActiveSessions[session.session_number]">
+                    <div *ngSwitchCase="0">
+
+                      <a style="padding:1em;" *ngIf="!(max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button)"
+                        href="#" (click)="!!run(session.session_number, 'base_image_ubuntu')">
+                        <img width="50px" class="zoom" src="assets/images/ubuntu.png" />
+                      </a>
+
+                      <a style="padding:1em;" *ngIf="!(max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button)"
+                        href="#" (click)="!!run(session.session_number, 'base_image')">
+                        <img width="50px" class="zoom" src="assets/images/desktop.png" />
+                      </a>
+
+                      <a style="padding:1em;" *ngIf="!(max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button)"
+                        href="#" (click)="!!run(session.session_number, 'base_jupyter')">
+                        <img width="50px" class="zoom" src="assets/images/jupyter.png" />
+                      </a>
+
+                      <a style="padding:1em;" *ngIf="(max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button)">
+                        <img width="50px" src="assets/images/ubuntu_mono.png" />
+                      </a>
+
+                      <a style="padding:1em;" *ngIf="(max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button)">
+                        <img width="50px" src="assets/images/desktop_mono.png" />
+                      </a>
+
+                      <a style="padding:1em;" *ngIf="(max_hdd_exceeded || max_memory_exceeded || max_num_cpu_exceeded || max_num_machines_exceeded || safe_locked_button)">
+                        <img width="50px" src="assets/images/jupyter_mono.png" />
+                      </a>
+
+                    </div>
+
+                    <div *ngSwitchCase="1">
+
+                      <div *ngIf="safe_locked_button">
+
+                        <a style="padding:1em;" *ngIf="!(this.actualRunningContainer[session.session_number]=='base_image_ubuntu')">
+                          <img width="50px" width="50px" src="assets/images/ubuntu_mono.png" />
+                        </a>
+
+                        <a style="padding:1em;" *ngIf="(this.actualRunningContainer[session.session_number]=='base_image_ubuntu')">
+                          <img style="cursor:pointer;" (click)="go_in(session.session_number)" width="50px" class="myspinner"
+                            width="50px" src="assets/images/ubuntu.png" />
+                        </a>
+
+                        <a style="padding:1em;" *ngIf="!(this.actualRunningContainer[session.session_number]=='base_image')">
+                          <img width="50px" width="50px" src="assets/images/desktop_mono.png" />
+                        </a>
+                        <a style="padding:1em;" *ngIf="(this.actualRunningContainer[session.session_number]=='base_image')">
+                          <img style="cursor: pointer;" (click)="go_in(session.session_number)" width="50px" class="myspinner"
+                            width="50px" src="assets/images/desktop.png" />
+                        </a>
+                        <a style="padding:1em;" *ngIf="!(this.actualRunningContainer[session.session_number]=='base_jupyter')">
+                          <img width="50px" width="50px" src="assets/images/jupyter_mono.png" />
+                        </a>
+                        <a style="padding:1em;" *ngIf="(this.actualRunningContainer[session.session_number]=='base_jupyter')">
+                          <img style="cursor: pointer;" (click)="go_in(session.session_number)" width="50px" class="myspinner"
+                            width="50px" src="assets/images/jupyter.png" />
+                        </a>
+
+                      </div>
+
+                    </div>
+
+
+
+                    <div *ngSwitchCase="2">
+
+                      <div *ngIf="safe_locked_button">
+                        <a style="padding:1em;">
+                          <img width="50px" width="50px" src="assets/images/ubuntu_mono.png" />
+                        </a>
+                        <a style="padding:1em;">
+                          <img width="50px" width="50px" src="assets/images/desktop_mono.png" />
+                        </a>
+                        <a style="padding:1em;">
+                          <img width="50px" width="50px" src="assets/images/jupyter_mono.png" />
+                        </a>
+                        &nbsp;&nbsp;
+                        <img style="cursor: pointer;" width="20px" width="20px" src="assets/images/stop_mono.png" />
+                      </div>
+
+                      <div *ngIf="!safe_locked_button">
+                        <a *ngIf="!(this.actualRunningContainer[session.session_number]=='base_image_ubuntu')" style="padding:1em;">
+                          <img width="50px" height="50px" src="assets/images/ubuntu_mono.png" />
+                        </a>
+                        <a *ngIf="(this.actualRunningContainer[session.session_number]=='base_image_ubuntu')" style="padding:1em;">
+                          <img style="cursor: pointer;" class="zoom" (click)="go_in(session.session_number)" width="50px"
+                            height="50px" src="assets/images/ubuntu.png" />
+                        </a>
+                        <a *ngIf="!(this.actualRunningContainer[session.session_number]=='base_image')" style="padding:1em;">
+
+                          <img width="50px" width="50px" src="assets/images/desktop_mono.png" />
+                        </a>
+                        <a *ngIf=" (this.actualRunningContainer[session.session_number]=='base_image')" style="padding:1em;">
+                          <img style="cursor: pointer;" class="zoom" (click)="go_in(session.session_number)" width="50px"
+                            height="50px" src="assets/images/desktop.png" />
+                        </a>
+                        <a *ngIf="!(this.actualRunningContainer[session.session_number]=='base_jupyter')" style="padding:1em;">
+
+                          <img width="50px" height="50px" src="assets/images/jupyter_mono.png" />
+                        </a>
+                        <a style="padding:1em;" *ngIf="(this.actualRunningContainer[session.session_number]=='base_jupyter')">
+                          <img style="cursor: pointer;" class="zoom" (click)="go_in(session.session_number)" width="50px"
+                            height="50px" src="assets/images/jupyter.png" />
+                        </a>
+                        &nbsp;&nbsp;
+                        <a title="Stop">
+                          <img style="cursor: pointer;" class="zoom" (click)="stop_and_remove_container(session.session_number)"
+                            width="20px" height="20px" src="assets/images/stop.png" />
+                        </a>
+                      </div>
+
+                    </div>
+                    <li *ngSwitchDefault>Error</li>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </tr>
+
+
       </tbody>
+
+
     </table>
 
-    <hr/>
+    <hr>
 
     <div class="col-sm-12">
       <nav aria-label="experiments pagination">
@@ -120,12 +274,8 @@
           <li class="page-item {{compare_if_disabled(actual_page==1)}}">
             <button class="page-link " (click)="load_experiments(this.actual_page-1)">
               <span aria-hidden="true">&laquo;</span>
-
             </button>
-
           </li>
-
-
           <div *ngFor="let page of total_pages">
             <div *ngIf="this.showPage(page)">
               <li class="page-item {{compare_if_active(actual_page==page)}}">
@@ -153,11 +303,11 @@
       </nav>
 
     </div>
-    <hr/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
   </div>
 </div>

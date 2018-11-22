@@ -25,8 +25,8 @@ export class MainNavComponent implements OnInit {
             this.calipsoService.authWithEAAHash(username, EAAHash).subscribe(
               user_resp => {
                 //console.log(user_resp);
-                this.calipsoService.login(username,"umbrella");
-                this.router.navigate(["/partners"]);
+                this.calipsoService.login(username, "umbrella");
+                this.router.navigate(["/login"]);
               },
               error => {
                 if (error.status == 404) {
@@ -54,7 +54,7 @@ export class MainNavComponent implements OnInit {
 
   public logout() {
     //console.log("login_local:"+this.calipsoService.calipsoSettings.local_auth);
-    if (this.calipsoService.getLoginType()=='local') {
+    if (this.calipsoService.getLoginType() == "local") {
       this.calipsoService.unauth().subscribe(
         resp => {
           //console.log("logout done from UO");
@@ -82,5 +82,9 @@ export class MainNavComponent implements OnInit {
 
   public login() {
     this.router.navigate(["/login"]);
+  }
+
+  public getFrontendUrl(){
+    return environment.frontend_calipso;
   }
 }
