@@ -6,6 +6,11 @@
   <div class="col text-center">
     <div class="row">
       <h5 class="col text-center">
+        <div *ngIf="staff_forbbiden">
+          <span class="badge badge-warning">
+              You do not have permissions</span>
+        </div>
+
         <div
           *ngIf="
             max_num_machines_exceeded ||
