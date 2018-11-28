@@ -23,7 +23,8 @@ export class SelectCalipsoOwnResourcesFormComponent implements OnInit {
     private router: Router
   ) {}
 
-  safe_locked_button: boolean =  false;
+  safe_locked_button: boolean = false;
+  staff_forbbiden: boolean = false;
 
   statusActiveSessions: { [key: string]: Status } = {};
   actualRunningContainer: { [key: string]: string } = {};
@@ -37,16 +38,22 @@ export class SelectCalipsoOwnResourcesFormComponent implements OnInit {
   max_hdd_exceeded: boolean = false;
 
   ngOnInit() {
-    this.calipsoService.getCalipsoUserType().subscribe(user_type => {
-      this.calipsoService.definedCalipsoUserType = user_type;
-      if (user_type && this.calipsoService.isLogged()) {
+    if (this.calipsoService.isLogged()) {
+      this.calipsoService.getCalipsoUserType().subscribe(user_type => {
         let username = this.getUsername();
         this.statusActiveSessions[username] = Status.idle;
-        this.load_own_resources();
-      } else {
-        this.router.navigate(["/"]);
-      }
-    });
+
+        if (user_type.is_staff) {
+          this.staff_forbbiden = false;
+          this.load_own_resources();
+        } else {
+          this.safe_locked_button = true;
+          this.staff_forbbiden = true;
+        }
+      });
+    } else {
+      this.router.navigate(["/"]);
+    }
   }
 
   public getUsername() {
@@ -69,20 +76,17 @@ export class SelectCalipsoOwnResourcesFormComponent implements OnInit {
         this.containers.forEach(element => {
           var c = this.containers.find(
             x =>
-              (x.calipso_experiment == username ||
-              x.calipso_experiment == element.calipso_experiment)
+              x.calipso_experiment == username ||
+              x.calipso_experiment == element.calipso_experiment
           );
 
           if (c == null) {
             this.statusActiveSessions[username] = Status.idle;
           } else {
             this.check_quota(c.public_name);
-          this.actualRunningContainer[username] = "";
+            this.actualRunningContainer[username] = "";
 
             if (c.calipso_experiment == username) {
-
-
-
               switch (c.container_status) {
                 case "busy": {
                   this.statusActiveSessions[username] = Status.busy;
@@ -103,9 +107,7 @@ export class SelectCalipsoOwnResourcesFormComponent implements OnInit {
                   break;
                 }
               }
-
             }
-
           }
         });
         this.safe_locked_button = false;
@@ -122,7 +124,6 @@ export class SelectCalipsoOwnResourcesFormComponent implements OnInit {
     this.actualRunningContainer[username] = base_image;
 
     this.safe_locked_button = true;
-
 
     this.calipsoService.runContainer(username, username, base_image).subscribe(
       data => {
