@@ -24,6 +24,7 @@ import { SelectCalipsoQuotaFormComponent } from './select-calipso-quota-form/sel
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SelectCalipsoFavoriteFormComponent } from './select-calipso-favorite-form/select-calipso-favorite-form.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SelectCalipsoOwnResourcesFormComponent } from './select-calipso-own-resources-form/select-calipso-own-resources-form.component';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     ExperimentNavComponent,
     SelectCalipsoQuotaFormComponent,
     PageNotFoundComponent,
-    SelectCalipsoFavoriteFormComponent
+    SelectCalipsoFavoriteFormComponent,
+    SelectCalipsoOwnResourcesFormComponent
   ],
   providers: [CalipsoplusService],
   bootstrap: [AppComponent]
