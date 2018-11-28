@@ -62,8 +62,6 @@ export class CalipsoplusService {
 
   defaultCalipsoSettings: CalipsoSettings = new CalipsoSettings(false);
 
-  definedCalipsoUserType: CalipsoUserType = new CalipsoUserType(false);
-
 
   FACILITIES: CalipsoFacility[] = [
     {

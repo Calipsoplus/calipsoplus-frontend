@@ -11,9 +11,6 @@ export class ExperimentNavComponent implements OnInit {
   constructor(public calipsoService: CalipsoplusService) { }
 
   ngOnInit() {
-    this.calipsoService.getCalipsoUserType().subscribe(user_type => {
-      this.calipsoService.definedCalipsoUserType = user_type;
-    });
   }
 
 }
