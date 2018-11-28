@@ -4,5 +4,7 @@
     <a class="nav-item " routerLink="/resource">RESOURCES</a>
     <a class="nav-item active" routerLink="/quota">QUOTAS</a>
     <a class="nav-item" routerLinkActive="active" routerLink="/favorite">FAVORITES</a>
+    <a *ngIf="calipsoService.definedCalipsoUserType.is_staff"
+      class="nav-item" routerLink="/ownresources">OWN RESOURCES</a>
   </nav>
 </div>
