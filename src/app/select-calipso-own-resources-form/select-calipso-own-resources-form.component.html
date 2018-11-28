@@ -1,0 +1,237 @@
+<app-facility-nav></app-facility-nav>
+
+<div class="row col">
+  <app-experiment-nav></app-experiment-nav>
+
+  <div class="col text-center">
+    <div class="row">
+      <h5 class="col text-center">
+        <div
+          *ngIf="
+            max_num_machines_exceeded ||
+            max_num_cpu_exceeded ||
+            max_memory_exceeded ||
+            max_hdd_exceeded
+          "
+        >
+          <span class="badge badge-primary">Warning</span>
+        </div>
+        <div *ngIf="max_num_machines_exceeded">
+          <span class="badge badge-warning"
+            >The number of machines per user has been reached.</span
+          >
+        </div>
+        <div *ngIf="max_num_cpu_exceeded">
+          <span class="badge badge-warning"
+            >The number of cpu per user has been reached.</span
+          >
+        </div>
+        <div *ngIf="max_memory_exceeded">
+          <span class="badge badge-warning"
+            >The memory per user has been reached.</span
+          >
+        </div>
+        <div *ngIf="max_hdd_exceeded">
+          <span class="badge badge-warning"
+            >The storage per user has been reached.</span
+          >
+        </div>
+      </h5>
+    </div>
+    <div class="row">
+      <div class="col-12 text-left">
+        <h1>Own resources</h1>
+        <hr />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-3">UBUNTU</div>
+      <div class="col-3">DESKTOP</div>
+      <div class="col-3">JUPYTER</div>
+      <div class="col-3"></div>
+    </div>
+
+    <div [ngSwitch]="statusActiveSessions[getUsername()]" style="padding: 1em;">
+      <div *ngSwitchCase="0" class="row">
+        <div class="col-3">
+          <img
+            *ngIf="
+              !(
+                max_hdd_exceeded ||
+                max_memory_exceeded ||
+                max_num_cpu_exceeded ||
+                max_num_machines_exceeded ||
+                safe_locked_button
+              )
+            "
+            style="cursor:pointer;"
+            class="zoom"
+            src="assets/images/ubuntu.png"
+            (click)="!!run('base_image_ubuntu')"
+          />
+        </div>
+        <div class="col-3">
+          <img
+            *ngIf="
+              !(
+                max_hdd_exceeded ||
+                max_memory_exceeded ||
+                max_num_cpu_exceeded ||
+                max_num_machines_exceeded ||
+                safe_locked_button
+              )
+            "
+            style="cursor:pointer;"
+            class="zoom"
+            src="assets/images/desktop.png"
+            (click)="!!run('base_image')"
+          />
+        </div>
+        <div class="col-3">
+          <img
+            *ngIf="
+              !(
+                max_hdd_exceeded ||
+                max_memory_exceeded ||
+                max_num_cpu_exceeded ||
+                max_num_machines_exceeded ||
+                safe_locked_button
+              )
+            "
+            style="cursor:pointer;"
+            class="zoom"
+            src="assets/images/jupyter.png"
+            (click)="!!run('base_jupyter')"
+          />
+        </div>
+        <div class="col-3"></div>
+      </div>
+
+      <div *ngSwitchCase="0" class="row">
+        <div class="col-3">
+          <img
+            *ngIf="
+              max_hdd_exceeded ||
+              max_memory_exceeded ||
+              max_num_cpu_exceeded ||
+              max_num_machines_exceeded ||
+              safe_locked_button
+            "
+            src="assets/images/ubuntu_mono.png"
+          />
+        </div>
+        <div class="col-3">
+          <img
+            *ngIf="
+              max_hdd_exceeded ||
+              max_memory_exceeded ||
+              max_num_cpu_exceeded ||
+              max_num_machines_exceeded ||
+              safe_locked_button
+            "
+            src="assets/images/desktop_mono.png"
+          />
+        </div>
+        <div class="col-3">
+          <img
+            *ngIf="
+              max_hdd_exceeded ||
+              max_memory_exceeded ||
+              max_num_cpu_exceeded ||
+              max_num_machines_exceeded ||
+              safe_locked_button
+            "
+            src="assets/images/jupyter_mono.png"
+          />
+        </div>
+        <div class="col-3"></div>
+      </div>
+
+      <div *ngSwitchCase="1" class="row">
+        <div class="col-3">
+          <div
+            *ngIf="actualRunningContainer[getUsername()] == 'base_image_ubuntu'"
+          >
+            <img class="myspinner" src="assets/images/ubuntu.png" />
+          </div>
+          <div
+            *ngIf="actualRunningContainer[getUsername()] != 'base_image_ubuntu'"
+          >
+            <img src="assets/images/ubuntu_mono.png" />
+          </div>
+        </div>
+        <div class="col-3">
+          <div *ngIf="actualRunningContainer[getUsername()] == 'base_image'">
+            <img class="myspinner" src="assets/images/desktop.png" />
+          </div>
+          <div *ngIf="actualRunningContainer[getUsername()] != 'base_image'">
+            <img src="assets/images/desktop_mono.png" />
+          </div>
+        </div>
+        <div class="col-3">
+          <div *ngIf="actualRunningContainer[getUsername()] == 'base_jupyter'">
+            <img class="myspinner" src="assets/images/jupyter.png" />
+          </div>
+          <div *ngIf="actualRunningContainer[getUsername()] != 'base_jupyter'">
+            <img src="assets/images/jupyter_mono.png" />
+          </div>
+        </div>
+        <div class="col-3"></div>
+      </div>
+      <div *ngSwitchCase="2" class="row">
+        <div class="col-3">
+          <img
+            *ngIf="actualRunningContainer[getUsername()] == 'base_image_ubuntu'"
+            style="cursor:pointer;"
+            src="assets/images/ubuntu.png"
+            (click)="!!go_in('base_image_ubuntu')"
+          />
+          <img
+            *ngIf="
+              !(actualRunningContainer[getUsername()] == 'base_image_ubuntu')
+            "
+            src="assets/images/ubuntu_mono.png"
+          />
+        </div>
+        <div class="col-3">
+          <img
+            *ngIf="actualRunningContainer[getUsername()] == 'base_image'"
+            style="cursor:pointer;"
+            src="assets/images/desktop.png"
+            (click)="!!go_in('base_image')"
+          />
+          <img
+            *ngIf="!(actualRunningContainer[getUsername()] == 'base_image')"
+            src="assets/images/desktop_mono.png"
+          />
+        </div>
+        <div class="col-3">
+          <img
+            *ngIf="actualRunningContainer[getUsername()] == 'base_jupyter'"
+            style="cursor:pointer;"
+            src="assets/images/jupyter.png"
+            (click)="!!go_in('base_jupyter')"
+          />
+          <img
+            *ngIf="!(actualRunningContainer[getUsername()] == 'base_jupyter')"
+            src="assets/images/jupyter_mono.png"
+          />
+        </div>
+
+        <div class="col-3">
+          <img
+            title="Stop"
+            style="cursor: pointer;"
+            class="zoom"
+            (click)="stop_and_remove_container(getUsername())"
+            width="40px"
+            height="40px"
+            src="assets/images/stop.png"
+          />
+        </div>
+      </div>
+      <div *ngSwitchDefault></div>
+    </div>
+  </div>
+</div>

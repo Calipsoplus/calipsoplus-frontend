@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CalipsoplusService } from '../calipsoplus.service';
 
 @Component({
   selector: 'app-experiment-nav',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExperimentNavComponent implements OnInit {
 
-  constructor() { }
+  constructor(public calipsoService: CalipsoplusService) { }
 
   ngOnInit() {
+    this.calipsoService.getCalipsoUserType().subscribe(user_type => {
+      this.calipsoService.definedCalipsoUserType = user_type;
+    });
   }
 
 }
