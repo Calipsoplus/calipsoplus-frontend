@@ -17,20 +17,20 @@
         <tr class="d-flex">
           <td class="col" *ngFor="let resource of resources">
             <a *ngIf="(resource.machine_ip=='base_image_ubuntu')" style="padding:1em;">
-              <img height="100px" width="100px" style="cursor: pointer;" class="zoom" (click)="go_in(resource.machine_name)"
+              <img height="100px" width="100px" style="cursor: pointer;padding:1em;" class="zoom" (click)="go_in(resource.machine_name)"
                 src="assets/images/ubuntu.png" />
             </a>
             <a *ngIf=" (resource.machine_ip=='base_image')" style="padding:1em;">
-              <img height="100px" width="100px" style="cursor: pointer;" class="zoom" (click)="go_in(resource.machine_name)"
+              <img height="100px" width="100px" style="cursor: pointer;padding:1em;" class="zoom" (click)="go_in(resource.machine_name)"
                 src="assets/images/desktop.png" />
             </a>
             <a style="padding:1em;" *ngIf="(resource.machine_ip=='base_jupyter')">
-              <img height="100px" width="100px" style="cursor: pointer;" class="zoom" (click)="go_in(resource.machine_name)"
+              <img height="100px" width="100px" style="cursor: pointer;padding:1em;" class="zoom" (click)="go_in(resource.machine_name)"
                 src="assets/images/jupyter.png" />
             </a>
             <br />
-            <b>Proposal ID : </b>{{resource.experiment}}
-            <br />
+            <!--b>Proposal ID : </b>{{resource.experiment}}
+            <br /-->
             <b>Machine name: </b>{{resource.machine_name}}
             <br />
             <b>Machine type: </b>{{resource.machine_ip}}

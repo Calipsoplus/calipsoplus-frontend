@@ -20,6 +20,7 @@ import { CalipsoPaginationExperiment } from "./calipso-pagination-experiment";
 import { CalipsoUmbrellaSession } from "./calipso-umbrella-session";
 import { CalipsoSettings } from "./calipso-settings";
 import { LOGO_FACILITY } from "./calipso-constants";
+import { CalipsoUserType } from "./calipso-user-type";
 
 @Injectable()
 export class CalipsoplusService {
@@ -55,9 +56,14 @@ export class CalipsoplusService {
 
   settingsCalipsoUrl = this.backendUrl_calipso + "settings/";
 
+  calipsoUserTypeUrl = this.backendUrl_calipso + "login/type/";
+
   UOWebUrl = "https://useroffice.cells.es/Welcome";
 
   defaultCalipsoSettings: CalipsoSettings = new CalipsoSettings(false);
+
+  definedCalipsoUserType: CalipsoUserType = new CalipsoUserType(false);
+
 
   FACILITIES: CalipsoFacility[] = [
     {
@@ -223,6 +229,12 @@ export class CalipsoplusService {
     });
   }
 
+  public getCalipsoUserType(): Observable<CalipsoUserType> {
+    return this.http.get<CalipsoUserType>(this.calipsoUserTypeUrl, {
+      withCredentials: true
+    });
+  }
+
   public getCalipsoFacilities(): Observable<CalipsoFacility[]> {
     return of(this.FACILITIES);
     //return this.http.get<CalipsoFacility[]>(this.facilitiesUrl);
@@ -312,7 +324,7 @@ export class CalipsoplusService {
       });
   }
 
-  public removeStorage(){
+  public removeStorage() {
     sessionStorage.removeItem("ct");
     sessionStorage.removeItem("cb");
   }
@@ -487,7 +499,6 @@ export class CalipsoplusService {
   public logout() {
     //console.log("login_local:"+this.calipsoService.calipsoSettings.local_auth);
 
-
     if (this.getLoginType() == "local") {
       this.removeStorage();
       this.unauth().subscribe(
@@ -515,7 +526,4 @@ export class CalipsoplusService {
       );
     }
   }
-
-
-
 }
