@@ -1,20 +1,479 @@
-<form class="form-signin  center-all" #calipsoForm="ngForm" name="ftemp">
+<app-facility-nav></app-facility-nav>
 
-  <h2 class="mt-5">Please, choose a facility</h2>
-  <p>
-    From hereupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-  </p>
+<div class="row col">
+  <app-experiment-nav></app-experiment-nav>
 
-  <div class="form-group row">
-    <label class="h3 mb-3 font-weight-normal" for="sfacility" class="sr-only">Select a facility</label>
-    <select name="sfacilityname" id="sfacility" class="form-control" required [(ngModel)]="selectedVal">
-      <option disabled selected hidden>Choose one</option>
-      <option *ngFor="let facility of facilities" [ngValue]="facility.id">
-        {{ facility.name }}
-      </option>
-    </select>
+  <!-- experiments list -->
+  <div class="col">
+    <div class="row">
+      <h2 class="col-4 text-center"></h2>
+
+      <h5 class="col-4 text-center">
+        <h2>
+          <span class="badge badge-primary">{{ message_proposals }}</span>
+        </h2>
+        <br />
+        <div
+          *ngIf="
+            max_num_machines_exceeded ||
+            max_num_cpu_exceeded ||
+            max_memory_exceeded ||
+            max_hdd_exceeded
+          "
+        >
+          <h3><span class="badge badge-primary">Warning</span></h3>
+        </div>
+        <div *ngIf="max_num_machines_exceeded">
+          <h3>
+            <span class="badge badge-warning"
+              >The number of machines per user has been reached.</span
+            >
+          </h3>
+        </div>
+        <div *ngIf="max_num_cpu_exceeded">
+          <h3>
+            <span class="badge badge-warning"
+              >The number of cpu per user has been reached.</span
+            >
+          </h3>
+        </div>
+        <div *ngIf="max_memory_exceeded">
+          <h3>
+            <span class="badge badge-warning"
+              >The memory per user has been reached.</span
+            >
+          </h3>
+        </div>
+        <div *ngIf="max_hdd_exceeded">
+          <h3>
+            <span class="badge badge-warning"
+              >The storage per user has been reached.</span
+            >
+          </h3>
+        </div>
+      </h5>
+      <div class="col-4"></div>
+    </div>
+
+    <div *ngIf="!experiment_selected" class="col">
+      <div class="row">
+        <h1 class="col-4">{{ title }}</h1>
+        <div class="col-5"></div>
+        <div class="col-3">
+          <div class="input-group align-vertical input-group-lg">
+            <input
+              type="text"
+              (keyup.enter)="search_action(searchkey.value)"
+              class="form-control form-control-lg"
+              value="{{ search_key }}"
+              #searchkey
+              placeholder="Search..."
+            />&nbsp;&nbsp;
+            <a href="#" (click)="!!search_action(searchkey.value)">
+              <fa-icon style="color:black;" [icon]="['fa', 'search']"></fa-icon>
+            </a>
+          </div>
+        </div>
+
+        <table class="table sortable">
+          <thead>
+            <tr class="d-flex">
+              <th
+                class="col-1  text-center"
+                (click)="sort_by_field('calipsouserexperiment__favorite')"
+              >
+                <fa-icon [icon]="['fa', 'star']"></fa-icon>
+              </th>
+              <th
+                class="col-2 {{ if_is_sorted('serial_number') }}"
+                (click)="sort_by_field('serial_number')"
+              >
+                Proposal Id &nbsp;&nbsp;
+                <fa-icon [icon]="['fas', 'sort']"></fa-icon>
+              </th>
+              <th
+                class="col-3 {{ if_is_sorted('subject') }}"
+                (click)="sort_by_field('subject')"
+              >
+                Title &nbsp;&nbsp;
+                <fa-icon [icon]="['fas', 'sort']"></fa-icon>
+              </th>
+              <th
+                class="col-4 {{ if_is_sorted('body') }} "
+                (click)="sort_by_field('body')"
+              >
+                Abstract &nbsp;&nbsp;
+                <fa-icon [icon]="['fas', 'sort']"></fa-icon>
+              </th>
+              <th
+                class="col-2 {{ if_is_sorted('beam_line') }}"
+                (click)="sort_by_field('beam_line')"
+              >
+                Beamline &nbsp;&nbsp;
+                <fa-icon [icon]="['fas', 'sort']"></fa-icon>
+              </th>
+
+              <!--
+                th class="col-1 text-center"><fa-icon [icon]="['fas', 'laptop']"></fa-icon></th
+              -->
+            </tr>
+          </thead>
+          <tbody *ngFor="let experiment of experiments">
+            <tr class="d-flex" style="cursor:pointer;">
+              <td class="col-1  text-center">
+                <a
+                  *ngIf="!experiment.favorite"
+                  href="#"
+                  (click)="!!star_on(experiment.serial_number, experiment.id)"
+                >
+                  <fa-icon
+                    [icon]="['far', 'star']"
+                    style="color:black;"
+                  ></fa-icon>
+                </a>
+                <a
+                  *ngIf="experiment.favorite"
+                  href="#"
+                  (click)="!!star_off(experiment.serial_number, experiment.id)"
+                >
+                  <fa-icon
+                    [icon]="['fa', 'star']"
+                    style="color:black;"
+                  ></fa-icon>
+                </a>
+              </td>
+              <td
+                class="col-2"
+                (click)="selectExperiment(experiment.serial_number)"
+              >
+                {{ experiment.serial_number }}
+              </td>
+              <td
+                class="col-3"
+                (click)="selectExperiment(experiment.serial_number)"
+              >
+                {{ experiment.subject }}
+              </td>
+              <td
+                class="col-4"
+                (click)="selectExperiment(experiment.serial_number)"
+              >
+                {{ experiment.body | slice: 0:106 }} &nbsp;
+                <a
+                  *ngIf="experiment.body.length > 100"
+                  title="{{ experiment.body }}"
+                >
+                  <fa-icon
+                    [icon]="['far', 'eye']"
+                    style="color:black;"
+                  ></fa-icon>
+                </a>
+              </td>
+              <td
+                class="col-2"
+                (click)="selectExperiment(experiment.serial_number)"
+              >
+                {{ experiment.beam_line }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="col-12">
+          <nav aria-label="experiments pagination">
+            <ul class="pagination pagination justify-content-center ">
+              <li class="page-item {{ compare_if_disabled(actual_page == 1) }}">
+                <button
+                  class="page-link "
+                  (click)="load_experiments(this.actual_page - 1)"
+                >
+                  <span aria-hidden="true">&laquo;</span>
+                </button>
+              </li>
+              <div *ngFor="let page of total_pages">
+                <div *ngIf="this.showPage(page)">
+                  <li
+                    class="page-item {{
+                      compare_if_active(actual_page == page)
+                    }}"
+                  >
+                    <button class="page-link" (click)="load_experiments(page)">
+                      <span>{{ page }}</span>
+                    </button>
+                  </li>
+                </div>
+                <div *ngIf="!this.showPage(page)">
+                  <li class="page-item disabled">
+                    <button class="page-link"><span>...</span></button>
+                  </li>
+                </div>
+              </div>
+              <li
+                class="page-item {{
+                  compare_if_disabled(
+                    actual_page >= pagination.count / pagination.page_size
+                  )
+                }}"
+              >
+                <button
+                  class="page-link"
+                  (click)="load_experiments(this.actual_page + 1)"
+                >
+                  <span aria-hidden="true">&raquo;</span>
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="experiment_selected" class="col">
+      <div class="row col">
+        <div class=" text-left">
+          <input
+            type="button"
+            class="btn btn-info btn-lg"
+            (click)="backtoExperiment()"
+            value="<< "
+          />
+
+          <h1>
+            Sessions from proposal
+            <b>{{ experiment_selected.serial_number }}</b>
+          </h1>
+        </div>
+      </div>
+      <table class="table sortable">
+        <thead>
+          <tr class="d-flex">
+            <th class="col-2  text-left"></th>
+            <th class="col-2  text-left">Code</th>
+            <th class="col-2  text-left">Start</th>
+            <th class="col-2  text-left">End</th>
+            <th class="col-2  text-left">Subject</th>
+            <th class="col-2  text-center">Status</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let session of experiment_selected.sessions">
+          <tr class="d-flex">
+            <td class="col-2  text-left">
+              <div class="dropdown">
+                <button
+                  class="btn btn-success  dropdown-toggle {{
+                    this.ifDisabled(session)
+                  }}"
+                  type="button"
+                  id="menu1"
+                  data-toggle="dropdown"
+                >
+                  Launch !
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                  <li role="presentation">
+                    <a
+                      class="btn-lg"
+                      role="menuitem"
+                      tabindex="-1"
+                      (click)="
+                        !!new_resource('base_image', session.session_number)
+                      "
+                      href="#"
+                      >Desktop</a
+                    >
+                  </li>
+                  <li role="presentation">
+                    <a
+                      class="btn-lg"
+                      role="menuitem"
+                      tabindex="-1"
+                      (click)="
+                        !!new_resource('base_jupyter', session.session_number)
+                      "
+                      href="#"
+                      >Jupyter</a
+                    >
+                  </li>
+                  <li role="presentation">
+                    <a
+                      class="btn-lg"
+                      role="menuitem"
+                      tabindex="-1"
+                      (click)="
+                        !!new_resource(
+                          'base_image_ubuntu',
+                          session.session_number
+                        )
+                      "
+                      href="#"
+                      >Ubuntu</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </td>
+            <td class="col-2  text-left">{{ session.session_number }}</td>
+            <td class="col-2  text-left">
+              {{ session.start_date | date: "MM/dd/yyyy HH:MM" }}
+            </td>
+            <td class="col-2  text-left">
+              {{ session.end_date | date: "MM/dd/yyyy HH:MM" }}
+            </td>
+            <td class="col-2  text-left">{{ session.subject }}</td>
+            <td class="col-2  text-center">
+              <div [ngSwitch]="statusActiveSessions[session.session_number]">
+                <div *ngSwitchCase="0">
+                  <h3>
+                    <span class="label label-default font-weight-light"
+                      >idle</span
+                    >
+                  </h3>
+                </div>
+                <div *ngSwitchCase="1">
+                  <h3>
+                    <span class="label label-warning font-weight-light"
+                      >waiting</span
+                    >
+                  </h3>
+                </div>
+                <div *ngSwitchCase="2">
+                  <h3>
+                    <span class="label label-primary font-weight-light"
+                      >running</span
+                    >
+                  </h3>
+                </div>
+                <div *ngSwitchCase="3">
+                  <h3>
+                    <span class="label label-default font-weight-light"
+                      >forbidden</span
+                    >
+                  </h3>
+                </div>
+                <div *ngSwitchCase="4">
+                  <h3>
+                    <span class="label label-danger font-weight-light"
+                      >error</span
+                    >
+                  </h3>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="col-12" />
+    <h2 class="col-12 text-center">
+      <span class="badge badge-warning">{{ message_resources }}</span>
+    </h2>
+
+    <div class="col text-left">
+      <table class="table">
+        <thead>
+          <tr class="d-flex">
+            <th class="col" *ngFor="let resource of resources">
+              <h2>
+                <a (click)="!!gotoExperiment(resource.info)" href="">
+                  <span class="badge badge-primary"
+                    >{{ resource.experiment }} from {{ resource.info }}</span
+                  >
+                </a>
+              </h2>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="d-flex">
+            <td class="col" *ngFor="let resource of resources">
+              <a
+                *ngIf="resource.machine_ip == 'base_image_ubuntu'"
+                style="padding:1em;"
+              >
+                <img
+                  height="100px"
+                  width="100px"
+                  style="cursor: pointer;padding:1em;"
+                  class="zoom"
+                  (click)="go_in(resource.experiment)"
+                  src="assets/images/ubuntu.png"
+                />
+              </a>
+              <a
+                *ngIf="resource.machine_ip == 'base_image'"
+                style="padding:1em;"
+              >
+                <img
+                  height="100px"
+                  width="100px"
+                  style="cursor: pointer;padding:1em;"
+                  class="zoom"
+                  (click)="go_in(resource.experiment)"
+                  src="assets/images/desktop.png"
+                />
+              </a>
+              <a
+                style="padding:1em;"
+                *ngIf="resource.machine_ip == 'base_jupyter'"
+              >
+                <img
+                  height="100px"
+                  width="100px"
+                  style="cursor: pointer;padding:1em;"
+                  class="zoom"
+                  (click)="go_in(resource.experiment)"
+                  src="assets/images/jupyter.png"
+                />
+              </a>
+              <br />
+              <b>ID : </b>{{ resource.experiment }} <br />
+              <b>name: </b>{{ resource.machine_name }} <br />
+              <b>Type: </b>{{ resource.machine_ip }} <br />
+              <b>Creation Date : </b>{{ resource.creation_date }} <br />
+              <b>Expiration Date : </b>{{ resource.last_accessed_date }} <br />
+              <b>Last Access : </b>{{ resource.expiration_date }}
+            </td>
+          </tr>
+          <tr class="d-flex">
+            <td class="col" *ngFor="let resource of resources">
+              <div class="dropdown">
+                <button
+                  class="btn btn-success btn-lg dropdown-toggle {{
+                    this.compare_if_disabled(safe_locked_button == true)
+                  }}"
+                  type="button"
+                  id="menu2"
+                  data-toggle="dropdown"
+                >
+                  Options
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="menu2">
+                  <li role="presentation">
+                    <a
+                      class="btn-lg"
+                      role="menuitem"
+                      tabindex="-1"
+                      href="#"
+                      (click)="!!go_in(resource.experiment)"
+                      >Enter</a
+                    >
+                  </li>
+                  <li role="presentation">
+                    <a
+                      (click)="!!stop_and_remove_container(resource.experiment)"
+                      class="btn-lg"
+                      role="menuitem"
+                      tabindex="-1"
+                      href="#"
+                      >Stop</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-  <div class="form-group row">
-    <button type="button" [disabled]="!(selectedVal>0)" class="btn btn-lg btn-primary btn-block" (click)="next()">Next</button>
-  </div>
-</form>
+</div>
