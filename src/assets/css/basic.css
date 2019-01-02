@@ -1,11 +1,10 @@
 @font-face {
   font-family:myFont;
-
   src: url(../fonts/varela-round-regular.ttf);
 }
 
 html body {
   font-family:myFont !important;
-  font-size: 0.85em;
+  font-size: 1.35em;
 }
 

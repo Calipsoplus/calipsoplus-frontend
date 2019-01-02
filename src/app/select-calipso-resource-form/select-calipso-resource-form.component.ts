@@ -46,7 +46,8 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
                   c.public_name,
                   str_creation_date,
                   "-",
-                  date_access
+                  date_access,
+                  c.container_info
                 );
                 this.resources.push(resource);
               }
