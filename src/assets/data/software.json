@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "subject": "Phynix",
+    "command": "./phynix.sh"
+  },
+  { "id": 2,
+    "subject": "Tree",
+    "command": "./tree.sh"
+  },
+  { "id": 3,
+    "subject": "Fixme",
+    "command": "./fixme.sh"
+  },
+  { "id": 4,
+    "subject": "Cati",
+    "command": "./cati.sh"
+  },
+  { "id": 5,
+    "subject": "Jomsa",
+    "command": "./jomsa_start.sh"
+  },
+  { "id": 6,
+    "subject": "Mayson",
+    "command": "./mayson.sh"
+  }
+]

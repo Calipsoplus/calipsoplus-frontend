@@ -17,55 +17,55 @@
     <table class="table">
       <thead>
         <tr class="d-flex">
-          <th class="col" *ngFor="let quota of quotas">Your default quota</th>
-          <th class="col" *ngFor="let quota of quotas">Your used quota</th>
-          <th class="col" *ngFor="let quota of quotas">Your available quota</th>
-          <th class="col" *ngFor="let image of image_selected">Default image</th>
+          <th class="col">Your default quota</th>
+          <th class="col">Your used quota</th>
+          <th class="col">Your available quota</th>
+          <th class="col">Default image</th>
         </tr>
       </thead>
       <tbody>
         <tr class="d-flex">
-          <td class="col" *ngFor="let quota of quotas">
-            <b>machines : </b> {{ quota.max_simultaneous }}
+          <td class="col" > <!--*ngFor="let quota of quotas">-->
+            <b>machines : </b> {{ quotas?.max_simultaneous }}
             <br/>
-            <b>cpus : </b> {{ quota.cpu }}
+            <b>cpus : </b> {{ quotas?.cpu }}
             <br/>
-            <b>memory : </b> {{ quota.memory }}
+            <b>memory : </b> {{ quotas?.memory }}
             <br/>
-            <b>storage: </b> {{ quota.hdd }}
-            <br/>
-            <br/>
-          </td>
-          <td class="col" *ngFor="let used of used_quota">
-            <b>machines : </b> {{ used.max_simultaneous }}
-            <br/>
-            <b>cpus : </b> {{ used.cpu }}
-            <br/>
-            <b>memory : </b> {{ used.memory }}
-            <br/>
-            <b>storage: </b> {{ used.hdd }}
+            <b>storage: </b> {{ quotas?.hdd }}
             <br/>
             <br/>
           </td>
-          <td class="col" *ngFor="let available of available_quota">
-            <b>machines : </b> {{ available.max_simultaneous }}
+          <td class="col" > <!-- *ngFor="let used of used_quota"> -->
+            <b>machines : </b> {{ used_quota?.max_simultaneous }}
             <br/>
-            <b>cpus : </b> {{ available.cpu }}
+            <b>cpus : </b> {{ used_quota?.cpu }}
             <br/>
-            <b>memory : </b> {{ available.memory }}
+            <b>memory : </b> {{ used_quota?.memory }}
             <br/>
-            <b>storage: </b> {{ available.hdd }}
+            <b>storage: </b> {{ used_quota?.hdd }}
             <br/>
             <br/>
           </td>
-          <td class="col" *ngFor="let image of image_selected">
+          <td class="col"> <!-- *ngFor="let available of available_quota"> -->
+            <b>machines : </b> {{ available_quota?.max_simultaneous }}
+            <br/>
+            <b>cpus : </b> {{ available_quota?.cpu }}
+            <br/>
+            <b>memory : </b> {{ available_quota?.memory }}
+            <br/>
+            <b>storage: </b> {{ available_quota?.hdd }}
+            <br/>
+            <br/>
+          </td>
+          <td class="col"> <!-- *ngFor="let image of image_selected"> -->
             <b>-</b>
             <br/>
-            <b>cpus : </b> {{ image.cpu }}
+            <b>cpus : </b> {{ image_selected?.cpu }}
             <br/>
-            <b>memory : </b> {{ image.memory }}
+            <b>memory : </b> {{ image_selected?.memory }}
             <br/>
-            <b>storage: </b> {{ image.hdd }}
+            <b>storage: </b> {{ image_selected?.hdd }}
             <br/>
             <br/>
           </td>

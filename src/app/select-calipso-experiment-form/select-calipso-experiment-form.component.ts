@@ -1,17 +1,17 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { CalipsoplusService } from "../calipsoplus.service";
-import { CalipsoExperiment } from "../calipso-experiment";
+import { Component, Input, OnInit } from '@angular/core';
+import { CalipsoplusService } from '../calipsoplus.service';
+import { CalipsoExperiment } from '../calipso-experiment';
 
-import { Router } from "@angular/router";
-import { CalipsoContainer } from "../calipso-container";
+import { Router } from '@angular/router';
+import { CalipsoContainer } from '../calipso-container';
 
-import { CalipsoQuota } from "../calipso-quota";
-import { CalipsoPaginationExperiment } from "../calipso-pagination-experiment";
+import { CalipsoQuota } from '../calipso-quota';
+import { CalipsoPaginationExperiment } from '../calipso-pagination-experiment';
 
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/free-solid-svg-icons";
-import { far } from "@fortawesome/free-regular-svg-icons";
-import { CalipsoSession } from "../calipso-sessions";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
+import { CalipsoSession } from '../calipso-sessions';
 
 library.add(fas, far);
 
@@ -24,48 +24,48 @@ export enum Status {
 }
 
 @Component({
-  selector: "app-select-calipso-experiment-form",
-  templateUrl: "./select-calipso-experiment-form.component.html",
-  styleUrls: ["./select-calipso-experiment-form.component.css"]
+  selector: 'app-select-calipso-experiment-form',
+  templateUrl: './select-calipso-experiment-form.component.html',
+  styleUrls: ['./select-calipso-experiment-form.component.css']
 })
 export class SelectCalipsoExperimentFormComponent implements OnInit {
   @Input()
-  only_favorites: boolean = false;
+  only_favorites = false;
   @Input()
-  title: string = "Proposals";
+  title = 'Proposals';
 
   pagination: CalipsoPaginationExperiment = new CalipsoPaginationExperiment(
     0,
-    "",
-    "",
+    '',
+    '',
     0,
     []
   );
-  actual_page: number = 1;
+  actual_page = 1;
   total_pages: number[] = [];
-  sort_field: string = "";
-  header_column_sorted: string = "serial_number";
+  sort_field = '';
+  header_column_sorted = 'serial_number';
 
   experiments: CalipsoExperiment[];
   sessions: CalipsoSession[];
   containers: CalipsoContainer[];
 
-  used_quota: CalipsoQuota[];
-  user_quota: CalipsoQuota[];
+  used_quota: CalipsoQuota;
+  user_quota: CalipsoQuota;
 
   statusActiveSessions: { [key: string]: Status } = {};
 
   actualRunningContainer: { [key: string]: string } = {};
 
-  max_num_machines_exceeded: boolean = false;
-  max_num_cpu_exceeded: boolean = false;
-  max_memory_exceeded: boolean = false;
-  max_hdd_exceeded: boolean = false;
+  max_num_machines_exceeded = false;
+  max_num_cpu_exceeded = false;
+  max_memory_exceeded = false;
+  max_hdd_exceeded = false;
 
-  search_key: string = "";
+  search_key = '';
 
-  safe_locked_button: boolean = false;
-  last_sorted = "";
+  safe_locked_button = false;
+  last_sorted = '';
 
   constructor(
     private calipsoService: CalipsoplusService,
@@ -74,19 +74,19 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   public star_on(serial: string, id: string) {
     this.calipsoService.favorite_experiment(id, 1).subscribe(data => {
-      var c = this.experiments.find(x => x.serial_number == serial);
+      const c = this.experiments.find(x => x.serial_number == serial);
       if (c != null) {
         c.favorite = true;
-      } else this.load_experiments(this.actual_page);
+      } else { this.load_experiments(this.actual_page); }
     });
   }
 
   public star_off(serial: string, id: string) {
     this.calipsoService.favorite_experiment(id, 0).subscribe(data => {
-      var c = this.experiments.find(x => x.serial_number == serial);
+      const c = this.experiments.find(x => x.serial_number == serial);
       if (c != null) {
         c.favorite = false;
-      } else this.load_experiments(this.actual_page);
+      } else { this.load_experiments(this.actual_page); }
     });
   }
 
@@ -98,12 +98,12 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   public if_is_sorted(sort_field: string) {
     if (sort_field == this.header_column_sorted) {
-      return "column_selected";
-    } else return "";
+      return 'column_selected';
+    } else { return ''; }
   }
 
   public sort_by_field(sort_field: string) {
-    let sort = "";
+    const sort = '';
     this.actual_page = 1;
 
     this.header_column_sorted = sort_field;
@@ -111,14 +111,14 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     if (this.last_sorted != sort_field) {
       this.sort_field = sort_field;
     } else {
-      this.sort_field = "-" + sort_field;
+      this.sort_field = '-' + sort_field;
     }
     this.last_sorted = this.sort_field;
     this.load_experiments(this.actual_page);
   }
 
   private check_quota(base_image: string) {
-    let username = this.calipsoService.getLoggedUserName();
+    const username = this.calipsoService.getLoggedUserName();
     this.calipsoService
       .getCalipsoAvailableImageQuota(username)
       .subscribe(used => {
@@ -127,16 +127,16 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
         this.calipsoService.getCalipsoQuota(username).subscribe(user_quota => {
           this.user_quota = user_quota;
 
-          let max_available =
-            this.user_quota[0].max_simultaneous -
-            this.used_quota[0].max_simultaneous;
-          let cpu_available = this.user_quota[0].cpu - this.used_quota[0].cpu;
-          let hdd_available =
-            parseInt(this.user_quota[0].hdd.slice(0, -1)) -
-            parseInt(this.used_quota[0].hdd.slice(0, -1));
-          let memory_available =
-            parseInt(this.user_quota[0].memory.slice(0, -1)) -
-            parseInt(this.used_quota[0].memory.slice(0, -1));
+          const max_available =
+            this.user_quota.max_simultaneous -
+            this.used_quota.max_simultaneous;
+          const cpu_available = this.user_quota.cpu - this.used_quota.cpu;
+          const hdd_available =
+            parseInt(this.user_quota.hdd.slice(0, -1)) -
+            parseInt(this.used_quota.hdd.slice(0, -1));
+          const memory_available =
+            parseInt(this.user_quota.memory.slice(0, -1)) -
+            parseInt(this.used_quota.memory.slice(0, -1));
 
           this.max_num_machines_exceeded = max_available <= 0;
 
@@ -144,49 +144,49 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
             .getImageByPublicName(base_image)
             .subscribe(image_quota => {
               this.max_num_cpu_exceeded =
-                cpu_available - image_quota[0].cpu < 0;
+                cpu_available - image_quota.cpu < 0;
               this.max_memory_exceeded =
                 memory_available -
-                  parseInt(image_quota[0].memory.slice(0, -1)) <
+                parseInt(image_quota.memory.slice(0, -1)) <
                 0;
               this.max_hdd_exceeded =
-                hdd_available - parseInt(image_quota[0].hdd.slice(0, -1)) < 0;
+                hdd_available - parseInt(image_quota.hdd.slice(0, -1)) < 0;
             });
         });
       });
   }
 
   public compare_if_disabled(bol: boolean) {
-    if (bol) return "disabled";
-    else return "";
+    if (bol) { return 'disabled'; }
+    else { return ''; }
   }
   public compare_if_active(bol: boolean) {
-    if (bol) return "active";
-    else return "";
+    if (bol) { return 'active'; }
+    else { return ''; }
   }
 
   public showPage(page: number) {
-    let total_pages = this.pagination.count / this.pagination.page_size;
-    let medium_pages: boolean = false; //(total_pages/2-1<page)&&(page<total_pages/2+2);
-    let actual: boolean = this.actual_page == page;
-    let near: boolean =
+    const total_pages = this.pagination.count / this.pagination.page_size;
+    const medium_pages = false; //(total_pages/2-1<page)&&(page<total_pages/2+2);
+    const actual: boolean = this.actual_page == page;
+    const near: boolean =
       this.actual_page - 2 < page && page < this.actual_page + 2;
 
     return page < 3 || actual || near || medium_pages || page > total_pages - 1;
   }
 
   public load_experiments(page: number) {
-    let filter = "";
-    if (this.only_favorites) filter = "1";
+    let filter = '';
+    if (this.only_favorites) { filter = '1'; }
 
     if (this.total_pages) {
       this.total_pages.splice(0, this.total_pages.length);
     }
-    if (this.experiments) this.experiments.splice(0, this.experiments.length);
+    if (this.experiments) { this.experiments.splice(0, this.experiments.length); }
 
     if (this.calipsoService.isLogged()) {
       this.actual_page = page;
-      let username = this.calipsoService.getLoggedUserName();
+      const username = this.calipsoService.getLoggedUserName();
       this.safe_locked_button = false;
 
       //get all containers active from user
@@ -209,7 +209,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
               let points = true;
               for (
-                let i: number = 0;
+                let i = 0;
                 i < this.pagination.count / this.pagination.page_size;
                 i++
               ) {
@@ -228,7 +228,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
               this.experiments.forEach(element => {
                 this.sessions = element.sessions;
                 this.sessions.forEach(sselement => {
-                  var c = this.containers.find(
+                  const c = this.containers.find(
                     x => x.calipso_experiment == sselement.session_number
                   );
 
@@ -237,15 +237,15 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
                       Status.idle;
                   } else {
                     this.check_quota(c.public_name);
-                    this.actualRunningContainer[sselement.session_number] = "";
+                    this.actualRunningContainer[sselement.session_number] = '';
 
                     switch (c.container_status) {
-                      case "busy": {
+                      case 'busy': {
                         this.statusActiveSessions[sselement.session_number] =
                           Status.busy;
                         break;
                       }
-                      case "created": {
+                      case 'created': {
                         this.statusActiveSessions[sselement.session_number] =
                           Status.running;
                         this.actualRunningContainer[sselement.session_number] =
@@ -253,8 +253,8 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
                         break;
                       }
-                      case "stopped":
-                      case "removed": {
+                      case 'stopped':
+                      case 'removed': {
                         this.statusActiveSessions[sselement.session_number] =
                           Status.idle;
                         break;
@@ -273,7 +273,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
             err => {
               this.calipsoService.logout();
 
-              console.log("Security error");
+              console.log('Security error');
             }
           );
       });
@@ -286,7 +286,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     if (this.calipsoService.isLogged()) {
       this.load_experiments(this.actual_page);
     } else {
-      this.router.navigate(["/"]);
+      this.router.navigate(['/']);
     }
   }
 
@@ -320,18 +320,18 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
         error => {
           this.statusActiveSessions[session_serial_number] = Status.idle;
           this.safe_locked_button = false;
-          console.log("Ooops!");
+          console.log('Ooops!');
         }
       );
   }
 
   public stop_and_remove_container(session_serial_number: string) {
-    let username = this.calipsoService.getLoggedUserName();
+    const username = this.calipsoService.getLoggedUserName();
     this.safe_locked_button = true;
 
     this.statusActiveSessions[session_serial_number] = Status.busy;
 
-    var c = this.containers.find(
+    const c = this.containers.find(
       x => x.calipso_experiment == session_serial_number
     );
 
@@ -363,11 +363,11 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   }
 
   public go_in(session_serial_number: string) {
-    var c = this.containers.find(
+    const c = this.containers.find(
       x => x.calipso_experiment == session_serial_number
     );
-    if (c == null) console.log("error win up");
-    else if (c.host_port == "") {
+    if (c == null) { console.log('error win up'); }
+    else if (c.host_port == '') {
       this.calipsoService.go_into_container(
         c.container_name,
         c.guacamole_username,
@@ -379,21 +379,21 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   }
 
   public getContainerType(serial_number: string) {
-    var c = this.containers.find(x => x.calipso_experiment == serial_number);
-    let type = "Default";
+    const c = this.containers.find(x => x.calipso_experiment == serial_number);
+    let type = 'Default';
 
     if (c != null) {
       switch (c.public_name) {
-        case "base_image": {
-          type = "Desktop";
+        case 'base_image': {
+          type = 'Desktop';
           break;
         }
-        case "base_jupyter": {
-          type = "Jupyter";
+        case 'base_jupyter': {
+          type = 'Jupyter';
           break;
         }
-        case "base_image_ubuntu": {
-          type = "Ubuntu";
+        case 'base_image_ubuntu': {
+          type = 'Ubuntu';
           break;
         }
       }
