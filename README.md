@@ -55,7 +55,7 @@ To specify the environment use `ng build --env={ENVIRONMENT}`, where environment
 In case you are deploying the application behind a proxy, you might want to also use the `--base-href {HREF}` option to specify the base path used in the internal links inside the application (eg.: `--base-href '/calipsoplus/'`).
 
 ### Running under Apache 2
-The result of the build step is to be used as the site in the deployment server. Set up a configuration file in the `APACHE_DIR/apps-available`, where APACHE_DIR is the APACHE 2 root folder. Sym-link the file to the `APACHE_DIR/apps-enabled` folder to enable the application and reload the server settings (`sudo service apache2 reload`).
+The result of the build step is to be used as the site in the deployment server. Set up a configuration file in the **APACHE_DIR/apps-available**, where APACHE_DIR is the APACHE 2 root folder. Sym-link the file to the **APACHE_DIR/apps-enabled** folder to enable the application and reload the server settings (`sudo service apache2 reload`).
 
 The following snippet is provided for reference:
 ```
