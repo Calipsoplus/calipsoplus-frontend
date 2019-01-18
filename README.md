@@ -1,6 +1,6 @@
 # CalipsoPlus Frontend
 
-The aim of this project is to provide a frontend  for the CalipsoPlus JRA2 Demonstrator project.
+The aim of this project is to provide a frontend for the CalipsoPlus JRA2 Demonstrator application.
 
 ### Contents
 
