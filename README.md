@@ -29,7 +29,7 @@ Additionally, this frontend also interfaces with an [Apache Guacamole](https://g
 
 The only prerequisites for a development setup is to have a working NodeJS/NPM installation in your system (any recent LTS release of Node will suffice) and install the ngi-cli package.
 
-```
+```bash
 npm install -g @angular/cli
 ```
 
@@ -58,7 +58,7 @@ In case you are deploying the application behind a proxy, you will also need to 
 The result of the build step is to be used as the site in the deployment server. Set up a configuration file in the **APACHE_DIR/apps-available**, where APACHE_DIR is the APACHE 2 root folder. Sym-link the file to the **APACHE_DIR/apps-enabled** folder to enable the application and reload the server settings (`sudo service apache2 reload`).
 
 The following snippet is provided for reference:
-```
+```apache
 RewriteEngine On
 RewriteCond %{HTTPS} !=on
 RewriteRule ^/calipsoplus/?(.*) https://%{SERVER_NAME}/calipsoplus/$1 [R=301,L]
