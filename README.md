@@ -34,7 +34,7 @@ npm install -g @angular/cli
 ```
 
 ### Installation
-In the project folder, run `npm install` to download any required dependencies
+In the project folder, run `npm install` to download any required dependencies.
 
 ### Running the development server
 To start a development server, run `ng serve`. This will start a development server listening in `http://localhost:4200`. The application will automatically reload if you change any of the source files.
@@ -50,9 +50,9 @@ These files contain the mappings to the backend and Guacamole instance.
 ### Build
 To build the project, use `ng build`. The build artifacts will be stored in the `dist/` directory. 
 
-To specify the environment use `ng build --env={ENVIRONMENT}`, where environment is one of dev, test, demo, docker, or prod. These environments correspond to each of the files in the **src/environments** folder. 
+To specify the environment use `ng build --configuration={ENVIRONMENT}`, where environment is one of dev, test, demo, docker, or prod. These environments correspond to each of the files in the **src/environments** folder. 
 
-In case you are deploying the application behind a proxy, you might want to also use the `--base-href {HREF}` option to specify the base path used in the internal links inside the application (eg.: `--base-href '/calipsoplus/'`).
+In case you are deploying the application behind a proxy, you will also need to use the `--base-href {HREF}` option to specify the base path used in the internal links inside the application (eg.: `--base-href '/calipsoplus/'`), this has to match with the ProxyPass setting in the Apache config file.
 
 ### Running under Apache 2
 The result of the build step is to be used as the site in the deployment server. Set up a configuration file in the **APACHE_DIR/apps-available**, where APACHE_DIR is the APACHE 2 root folder. Sym-link the file to the **APACHE_DIR/apps-enabled** folder to enable the application and reload the server settings (`sudo service apache2 reload`).
