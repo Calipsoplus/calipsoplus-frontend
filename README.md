@@ -41,7 +41,7 @@ To start a development server, run `ng serve`. This will start a development ser
 
 ## Configuration
 
-For the application to function properly, the relevant environment settings need to be configured. You will find the configuration files under the **src/environments** folder. By default, the environment.ts file, the "dev" environment, will be used.
+For the application to function properly, the relevant environment settings need to be configured. The configuration files have to be stored in the **src/environments** folder, use the provided example files for reference. By default, the environment.ts file, the "dev" environment, will be used.
 
 These files contain the mappings to the backend and Guacamole instance.
 
