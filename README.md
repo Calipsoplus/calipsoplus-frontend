@@ -48,7 +48,7 @@ These files contain the mappings to the backend and Guacamole instance.
 ## Deploy
 
 ### Build
-To build the project, use `ng build`. The build artifacts will be stored in the `dist/` directory. 
+To build the project, use `ng build`. The build artifacts will be stored in the **dist/** directory. 
 
 To specify the environment use `ng build --configuration={ENVIRONMENT}`, where environment is one of dev, test, demo, docker, or prod. These environments correspond to each of the files in the **src/environments** folder. 
 
