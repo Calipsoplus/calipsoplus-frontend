@@ -21,7 +21,6 @@ const routes: Routes = [
   { path: "quota", component: SelectCalipsoQuotaFormComponent },
   { path: "favorite", component: SelectCalipsoFavoriteFormComponent },
   { path: "autologin", component: LoginCalipsoUserFormComponent },
-  { path: "ownresources", component: SelectCalipsoOwnResourcesFormComponent},
 
   { path: "**", component: PageNotFoundComponent }
 ];
