@@ -3,52 +3,200 @@
 <div class="row col">
   <app-experiment-nav></app-experiment-nav>
 
-  <!-- resources list -->
+  <!-- own resources list -->
 
   <div class="col">
-    <h1 center>Resources</h1>
-    <table class="table">
-      <thead>
-        <tr class="d-flex">
-          <th class="col" *ngFor="let resource of resources">RESOURCE</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="d-flex">
-          <td class="col" *ngFor="let resource of resources">
-            <a *ngIf="(resource.machine_ip=='base_image_ubuntu')" style="padding:1em;">
-              <img height="100px" width="100px" style="cursor: pointer;padding:1em;" class="zoom" (click)="go_in(resource.machine_name)"
-                src="assets/images/ubuntu.png" />
-            </a>
-            <a *ngIf=" (resource.machine_ip=='base_image')" style="padding:1em;">
-              <img height="100px" width="100px" style="cursor: pointer;padding:1em;" class="zoom" (click)="go_in(resource.machine_name)"
-                src="assets/images/desktop.png" />
-            </a>
-            <a style="padding:1em;" *ngIf="(resource.machine_ip=='base_jupyter')">
-              <img height="100px" width="100px" style="cursor: pointer;padding:1em;" class="zoom" (click)="go_in(resource.machine_name)"
-                src="assets/images/jupyter.png" />
-            </a>
-            <br />
-            <!--b>Proposal ID : </b>{{resource.experiment}}
-            <br /-->
-            <b>Machine name: </b>{{resource.machine_name}}
-            <br />
-            <b>Machine type: </b>{{resource.machine_ip}}
-            <br />
-            <b>Creation Date : </b>{{resource.creation_date}}
-            <br />
-            <b>Expiration Date : </b>{{resource.last_accessed_date}}
-            <br />
-            <b>Last Access : </b>{{resource.expiration_date}}
+    <h2 class="text-center">
+      <div
+        *ngIf="
+          max_num_machines_exceeded ||
+          max_num_cpu_exceeded ||
+          max_memory_exceeded ||
+          max_hdd_exceeded
+        "
+      >
+        <span class="badge badge-primary">Warning</span>
 
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div *ngIf="!resources.length">
-      <hr>
-      <div class="text-center col">
-        <h2>No resources found</h2>
+        <div *ngIf="max_num_machines_exceeded">
+          <span class="badge badge-warning"
+            >The number of machines per user has been reached.</span
+          >
+        </div>
+        <div *ngIf="max_num_cpu_exceeded">
+          <span class="badge badge-warning"
+            >The number of cpu per user has been reached.</span
+          >
+        </div>
+        <div *ngIf="max_memory_exceeded">
+          <span class="badge badge-warning"
+            >The memory per user has been reached.</span
+          >
+        </div>
+        <div *ngIf="max_hdd_exceeded">
+          <span class="badge badge-warning"
+            >The storage per user has been reached.</span
+          >
+        </div>
+      </div>
+    </h2>
+
+    <div *ngIf="!staff_forbbiden">
+      <h1>Own resource</h1>
+      <hr />
+      <div class="dropdown">
+        <button
+          class="btn btn-success dropdown-toggle {{ this.ifDisabled() }}"
+          type="button"
+          id="menu1"
+          data-toggle="dropdown"
+        >
+          Launch !
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+          <li role="presentation">
+            <a
+              class="btn-lg"
+              role="menuitem"
+              tabindex="-1"
+              (click)="!!run('base_image')"
+              href="#"
+              >Desktop</a
+            >
+          </li>
+          <li role="presentation">
+            <a
+              class="btn-lg"
+              role="menuitem"
+              tabindex="-1"
+              (click)="!!run('base_jupyter')"
+              href="#"
+              >Jupyter</a
+            >
+          </li>
+          <li role="presentation">
+            <a
+              class="btn-lg"
+              role="menuitem"
+              tabindex="-1"
+              (click)="!!run('base_image_ubuntu')"
+              href="#"
+              >Ubuntu</a
+            >
+          </li>
+        </ul>
+        <hr />
+      </div>
+    </div>
+    <!-- resources list -->
+    <div class="row">
+      <div class="col">
+        <h1>Resources</h1>
+        <table class="table">
+          <thead>
+            <tr class="d-flex">
+              <th class="col" *ngFor="let resource of resources">
+                <span *ngIf="resource.experiment == this.getUsername()"
+                  >OWN RESOURCE</span
+                >
+                <span *ngIf="resource.experiment != this.getUsername()"
+                  >RESOURCE</span
+                >
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="d-flex">
+              <td class="col" *ngFor="let resource of resources">
+                <a
+                  *ngIf="resource.machine_ip == 'base_image_ubuntu'"
+                  style="padding:1em;"
+                >
+                  <img
+                    height="100px"
+                    width="100px"
+                    style="cursor: pointer;padding:1em;"
+                    class="zoom"
+                    (click)="go_in(resource.experiment)"
+                    src="assets/images/ubuntu.png"
+                  />
+                </a>
+                <a
+                  *ngIf="resource.machine_ip == 'base_image'"
+                  style="padding:1em;"
+                >
+                  <img
+                    height="100px"
+                    width="100px"
+                    style="cursor: pointer;padding:1em;"
+                    class="zoom"
+                    (click)="go_in(resource.experiment)"
+                    src="assets/images/desktop.png"
+                  />
+                </a>
+                <a
+                  style="padding:1em;"
+                  *ngIf="resource.machine_ip == 'base_jupyter'"
+                >
+                  <img
+                    height="100px"
+                    width="100px"
+                    style="cursor: pointer;padding:1em;"
+                    class="zoom"
+                    (click)="go_in(resource.experiment)"
+                    src="assets/images/jupyter.png"
+                  />
+                </a>
+                <br />
+                <b>Proposal ID : </b>{{ resource.experiment }} <br />
+                <b>Machine name: </b>{{ resource.machine_name }} <br />
+                <b>Machine type: </b>{{ resource.machine_ip }} <br />
+                <b>Creation Date : </b>{{ resource.creation_date }} <br />
+                <b>Expiration Date : </b>{{ resource.last_accessed_date }}
+                <br />
+                <b>Last Access : </b>{{ resource.expiration_date }}
+
+                <div class="dropdown">
+                  <button
+                    class="btn btn-success btn-lg dropdown-toggle"
+                    type="button"
+                    id="menu2"
+                    data-toggle="dropdown"
+                  >
+                    Options
+                  </button>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="menu2">
+                    <li role="presentation">
+                      <a
+                        class="btn-lg"
+                        role="menuitem"
+                        tabindex="-1"
+                        href="#"
+                        (click)="!!go_in(resource.experiment)"
+                        >Enter</a
+                      >
+                    </li>
+                    <li role="presentation">
+                      <a
+                        (click)="
+                          !!stop_and_remove_container(resource.experiment)
+                        "
+                        class="btn-lg"
+                        role="menuitem"
+                        tabindex="-1"
+                        href="#"
+                        >Stop</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="!resources.length">
+          <hr />
+          <div class="text-center col"><h2>No resources found</h2></div>
+        </div>
       </div>
     </div>
   </div>
