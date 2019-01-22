@@ -305,7 +305,6 @@ export class CalipsoplusService {
   public getCookie(name: string) {
     let value = "; " + document.cookie;
     let parts = value.split("; " + name + "=");
-    //console.log("getCookie from :" + document.cookie);
     if (parts.length == 2)
       return parts
         .pop()
