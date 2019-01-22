@@ -213,11 +213,11 @@ export class CalipsoplusService {
 
     if (server_token == undefined) {
       server_token = "none";
-      console.log("token_not_found server_token!");
+      //console.log("token_not_found server_token!");
     }
     if (server_token_session == undefined) {
       server_token_session = "none";
-      console.log("token_not_found server_token_session!");
+      //console.log("token_not_found server_token_session!");
     }
 
     let headers = new HttpHeaders({
@@ -244,9 +244,13 @@ export class CalipsoplusService {
   }
 
   public getCalipsoUserType(): Observable<CalipsoUserType> {
-    return this.http.get<CalipsoUserType>(this.calipsoUserTypeUrl, {
-      withCredentials: true
-    });
+    return this.http
+      .get<CalipsoUserType>(this.calipsoUserTypeUrl, {
+        withCredentials: true
+      })
+      .map(res => {
+        return res;
+      });
   }
 
   public getCalipsoFacilities(): Observable<CalipsoFacility[]> {
@@ -292,15 +296,16 @@ export class CalipsoplusService {
         withCredentials: true
       })
       .map(res => {
-        console.log("login:", this.getCookie("sessionid"));
+        //console.log("login:", this.getCookie("sessionid"));
         this.login(username, "local");
         return res;
       });
   }
 
-  public getCookie(name) {
+  public getCookie(name: string) {
     let value = "; " + document.cookie;
     let parts = value.split("; " + name + "=");
+    //console.log("getCookie from :" + document.cookie);
     if (parts.length == 2)
       return parts
         .pop()
