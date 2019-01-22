@@ -84,8 +84,12 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
     private router: Router
   ) {}
 
-  public new_resource(image: string, session_name: string) {
-    this.run(session_name, image);
+  public new_resource(
+    image: string,
+    serial_number: string,
+    session_name: string
+  ) {
+    this.run(serial_number, session_name, image);
   }
 
   public ifDisabled(session: CalipsoSession) {
@@ -265,7 +269,7 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
                 }
               }
 
-              if (this.experiments.length == 0) {
+              if (this.experiments && this.experiments.length == 0) {
                 if (this.only_favorites)
                   this.message_proposals = "No favorite proposals found";
                 else this.message_proposals = "No proposals found";
@@ -348,7 +352,9 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
 
         this.containers.forEach(element => {
           var c = this.containers.find(
-            x => x.calipso_experiment == element.calipso_experiment
+            x =>
+              x.calipso_experiment == element.calipso_experiment &&
+              x.calipso_experiment != username
           );
           if (c != null) {
             let date = new Date(c.creation_date);
@@ -369,9 +375,9 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
               this.message_resources = "";
               this.resources.push(resource);
             }
-            if (this.resources.length == 0)
-              this.message_resources = "No resources found";
           }
+          if (this.resources.length == 0)
+            this.message_resources = "No resources found";
         });
       },
       err => {
@@ -389,7 +395,7 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
     }
   }
 
-  public run(session_serial_number, base_image: string) {
+  public run(serial_number, session_serial_number, base_image: string) {
     this.statusActiveSessions[session_serial_number] = Status.busy;
     this.actualRunningContainer[session_serial_number] = base_image;
     this.message_resources = "Launching...";
@@ -400,7 +406,7 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
     this.calipsoService
       .runContainer(
         this.calipsoService.getLoggedUserName(),
-        session_serial_number,
+        serial_number + "~" + session_serial_number,
         base_image
       )
       .subscribe(
@@ -528,6 +534,12 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
   public gotoExperiment(serial_number: string) {
     this.search_key = serial_number;
     let username = this.calipsoService.getLoggedUserName();
+
+    if (serial_number == username) {
+      this.router.navigate(["/ownresources"]);
+      return;
+    }
+
     this.experiment_selected = null;
     if (this.experiments) this.experiments.splice(0, this.experiments.length);
 

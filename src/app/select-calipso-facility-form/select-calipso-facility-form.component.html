@@ -159,15 +159,17 @@
                 (click)="selectExperiment(experiment.serial_number)"
               >
                 {{ experiment.body | slice: 0:106 }} &nbsp;
-                <a
-                  *ngIf="experiment.body.length > 100"
-                  title="{{ experiment.body }}"
-                >
-                  <fa-icon
-                    [icon]="['far', 'eye']"
-                    style="color:black;"
-                  ></fa-icon>
-                </a>
+                <div *ngIf="experiment.body">
+                  <a
+                    *ngIf="experiment.body.length > 100"
+                    title="{{ experiment.body }}"
+                  >
+                    <fa-icon
+                      [icon]="['far', 'eye']"
+                      style="color:black;"
+                    ></fa-icon>
+                  </a>
+                </div>
               </td>
               <td
                 class="col-2"
@@ -238,9 +240,39 @@
           />
 
           <h1>
-            Sessions from proposal
-            <b>{{ experiment_selected.serial_number }}</b>
+            Sessions from proposal <b>{{ experiment_selected.serial_number }}</b
+            ><br />
           </h1>
+          <div class="row">
+            <div class="col">
+              <li>{{ experiment_selected.subject }}</li>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div *ngIf="experiment_selected.body">
+                <li>
+                  {{ experiment_selected.body | slice: 0:100 }}...
+
+                  <a
+                    *ngIf="experiment_selected.body.length > 100"
+                    title="{{ experiment_selected.body }}"
+                  >
+                    <fa-icon
+                      [icon]="['far', 'eye']"
+                      style="color:black;"
+                    ></fa-icon>
+                  </a>
+                </li>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <li>{{ experiment_selected.beam_line }}</li>
+            </div>
+          </div>
+          <br />
         </div>
       </div>
       <table class="table sortable">
@@ -275,7 +307,11 @@
                       role="menuitem"
                       tabindex="-1"
                       (click)="
-                        !!new_resource('base_image', session.session_number)
+                        !!new_resource(
+                          'base_image',
+                          experiment_selected.serial_number,
+                          session.session_number
+                        )
                       "
                       href="#"
                       >Desktop</a
@@ -287,7 +323,11 @@
                       role="menuitem"
                       tabindex="-1"
                       (click)="
-                        !!new_resource('base_jupyter', session.session_number)
+                        !!new_resource(
+                          'base_jupyter',
+                          experiment_selected.serial_number,
+                          session.session_number
+                        )
                       "
                       href="#"
                       >Jupyter</a
@@ -301,6 +341,7 @@
                       (click)="
                         !!new_resource(
                           'base_image_ubuntu',
+                          experiment_selected.serial_number,
                           session.session_number
                         )
                       "
@@ -426,8 +467,8 @@
                 />
               </a>
               <br />
-              <b>ID : </b>{{ resource.experiment }} <br />
-              <b>name: </b>{{ resource.machine_name }} <br />
+              <b>Id : </b>{{ resource.experiment }} <br />
+              <b>Name: </b>{{ resource.machine_name }} <br />
               <b>Type: </b>{{ resource.machine_ip }} <br />
               <b>Creation Date : </b>{{ resource.creation_date }} <br />
               <b>Expiration Date : </b>{{ resource.last_accessed_date }} <br />
