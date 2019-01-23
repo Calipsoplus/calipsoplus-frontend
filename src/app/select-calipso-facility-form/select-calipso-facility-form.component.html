@@ -85,8 +85,8 @@
                 <fa-icon [icon]="['fa', 'star']"></fa-icon>
               </th>
               <th
-                class="col-2 {{ if_is_sorted('serial_number') }}"
-                (click)="sort_by_field('serial_number')"
+                class="col-2 {{ if_is_sorted('proposal_id') }}"
+                (click)="sort_by_field('proposal_id')"
               >
                 Proposal Id &nbsp;&nbsp;
                 <fa-icon [icon]="['fas', 'sort']"></fa-icon>
@@ -124,7 +124,7 @@
                 <a
                   *ngIf="!experiment.favorite"
                   href="#"
-                  (click)="!!star_on(experiment.serial_number, experiment.id)"
+                  (click)="!!star_on(experiment.proposal_id, experiment.id)"
                 >
                   <fa-icon
                     [icon]="['far', 'star']"
@@ -134,7 +134,7 @@
                 <a
                   *ngIf="experiment.favorite"
                   href="#"
-                  (click)="!!star_off(experiment.serial_number, experiment.id)"
+                  (click)="!!star_off(experiment.proposal_id, experiment.id)"
                 >
                   <fa-icon
                     [icon]="['fa', 'star']"
@@ -144,19 +144,19 @@
               </td>
               <td
                 class="col-2"
-                (click)="selectExperiment(experiment.serial_number)"
+                (click)="selectExperiment(experiment.proposal_id)"
               >
-                {{ experiment.serial_number }}
+                {{ experiment.proposal_id }}
               </td>
               <td
                 class="col-3"
-                (click)="selectExperiment(experiment.serial_number)"
+                (click)="selectExperiment(experiment.proposal_id)"
               >
                 {{ experiment.subject }}
               </td>
               <td
                 class="col-4"
-                (click)="selectExperiment(experiment.serial_number)"
+                (click)="selectExperiment(experiment.proposal_id)"
               >
                 {{ experiment.body | slice: 0:106 }} &nbsp;
                 <div *ngIf="experiment.body">
@@ -173,7 +173,7 @@
               </td>
               <td
                 class="col-2"
-                (click)="selectExperiment(experiment.serial_number)"
+                (click)="selectExperiment(experiment.proposal_id)"
               >
                 {{ experiment.beam_line }}
               </td>
@@ -240,7 +240,7 @@
           />
 
           <h1>
-            Sessions from proposal <b>{{ experiment_selected.serial_number }}</b
+            Sessions from proposal <b>{{ experiment_selected.proposal_id }}</b
             ><br />
           </h1>
           <div class="row">
@@ -309,7 +309,7 @@
                       (click)="
                         !!new_resource(
                           'base_image',
-                          experiment_selected.serial_number,
+                          experiment_selected.proposal_id,
                           session.session_number
                         )
                       "
@@ -325,7 +325,7 @@
                       (click)="
                         !!new_resource(
                           'base_jupyter',
-                          experiment_selected.serial_number,
+                          experiment_selected.proposal_id,
                           session.session_number
                         )
                       "
@@ -341,7 +341,7 @@
                       (click)="
                         !!new_resource(
                           'base_image_ubuntu',
-                          experiment_selected.serial_number,
+                          experiment_selected.proposal_id,
                           session.session_number
                         )
                       "

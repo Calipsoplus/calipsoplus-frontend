@@ -109,9 +109,9 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
 
   }
 
-  public go_in(session_serial_number: string) {
+  public go_in(session_proposal_id: string) {
     var c = this.containers.find(
-      x => x.calipso_experiment == session_serial_number
+      x => x.calipso_experiment == session_proposal_id
     );
     if (c == null) console.log("error win up");
     else if (c.host_port == "") {
@@ -125,12 +125,12 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
     }
   }
 
-  public stop_and_remove_container(serial_number: string) {
+  public stop_and_remove_container(proposal_id: string) {
     let username = this.getUsername();
-    this.statusActiveSessions[serial_number] = Status.busy;
+    this.statusActiveSessions[proposal_id] = Status.busy;
     this.safe_locked_button = true;
 
-    var c = this.containers.find(x => x.calipso_experiment == serial_number);
+    var c = this.containers.find(x => x.calipso_experiment == proposal_id);
 
     this.calipsoService
       .stopContainer(username, c.container_name)
@@ -153,7 +153,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
               }
             });
 
-            this.statusActiveSessions[serial_number] = Status.idle;
+            this.statusActiveSessions[proposal_id] = Status.idle;
             this.safe_locked_button = false;
 
             this.resources_update();

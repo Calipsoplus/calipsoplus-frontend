@@ -48,7 +48,7 @@
           <th class="col-sm-1  text-center" (click)="sort_by_field('calipsouserexperiment__favorite')">
             <fa-icon [icon]="['fa', 'star']"></fa-icon>
           </th>
-          <th class="col-sm-2 {{if_is_sorted('serial_number')}}" (click)="sort_by_field('serial_number')">
+          <th class="col-sm-2 {{if_is_sorted('proposal_id')}}" (click)="sort_by_field('proposal_id')">
             Proposal Id &nbsp;&nbsp;
             <fa-icon [icon]="['fas', 'sort']"></fa-icon>
           </th>
@@ -73,15 +73,15 @@
 
         <tr class="d-flex">
           <td class="col-sm-1  text-center">
-            <a *ngIf="!experiment.favorite" href="#" (click)="!!star_on(experiment.serial_number,experiment.id)">
+            <a *ngIf="!experiment.favorite" href="#" (click)="!!star_on(experiment.proposal_id,experiment.id)">
               <fa-icon [icon]="['far', 'star']" style="color:black;"></fa-icon>
             </a>
-            <a *ngIf="experiment.favorite" href="#" (click)="!!star_off(experiment.serial_number,experiment.id)">
+            <a *ngIf="experiment.favorite" href="#" (click)="!!star_off(experiment.proposal_id,experiment.id)">
               <fa-icon [icon]="['fa', 'star']" style="color:black;"></fa-icon>
             </a>
           </td>
           <td class="col-sm-2">
-            {{experiment.serial_number}}
+            {{experiment.proposal_id}}
           </td>
           <td class="col-sm-3">{{experiment.subject}}</td>
           <td class="col-sm-3">{{experiment.body | slice:0:106}} &nbsp;
@@ -91,7 +91,7 @@
           </td>
           <td class="col-sm-2">{{experiment.beam_line}}</td>
           <td class="col-sm-1">
-            <label data-toggle="collapse" [attr.href]="'#x'+experiment.serial_number" [attr.aria-controls]="'x'+experiment.serial_number"
+            <label data-toggle="collapse" [attr.href]="'#x'+experiment.proposal_id" [attr.aria-controls]="'x'+experiment.proposal_id"
               class="switch">
               <input type="checkbox">
               <span class="slider round"></span>
@@ -102,7 +102,7 @@
 
         <tr *ngFor="let session of experiment.sessions">
 
-          <div style="border: solid none none solid" class="collapse" [attr.id]="'x'+experiment.serial_number">
+          <div style="border: solid none none solid" class="collapse" [attr.id]="'x'+experiment.proposal_id">
 
             <div class="row " style="padding: 0.6em">
               <div class="col-12">
