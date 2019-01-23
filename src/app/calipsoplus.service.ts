@@ -258,21 +258,21 @@ export class CalipsoplusService {
     //return this.http.get<CalipsoFacility[]>(this.facilitiesUrl);
   }
 
-  public getImageByPublicName(public_name: string): Observable<CalipsoImage[]> {
+  public getImageByPublicName(public_name: string): Observable<CalipsoImage> {
     let url = this.imageQuotaUrl.replace("$PUBLIC_NAME", public_name);
-    return this.http.get<CalipsoImage[]>(url, { withCredentials: true });
+    return this.http.get<CalipsoImage>(url, { withCredentials: true });
   }
 
-  public getCalipsoQuota(username: string): Observable<CalipsoQuota[]> {
+  public getCalipsoQuota(username: string): Observable<CalipsoQuota> {
     let url = this.quotaUrl.replace("$USERNAME", username);
-    return this.http.get<CalipsoQuota[]>(url, { withCredentials: true });
+    return this.http.get<CalipsoQuota>(url, { withCredentials: true });
   }
 
   public getCalipsoAvailableImageQuota(
     username: string
-  ): Observable<CalipsoQuota[]> {
+  ): Observable<CalipsoQuota> {
     let url = this.usedQuotaUrl.replace("$USERNAME", username);
-    return this.http.get<CalipsoQuota[]>(url, { withCredentials: true });
+    return this.http.get<CalipsoQuota>(url, { withCredentials: true });
   }
 
   public getDatasetsFromExperiment(

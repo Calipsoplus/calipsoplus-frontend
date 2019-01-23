@@ -50,8 +50,8 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   sessions: CalipsoSession[];
   containers: CalipsoContainer[];
 
-  used_quota: CalipsoQuota[];
-  user_quota: CalipsoQuota[];
+  used_quota: CalipsoQuota=new CalipsoQuota(0, 0, "0", "0");
+  user_quota: CalipsoQuota=new CalipsoQuota(0, 0, "0", "0");
 
   statusActiveSessions: { [key: string]: Status } = {};
 
@@ -128,15 +128,15 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
           this.user_quota = user_quota;
 
           let max_available =
-            this.user_quota[0].max_simultaneous -
-            this.used_quota[0].max_simultaneous;
-          let cpu_available = this.user_quota[0].cpu - this.used_quota[0].cpu;
+            this.user_quota.max_simultaneous -
+            this.used_quota.max_simultaneous;
+          let cpu_available = this.user_quota.cpu - this.used_quota.cpu;
           let hdd_available =
-            parseInt(this.user_quota[0].hdd.slice(0, -1)) -
-            parseInt(this.used_quota[0].hdd.slice(0, -1));
+            parseInt(this.user_quota.hdd.slice(0, -1)) -
+            parseInt(this.used_quota.hdd.slice(0, -1));
           let memory_available =
-            parseInt(this.user_quota[0].memory.slice(0, -1)) -
-            parseInt(this.used_quota[0].memory.slice(0, -1));
+            parseInt(this.user_quota.memory.slice(0, -1)) -
+            parseInt(this.used_quota.memory.slice(0, -1));
 
           this.max_num_machines_exceeded = max_available <= 0;
 
@@ -144,13 +144,13 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
             .getImageByPublicName(base_image)
             .subscribe(image_quota => {
               this.max_num_cpu_exceeded =
-                cpu_available - image_quota[0].cpu < 0;
+                cpu_available - image_quota.cpu < 0;
               this.max_memory_exceeded =
                 memory_available -
-                  parseInt(image_quota[0].memory.slice(0, -1)) <
+                  parseInt(image_quota.memory.slice(0, -1)) <
                 0;
               this.max_hdd_exceeded =
-                hdd_available - parseInt(image_quota[0].hdd.slice(0, -1)) < 0;
+                hdd_available - parseInt(image_quota.hdd.slice(0, -1)) < 0;
             });
         });
       });
