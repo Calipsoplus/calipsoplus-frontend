@@ -20,6 +20,7 @@ import { CalipsoPaginationExperiment } from "./calipso-pagination-experiment";
 import { CalipsoUmbrellaSession } from "./calipso-umbrella-session";
 import { CalipsoSettings } from "./calipso-settings";
 import { LOGO_FACILITY } from "./calipso-constants";
+import { CalipsoUserType } from "./calipso-user-type";
 
 @Injectable()
 export class CalipsoplusService {
@@ -54,6 +55,8 @@ export class CalipsoplusService {
   listContainersUrl = this.backendUrl_calipso + "container/list/$USERNAME/";
 
   settingsCalipsoUrl = this.backendUrl_calipso + "settings/";
+
+  calipsoUserTypeUrl = this.backendUrl_calipso + "login/type/";
 
   UOWebUrl = "https://useroffice.cells.es/Welcome";
 
@@ -205,6 +208,22 @@ export class CalipsoplusService {
     search_data: string,
     filter: string
   ): Observable<CalipsoPaginationExperiment> {
+    let server_token = this.getCookie("csrftoken");
+    let server_token_session = this.getCookie("sessionid");
+
+    if (server_token == undefined) {
+      server_token = "none";
+      //console.log("token_not_found server_token!");
+    }
+    if (server_token_session == undefined) {
+      server_token_session = "none";
+      //console.log("token_not_found server_token_session!");
+    }
+
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json"
+    });
+
     let url = this.experimentsUrl.replace("$USERNAME", username);
     url = url.concat("?page=", page.toString(), "&ordering=", order.toString());
     if (search_data != "") url = url.concat("&search=", search_data.toString());
@@ -213,6 +232,7 @@ export class CalipsoplusService {
       url = url.concat("&calipsouserexperiment__favorite=" + filter);
 
     return this.http.get<CalipsoPaginationExperiment>(url, {
+      headers: headers,
       withCredentials: true
     });
   }
@@ -223,26 +243,36 @@ export class CalipsoplusService {
     });
   }
 
+  public getCalipsoUserType(): Observable<CalipsoUserType> {
+    return this.http
+      .get<CalipsoUserType>(this.calipsoUserTypeUrl, {
+        withCredentials: true
+      })
+      .map(res => {
+        return res;
+      });
+  }
+
   public getCalipsoFacilities(): Observable<CalipsoFacility[]> {
     return of(this.FACILITIES);
     //return this.http.get<CalipsoFacility[]>(this.facilitiesUrl);
   }
 
-  public getImageByPublicName(public_name: string): Observable<CalipsoImage[]> {
+  public getImageByPublicName(public_name: string): Observable<CalipsoImage> {
     let url = this.imageQuotaUrl.replace("$PUBLIC_NAME", public_name);
-    return this.http.get<CalipsoImage[]>(url, { withCredentials: true });
+    return this.http.get<CalipsoImage>(url, { withCredentials: true });
   }
 
-  public getCalipsoQuota(username: string): Observable<CalipsoQuota[]> {
+  public getCalipsoQuota(username: string): Observable<CalipsoQuota> {
     let url = this.quotaUrl.replace("$USERNAME", username);
-    return this.http.get<CalipsoQuota[]>(url, { withCredentials: true });
+    return this.http.get<CalipsoQuota>(url, { withCredentials: true });
   }
 
   public getCalipsoAvailableImageQuota(
     username: string
-  ): Observable<CalipsoQuota[]> {
+  ): Observable<CalipsoQuota> {
     let url = this.usedQuotaUrl.replace("$USERNAME", username);
-    return this.http.get<CalipsoQuota[]>(url, { withCredentials: true });
+    return this.http.get<CalipsoQuota>(url, { withCredentials: true });
   }
 
   public getDatasetsFromExperiment(
@@ -266,12 +296,13 @@ export class CalipsoplusService {
         withCredentials: true
       })
       .map(res => {
+        //console.log("login:", this.getCookie("sessionid"));
         this.login(username, "local");
         return res;
       });
   }
 
-  getCookie(name) {
+  public getCookie(name: string) {
     let value = "; " + document.cookie;
     let parts = value.split("; " + name + "=");
     if (parts.length == 2)
@@ -312,7 +343,7 @@ export class CalipsoplusService {
       });
   }
 
-  public removeStorage(){
+  public removeStorage() {
     sessionStorage.removeItem("ct");
     sessionStorage.removeItem("cb");
   }
@@ -365,10 +396,10 @@ export class CalipsoplusService {
 
   public removeContainer(
     username: string,
-    experiment_serial_number: string
+    experiment_proposal_id: string
   ): Observable<CalipsoContainer> {
     let remove_url = this.removeContainersUrl.replace("$USERNAME", username);
-    let url = remove_url.replace("$CONTAINER", experiment_serial_number);
+    let url = remove_url.replace("$CONTAINER", experiment_proposal_id);
 
     return this.http
       .get<CalipsoContainer>(url, { withCredentials: true })
@@ -379,10 +410,10 @@ export class CalipsoplusService {
 
   public stopContainer(
     username: string,
-    experiment_serial_number: string
+    experiment_proposal_id: string
   ): Observable<CalipsoContainer> {
     let stop_url = this.stopContainersUrl.replace("$USERNAME", username);
-    let url = stop_url.replace("$CONTAINER", experiment_serial_number);
+    let url = stop_url.replace("$CONTAINER", experiment_proposal_id);
 
     return this.http
       .get<CalipsoContainer>(url, { withCredentials: true })
@@ -487,7 +518,6 @@ export class CalipsoplusService {
   public logout() {
     //console.log("login_local:"+this.calipsoService.calipsoSettings.local_auth);
 
-
     if (this.getLoginType() == "local") {
       this.removeStorage();
       this.unauth().subscribe(
@@ -515,7 +545,4 @@ export class CalipsoplusService {
       );
     }
   }
-
-
-
 }

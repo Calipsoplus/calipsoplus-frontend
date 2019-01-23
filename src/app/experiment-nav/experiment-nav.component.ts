@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CalipsoplusService } from '../calipsoplus.service';
 
 @Component({
   selector: 'app-experiment-nav',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExperimentNavComponent implements OnInit {
 
-  constructor() { }
+  constructor(public calipsoService: CalipsoplusService) { }
 
   ngOnInit() {
   }

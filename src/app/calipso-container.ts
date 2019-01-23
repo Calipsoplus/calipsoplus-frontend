@@ -12,6 +12,7 @@ export class CalipsoContainer {
     public vnc_password: string,
     public creation_date:string,
     public host_port:string,
-    public public_name:string
+    public public_name:string,
+    public container_info:string
   ) {}
 }
