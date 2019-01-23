@@ -396,10 +396,10 @@ export class CalipsoplusService {
 
   public removeContainer(
     username: string,
-    experiment_serial_number: string
+    experiment_proposal_id: string
   ): Observable<CalipsoContainer> {
     let remove_url = this.removeContainersUrl.replace("$USERNAME", username);
-    let url = remove_url.replace("$CONTAINER", experiment_serial_number);
+    let url = remove_url.replace("$CONTAINER", experiment_proposal_id);
 
     return this.http
       .get<CalipsoContainer>(url, { withCredentials: true })
@@ -410,10 +410,10 @@ export class CalipsoplusService {
 
   public stopContainer(
     username: string,
-    experiment_serial_number: string
+    experiment_proposal_id: string
   ): Observable<CalipsoContainer> {
     let stop_url = this.stopContainersUrl.replace("$USERNAME", username);
-    let url = stop_url.replace("$CONTAINER", experiment_serial_number);
+    let url = stop_url.replace("$CONTAINER", experiment_proposal_id);
 
     return this.http
       .get<CalipsoContainer>(url, { withCredentials: true })

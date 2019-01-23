@@ -50,7 +50,7 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
   actual_page: number = 1;
   total_pages: number[] = [];
   sort_field: string = "";
-  header_column_sorted: string = "serial_number";
+  header_column_sorted: string = "proposal_id";
 
   experiments: CalipsoExperiment[];
   experiment_selected: CalipsoExperiment;
@@ -86,10 +86,10 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
 
   public new_resource(
     image: string,
-    serial_number: string,
+    proposal_id: string,
     session_name: string
   ) {
-    this.run(serial_number, session_name, image);
+    this.run(proposal_id, session_name, image);
   }
 
   public ifDisabled(session: CalipsoSession) {
@@ -117,7 +117,7 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
 
   public star_on(serial: string, id: string) {
     this.calipsoService.favorite_experiment(id, 1).subscribe(data => {
-      var c = this.experiments.find(x => x.serial_number == serial);
+      var c = this.experiments.find(x => x.proposal_id == serial);
       if (c != null) {
         c.favorite = true;
       } else this.load_experiments(this.actual_page);
@@ -126,7 +126,7 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
 
   public star_off(serial: string, id: string) {
     this.calipsoService.favorite_experiment(id, 0).subscribe(data => {
-      var c = this.experiments.find(x => x.serial_number == serial);
+      var c = this.experiments.find(x => x.proposal_id == serial);
       if (c != null) {
         c.favorite = false;
       } else this.load_experiments(this.actual_page);
@@ -395,9 +395,9 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
     }
   }
 
-  public run(serial_number, session_serial_number, base_image: string) {
-    this.statusActiveSessions[session_serial_number] = Status.busy;
-    this.actualRunningContainer[session_serial_number] = base_image;
+  public run(proposal_id, session_proposal_id, base_image: string) {
+    this.statusActiveSessions[session_proposal_id] = Status.busy;
+    this.actualRunningContainer[session_proposal_id] = base_image;
     this.message_resources = "Launching...";
 
     this.safe_locked_button = true;
@@ -406,7 +406,7 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
     this.calipsoService
       .runContainer(
         this.calipsoService.getLoggedUserName(),
-        serial_number + "~" + session_serial_number,
+        proposal_id + "~" + session_proposal_id,
         base_image
       )
       .subscribe(
@@ -414,31 +414,31 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
           if (data != null) {
             this.containers.push(data);
             this.check_quota(data.public_name);
-            this.statusActiveSessions[session_serial_number] = Status.running;
+            this.statusActiveSessions[session_proposal_id] = Status.running;
             this.getContainersActive();
           } else {
-            this.statusActiveSessions[session_serial_number] = Status.error;
+            this.statusActiveSessions[session_proposal_id] = Status.error;
           }
           this.safe_locked_button = false;
           this.message_resources = "";
         },
         error => {
-          this.statusActiveSessions[session_serial_number] = Status.error;
+          this.statusActiveSessions[session_proposal_id] = Status.error;
           this.safe_locked_button = false;
           console.log("Ooops!");
         }
       );
   }
 
-  public stop_and_remove_container(session_serial_number: string) {
+  public stop_and_remove_container(session_proposal_id: string) {
     let username = this.calipsoService.getLoggedUserName();
     this.safe_locked_button = true;
 
-    this.statusActiveSessions[session_serial_number] = Status.busy;
+    this.statusActiveSessions[session_proposal_id] = Status.busy;
     this.message_resources = "Wait...";
 
     var c = this.containers.find(
-      x => x.calipso_experiment == session_serial_number
+      x => x.calipso_experiment == session_proposal_id
     );
 
     this.calipsoService
@@ -469,13 +469,13 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
             this.check_quota(c.public_name);
           }),
           err => {
-            this.statusActiveSessions[session_serial_number] = Status.error;
+            this.statusActiveSessions[session_proposal_id] = Status.error;
             this.safe_locked_button = false;
             console.log("error on stop");
           };
       }),
       err => {
-        this.statusActiveSessions[session_serial_number] = Status.error;
+        this.statusActiveSessions[session_proposal_id] = Status.error;
         this.safe_locked_button = false;
         console.log("error on stop");
       };
@@ -495,8 +495,8 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
     }
   }
 
-  public getContainerType(serial_number: string) {
-    var c = this.containers.find(x => x.calipso_experiment == serial_number);
+  public getContainerType(proposal_id: string) {
+    var c = this.containers.find(x => x.calipso_experiment == proposal_id);
     let type = "Default";
 
     if (c != null) {
@@ -518,9 +518,9 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
     return type;
   }
 
-  public selectExperiment(serial_number: string) {
+  public selectExperiment(proposal_id: string) {
     this.experiments.forEach(element => {
-      if (element.serial_number == serial_number) {
+      if (element.proposal_id == proposal_id) {
         this.experiment_selected = element;
       }
     });
@@ -531,11 +531,11 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
     this.load_experiments(this.actual_page);
   }
 
-  public gotoExperiment(serial_number: string) {
-    this.search_key = serial_number;
+  public gotoExperiment(proposal_id: string) {
+    this.search_key = proposal_id;
     let username = this.calipsoService.getLoggedUserName();
 
-    if (serial_number == username) {
+    if (proposal_id == username) {
       this.router.navigate(["/ownresources"]);
       return;
     }
@@ -551,7 +551,7 @@ export class SelectCalipsoFacilityFormComponent implements OnInit {
           this.experiments = experiment.results;
           // search experiment in container
           this.experiments.forEach(element => {
-            if (element.serial_number == serial_number) {
+            if (element.proposal_id == proposal_id) {
               this.experiment_selected = element;
               this.sessions = element.sessions;
               this.sessions.forEach(sselement => {

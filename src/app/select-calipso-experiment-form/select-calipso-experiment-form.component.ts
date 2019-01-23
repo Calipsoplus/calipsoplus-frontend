@@ -44,7 +44,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   actual_page: number = 1;
   total_pages: number[] = [];
   sort_field: string = "";
-  header_column_sorted: string = "serial_number";
+  header_column_sorted: string = "proposal_id";
 
   experiments: CalipsoExperiment[];
   sessions: CalipsoSession[];
@@ -74,7 +74,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   public star_on(serial: string, id: string) {
     this.calipsoService.favorite_experiment(id, 1).subscribe(data => {
-      var c = this.experiments.find(x => x.serial_number == serial);
+      var c = this.experiments.find(x => x.proposal_id == serial);
       if (c != null) {
         c.favorite = true;
       } else this.load_experiments(this.actual_page);
@@ -83,7 +83,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   public star_off(serial: string, id: string) {
     this.calipsoService.favorite_experiment(id, 0).subscribe(data => {
-      var c = this.experiments.find(x => x.serial_number == serial);
+      var c = this.experiments.find(x => x.proposal_id == serial);
       if (c != null) {
         c.favorite = false;
       } else this.load_experiments(this.actual_page);
@@ -290,9 +290,9 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     }
   }
 
-  public run(session_serial_number, base_image: string) {
-    this.statusActiveSessions[session_serial_number] = Status.busy;
-    this.actualRunningContainer[session_serial_number] = base_image;
+  public run(session_proposal_id, base_image: string) {
+    this.statusActiveSessions[session_proposal_id] = Status.busy;
+    this.actualRunningContainer[session_proposal_id] = base_image;
 
     this.safe_locked_button = true;
 
@@ -301,7 +301,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     this.calipsoService
       .runContainer(
         this.calipsoService.getLoggedUserName(),
-        session_serial_number,
+        session_proposal_id,
         base_image
       )
       .subscribe(
@@ -311,28 +311,28 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
             this.check_quota(data.public_name);
 
-            this.statusActiveSessions[session_serial_number] = Status.running;
+            this.statusActiveSessions[session_proposal_id] = Status.running;
           } else {
-            this.statusActiveSessions[session_serial_number] = Status.idle;
+            this.statusActiveSessions[session_proposal_id] = Status.idle;
           }
           this.safe_locked_button = false;
         },
         error => {
-          this.statusActiveSessions[session_serial_number] = Status.idle;
+          this.statusActiveSessions[session_proposal_id] = Status.idle;
           this.safe_locked_button = false;
           console.log("Ooops!");
         }
       );
   }
 
-  public stop_and_remove_container(session_serial_number: string) {
+  public stop_and_remove_container(session_proposal_id: string) {
     let username = this.calipsoService.getLoggedUserName();
     this.safe_locked_button = true;
 
-    this.statusActiveSessions[session_serial_number] = Status.busy;
+    this.statusActiveSessions[session_proposal_id] = Status.busy;
 
     var c = this.containers.find(
-      x => x.calipso_experiment == session_serial_number
+      x => x.calipso_experiment == session_proposal_id
     );
 
     this.calipsoService
@@ -362,9 +362,9 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
       });
   }
 
-  public go_in(session_serial_number: string) {
+  public go_in(session_proposal_id: string) {
     var c = this.containers.find(
-      x => x.calipso_experiment == session_serial_number
+      x => x.calipso_experiment == session_proposal_id
     );
     if (c == null) console.log("error win up");
     else if (c.host_port == "") {
@@ -378,8 +378,8 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     }
   }
 
-  public getContainerType(serial_number: string) {
-    var c = this.containers.find(x => x.calipso_experiment == serial_number);
+  public getContainerType(proposal_id: string) {
+    var c = this.containers.find(x => x.calipso_experiment == proposal_id);
     let type = "Default";
 
     if (c != null) {
