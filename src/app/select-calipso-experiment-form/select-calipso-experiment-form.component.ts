@@ -258,7 +258,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
                 }
               }
 
-              if (this.experiments && this.experiments.length == 0) {
+              if (this.experiments.length == 0) {
                 if (this.only_favorites)
                   this.message_proposals = "No favorite proposals found";
                 else this.message_proposals = "No proposals found";
