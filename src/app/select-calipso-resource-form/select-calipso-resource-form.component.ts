@@ -96,11 +96,11 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
         this.statusActiveSessions[username] = Status.idle;
         if (user_type.result) {
           this.staff_forbbiden = false;
-          this.resources_update();
         } else {
           this.safe_locked_button = true;
           this.staff_forbbiden = true;
         }
+        this.resources_update();
       });
     } else {
       this.router.navigate(["/"]);
