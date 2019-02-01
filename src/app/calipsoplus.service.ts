@@ -208,21 +208,11 @@ export class CalipsoplusService {
     search_data: string,
     filter: string
   ): Observable<CalipsoPaginationExperiment> {
-    let server_token = this.getCookie("csrftoken");
-    let server_token_session = this.getCookie("sessionid");
-
-    if (server_token == undefined) {
-      server_token = "none";
-      //console.log("token_not_found server_token!");
-    }
-    if (server_token_session == undefined) {
-      server_token_session = "none";
-      //console.log("token_not_found server_token_session!");
-    }
 
     let headers = new HttpHeaders({
       "Content-Type": "application/json"
     });
+
 
     let url = this.experimentsUrl.replace("$USERNAME", username);
     url = url.concat("?page=", page.toString(), "&ordering=", order.toString());
