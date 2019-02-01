@@ -8,11 +8,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { LoginCalipsoUserFormComponent } from './login-calipso-user-form/login-calipso-user-form.component';
 import { AppRoutingModule } from './app-routing.module';
-import { SelectCalipsoFacilityFormComponent } from './select-calipso-facility-form/select-calipso-facility-form.component';
 import { CalipsoplusService} from './calipsoplus.service';
 import { SelectCalipsoExperimentFormComponent } from './select-calipso-experiment-form/select-calipso-experiment-form.component';
-import { HomeCalipsoPageComponent } from './home-calipso-page/home-calipso-page.component';
-import { AboutCalipsoPageComponent } from './about-calipso-page/about-calipso-page.component';
 import { PartnersCalipsoPageComponent } from './partners-calipso-page/partners-calipso-page.component';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -24,6 +21,7 @@ import { SelectCalipsoQuotaFormComponent } from './select-calipso-quota-form/sel
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SelectCalipsoFavoriteFormComponent } from './select-calipso-favorite-form/select-calipso-favorite-form.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 
 
 @NgModule({
@@ -38,10 +36,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   declarations: [
     AppComponent,
     LoginCalipsoUserFormComponent,
-    SelectCalipsoFacilityFormComponent,
     SelectCalipsoExperimentFormComponent,
-    HomeCalipsoPageComponent,
-    AboutCalipsoPageComponent,
     PartnersCalipsoPageComponent,
     MainNavComponent,
     FacilityNavComponent,
