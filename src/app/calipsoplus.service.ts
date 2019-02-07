@@ -24,8 +24,7 @@ import { CalipsoUserType } from "./calipso-user-type";
 
 @Injectable()
 export class CalipsoplusService {
-  backendUrl_calipso =
-    environment.backendUrl_calipso + environment.backendUrl_basehref;
+  backendUrl_calipso = environment.backendUrl_calipso + environment.backendUrl_basehref;
   guacamoleUrl = environment.guacamoleUrl;
 
   authUrl = this.backendUrl_calipso + 'login/';
@@ -193,7 +192,6 @@ export class CalipsoplusService {
         .split(';')
         .shift();
     }
-  }
 
   public getAvalilableSoftware(): Observable<CalipsoSoftware[]> {
     return this.http.get<CalipsoSoftware[]>('../assets/data/software.json');
