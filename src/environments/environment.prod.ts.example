@@ -1,0 +1,8 @@
+export const environment = {
+  production: true,
+  frontend_calipso: "https://calipsofrontend.domain.tld/",
+  backendUrl_calipso: "https://calipsobackend.domain.tld/",
+  backendUrl_basehref: "calipsoplus-services/",
+  guacamoleUrl: "https://calipsofrontend.domain.tld/gacces/",
+  env : "prod"
+};

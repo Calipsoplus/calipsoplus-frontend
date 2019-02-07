@@ -1,10 +1,10 @@
 <app-main-nav></app-main-nav>
 <div class="container">
-  <div class="col nav-link ml text-center">
+  <div class="col nav-link  text-center">
     <img src={{calipsoService.getMyLogo()}}  />
   </div>
 
-  <h6 class="center-all">Click on the logo bellow to sign in with your UmbrellaID</h6>
+  <div class="center-all">Click on the logo bellow to sign in with your UmbrellaID</div>
 
   <div class="row text-center">
     <div class="col">
@@ -16,8 +16,8 @@
 
   <div *ngIf="this.isSettingsLocalLogin()">
     <h5 class="center-all">Or</h5>
-    <h6 class="center-all">Click <a href="#" (click)="!!toggle_ShowMeLocalLogin()">here</a> to sign in with your local
-      account</h6>
+    <div class="center-all">Click <a href="#" (click)="!!toggle_ShowMeLocalLogin()">here</a> to sign in with your local
+      account</div>
     <div *ngIf="showme">
       <form class="form-signin center-all" #calipsoForm="ngForm">
         <br />
@@ -34,7 +34,7 @@
           <input [(ngModel)]="password" name="password" type="password" id="inputPassword" class="form-control"
             placeholder="Password" required>
         </div>
-        <button [disabled]="!calipsoForm.form.valid" class="btn btn-lg btn-primary btn-block btn-sm" (click)="login_UO()">Login</button>
+        <button [disabled]="!calipsoForm.form.valid" class="btn btn-primary btn-block btn-lg" (click)="login_UO()">Login</button>
       </form>
     </div>
   </div>

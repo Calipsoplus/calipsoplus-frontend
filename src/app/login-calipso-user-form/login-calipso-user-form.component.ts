@@ -12,7 +12,7 @@ export class LoginCalipsoUserFormComponent implements OnInit {
   password: string;
   showme: boolean;
 
-  public toggle_ShowMeLocalLogin(){
+  public toggle_ShowMeLocalLogin() {
     this.showme = !this.showme;
   }
 
@@ -26,7 +26,7 @@ export class LoginCalipsoUserFormComponent implements OnInit {
       resp => {
         this.calipsoService.auth(this.username, this.password).subscribe(
           resp => {
-            this.router.navigate(["/experiment"]);
+              this.router.navigate(["/experiment"]);
           },
           error => {
             alert("Invalid credentials");
@@ -39,17 +39,17 @@ export class LoginCalipsoUserFormComponent implements OnInit {
     );
   }
 
-  public isSettingsLocalLogin(){
-      return this.calipsoService.defaultCalipsoSettings.local_auth;
+  public isSettingsLocalLogin() {
+    return this.calipsoService.defaultCalipsoSettings.local_auth;
   }
 
- public login_umbrella(){
+  public login_umbrella() {
     this.calipsoService.goExternalLoginUmbrella();
- }
+  }
 
   ngOnInit() {
-      if (this.calipsoService.isLogged()){
-        this.router.navigate(["/experiment"]);
-      }
+    if (this.calipsoService.isLogged()) {
+      this.router.navigate(["/experiment"]);
+    }
   }
 }

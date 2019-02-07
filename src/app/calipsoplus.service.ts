@@ -1,28 +1,26 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import { environment } from '../environments/environment';
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { of } from "rxjs/observable/of";
+import "rxjs/add/operator/map";
+import "rxjs/add/operator/catch";
+import { environment } from "../environments/environment";
 
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Http } from '@angular/http';
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
-import { CalipsoFacility } from './calipso-facility';
-import { CalipsoExperiment } from './calipso-experiment';
-import { CalipsoDataset } from './calipso-dataset';
-import { CalipsoSoftware } from './calipso-software';
-import { CalipsoContainer } from './calipso-container';
-import { CalipsoQuota } from './calipso-quota';
-import { CalipsoImage } from './calipso-image';
+import { CalipsoFacility } from "./calipso-facility";
+import { CalipsoExperiment } from "./calipso-experiment";
+import { CalipsoDataset } from "./calipso-dataset";
+import { CalipsoSoftware } from "./calipso-software";
+import { CalipsoContainer } from "./calipso-container";
+import { CalipsoQuota } from "./calipso-quota";
+import { CalipsoImage } from "./calipso-image";
 
-import { Router } from '@angular/router';
-import { CalipsoPaginationExperiment } from './calipso-pagination-experiment';
-import { CalipsoUmbrellaSession } from './calipso-umbrella-session';
-import { CalipsoSettings } from './calipso-settings';
-import { LOGO_FACILITY } from './calipso-constants';
-import {T} from '@angular/core/src/render3';
-
+import { Router } from "@angular/router";
+import { CalipsoPaginationExperiment } from "./calipso-pagination-experiment";
+import { CalipsoUmbrellaSession } from "./calipso-umbrella-session";
+import { CalipsoSettings } from "./calipso-settings";
+import { LOGO_FACILITY } from "./calipso-constants";
+import { CalipsoUserType } from "./calipso-user-type";
 
 @Injectable()
 export class CalipsoplusService {
@@ -58,7 +56,9 @@ export class CalipsoplusService {
 
   settingsCalipsoUrl = this.backendUrl_calipso + 'settings/';
 
-  UOWebUrl = 'https://useroffice.cells.es/Welcome';
+  calipsoUserTypeUrl = this.backendUrl_calipso + "login/type/";
+
+  UOWebUrl = "https://useroffice.cells.es/Welcome";
 
   defaultCalipsoSettings: CalipsoSettings = new CalipsoSettings(false);
 
@@ -103,15 +103,21 @@ export class CalipsoplusService {
     search_data: string,
     filter: string
   ): Observable<CalipsoPaginationExperiment> {
-    let url = this.experimentsUrl.replace('$USERNAME', username);
-    url = url.concat('?page=', page.toString(), '&ordering=', order.toString());
-    if (search_data !== '') { url = url.concat('&search=', search_data.toString()); }
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json"
+    });
+
+    let url = this.experimentsUrl.replace("$USERNAME", username);
+    url = url.concat("?page=", page.toString(), "&ordering=", order.toString());
+    if (search_data != "") url = url.concat("&search=", search_data.toString());
+
 
     if (filter !== '') {
       url = url.concat('&calipsouserexperiment__favorite=' + filter);
     }
 
     return this.http.get<CalipsoPaginationExperiment>(url, {
+      headers: headers,
       withCredentials: true
     });
   }
@@ -122,22 +128,34 @@ export class CalipsoplusService {
     });
   }
 
+  public getCalipsoUserType(): Observable<CalipsoUserType> {
+    return this.http
+      .get<CalipsoUserType>(this.calipsoUserTypeUrl, {
+        withCredentials: true
+      })
+      .map(res => {
+        return res;
+      });
+  }
+
   public getCalipsoFacilities(): Observable<CalipsoFacility[]> {
     return this.http.get<CalipsoFacility[]>('../assets/data/facilities.json');
   }
 
   public getImageByPublicName(public_name: string): Observable<CalipsoImage> {
-    const url = this.imageQuotaUrl.replace('$PUBLIC_NAME', public_name);
+    let url = this.imageQuotaUrl.replace("$PUBLIC_NAME", public_name);
     return this.http.get<CalipsoImage>(url, { withCredentials: true });
   }
 
   public getCalipsoQuota(username: string): Observable<CalipsoQuota> {
-    const url = this.quotaUrl.replace('$USERNAME', username);
+    let url = this.quotaUrl.replace("$USERNAME", username);
     return this.http.get<CalipsoQuota>(url, { withCredentials: true });
   }
 
-  public getCalipsoAvailableImageQuota(username: string): Observable<CalipsoQuota> {
-    const url = this.usedQuotaUrl.replace('$USERNAME', username);
+  public getCalipsoAvailableImageQuota(
+    username: string
+  ): Observable<CalipsoQuota> {
+    let url = this.usedQuotaUrl.replace("$USERNAME", username);
     return this.http.get<CalipsoQuota>(url, { withCredentials: true });
   }
 
@@ -160,15 +178,16 @@ export class CalipsoplusService {
         withCredentials: true
       })
       .map(res => {
-        this.login(username, 'local');
+        //console.log("login:", this.getCookie("sessionid"));
+        this.login(username, "local");
         return res;
       });
   }
 
-  getCookie(name) {
-    const value = '; ' + document.cookie;
-    const parts = value.split('; ' + name + '=');
-    if (parts.length === 2) {
+  public getCookie(name: string) {
+    let value = "; " + document.cookie;
+    let parts = value.split("; " + name + "=");
+    if (parts.length == 2)
       return parts
         .pop()
         .split(';')
@@ -208,8 +227,8 @@ export class CalipsoplusService {
   }
 
   public removeStorage() {
-    sessionStorage.removeItem('ct');
-    sessionStorage.removeItem('cb');
+    sessionStorage.removeItem("ct");
+    sessionStorage.removeItem("cb");
   }
 
   public login(username: string, local_login: string) {
@@ -260,10 +279,10 @@ export class CalipsoplusService {
 
   public removeContainer(
     username: string,
-    experiment_serial_number: string
+    experiment_proposal_id: string
   ): Observable<CalipsoContainer> {
-    const remove_url = this.removeContainersUrl.replace('$USERNAME', username);
-    const url = remove_url.replace('$CONTAINER', experiment_serial_number);
+    let remove_url = this.removeContainersUrl.replace("$USERNAME", username);
+    let url = remove_url.replace("$CONTAINER", experiment_proposal_id);
 
     return this.http
       .get<CalipsoContainer>(url, { withCredentials: true })
@@ -274,10 +293,10 @@ export class CalipsoplusService {
 
   public stopContainer(
     username: string,
-    experiment_serial_number: string
+    experiment_proposal_id: string
   ): Observable<CalipsoContainer> {
-    const stop_url = this.stopContainersUrl.replace('$USERNAME', username);
-    const url = stop_url.replace('$CONTAINER', experiment_serial_number);
+    let stop_url = this.stopContainersUrl.replace("$USERNAME", username);
+    let url = stop_url.replace("$CONTAINER", experiment_proposal_id);
 
     return this.http
       .get<CalipsoContainer>(url, { withCredentials: true })
@@ -382,8 +401,7 @@ export class CalipsoplusService {
   public logout() {
     // console.log("login_local:"+this.calipsoService.calipsoSettings.local_auth);
 
-
-    if (this.getLoginType() === 'local') {
+    if (this.getLoginType() == "local") {
       this.removeStorage();
       this.unauth().subscribe(
         resp => {
@@ -410,34 +428,4 @@ export class CalipsoplusService {
       );
     }
   }
-  public addImage() {
-    const body = `{"public_name":"test_image", "image":"somethingon/dockerhub", 'docker_daemon': '192.168.25.14',
-    'host_domain': 'localhost', 'port_hook': 'Idunno', 'logs_er': 'logs', 'protocol': 'rdp', 'cpu': '100', 'memory': '100G'}`;
-
-    let server_token = this.getCookie('csrftoken');
-
-    if (server_token === undefined) {
-      server_token = 'none';
-    }
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'X-CSRFToken': server_token
-    });
-
-    return this.http
-      .post('http://localhost:9000/images', body, {
-        headers: headers,
-        observe: 'response',
-        withCredentials: true
-      })
-      .map(res => {
-        return res;
-      })
-      .catch(function(e) {
-        throw e;
-      });
-  }
-
-
 }

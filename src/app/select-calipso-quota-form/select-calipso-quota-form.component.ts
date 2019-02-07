@@ -18,10 +18,10 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
     private router: Router
   ) {}
 
-  quotas: CalipsoQuota;
-  used_quota: CalipsoQuota;
-  image_selected: CalipsoImage;
-  available_quota: CalipsoQuota;
+  quotas: CalipsoQuota= new CalipsoQuota(0, 0, "0", "0");
+  used_quota: CalipsoQuota= new CalipsoQuota(0, 0, "0", "0");
+  image_selected: CalipsoImage= new CalipsoImage(0, "0", "0");
+  available_quota: CalipsoQuota= new CalipsoQuota(0, 0, "0", "0");
 
   ngOnInit() {
     if (this.calipsoService.isLogged()) {
@@ -33,15 +33,21 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
             .getCalipsoAvailableImageQuota(username)
             .subscribe(used => {
               this.used_quota = used;
-              this.available_quota = new CalipsoQuota(0, 0, '0', '0');
 
-              this.available_quota.cpu = this.quotas.cpu - this.used_quota.cpu;
-              this.available_quota.memory = parseInt(this.quotas.memory.slice(0, -1), 10) -
-                parseInt(this.used_quota.memory.slice(0, -1), 10) + 'G';
-              this.available_quota.max_simultaneous = this.quotas.max_simultaneous -
-                this.used_quota.max_simultaneous;
-              this.available_quota.hdd = parseInt(this.quotas.hdd.slice(0, -1), 10) -
-                parseInt(this.used_quota.hdd.slice(0, -1), 10) + 'G';
+                this.available_quota.cpu =
+                  this.quotas.cpu - this.used_quota.cpu;
+                this.available_quota.memory =
+                  parseInt(this.quotas.memory.slice(0, -1)) -
+                  parseInt(this.used_quota.memory.slice(0, -1)) +
+                  "G";
+                this.available_quota.max_simultaneous =
+                  this.quotas.max_simultaneous -
+                  this.used_quota.max_simultaneous;
+                this.available_quota.hdd =
+                  parseInt(this.quotas.hdd.slice(0, -1)) -
+                  parseInt(this.used_quota.hdd.slice(0, -1)) +
+                  "G";
+
             });
         },
         error => {
