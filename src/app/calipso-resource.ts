@@ -6,6 +6,7 @@ export class CalipsoResource {
     public creation_date: string,
     public last_accessed_date: string,
     public expiration_date: string,
-    public info:string
+    public info:string,
+    public public_name:string
   ) {}
 }
