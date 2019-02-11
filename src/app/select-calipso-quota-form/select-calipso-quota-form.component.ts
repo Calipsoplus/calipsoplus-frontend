@@ -20,7 +20,8 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
 
   quotas: CalipsoQuota= new CalipsoQuota(0, 0, "0", "0");
   used_quota: CalipsoQuota= new CalipsoQuota(0, 0, "0", "0");
-  image_selected: CalipsoImage= new CalipsoImage(0, "0", "0");
+  image_selected: CalipsoImage= new CalipsoImage("name", "image", 0, "0", "0", "1");
+
   available_quota: CalipsoQuota= new CalipsoQuota(0, 0, "0", "0");
 
   ngOnInit() {
@@ -59,15 +60,16 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
         }
       );
 
-      // get default image user for all containers
+      // get default image, may be incorrect!
+      // must be refactorized
       this.calipsoService
-        .getImageByPublicName("base_image")
+        .getImageQuotaByPublicName("base_image")
         .subscribe(image_quota => {
           this.image_selected = image_quota;
         },
         error => {
           this.router.navigate(["/"]);
-          //console.log("Secutiry error");
+          console.log("base_image not found!");
         });
     } else {
       this.router.navigate(["/"]);

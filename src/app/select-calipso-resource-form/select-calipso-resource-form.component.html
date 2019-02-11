@@ -53,36 +53,14 @@
           Launch !
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-          <li role="presentation">
-            <a
-              class="btn-lg"
-              role="menuitem"
-              tabindex="-1"
-              (click)="!!run('base_image')"
-              href="#"
-              >Desktop</a
-            >
-          </li>
-          <li role="presentation">
-            <a
-              class="btn-lg"
-              role="menuitem"
-              tabindex="-1"
-              (click)="!!run('base_jupyter')"
-              href="#"
-              >Jupyter</a
-            >
-          </li>
-          <li role="presentation">
-            <a
-              class="btn-lg"
-              role="menuitem"
-              tabindex="-1"
-              (click)="!!run('base_image_ubuntu')"
-              href="#"
-              >Ubuntu</a
-            >
-          </li>
+            <li *ngFor="let image of availableImages" role="presentation">
+                <a
+                  class="btn-lg"
+                  role="menuitem"
+                  tabindex="-1"
+                  (click)="!!run(image.public_name)"
+                  href="#">{{image.public_name}}</a>
+              </li>
         </ul>
         <hr />
       </div>
@@ -107,49 +85,20 @@
           <tbody>
             <tr class="d-flex">
               <td class="col" *ngFor="let resource of resources">
-                <a
-                  *ngIf="resource.machine_ip == 'base_image_ubuntu'"
-                  style="padding:1em;"
-                >
+                <a style="padding:1em;">
                   <img
                     height="100px"
                     width="100px"
                     style="cursor: pointer;padding:1em;"
                     class="zoom"
                     (click)="go_in(resource.experiment)"
-                    src="assets/images/ubuntu.png"
-                  />
-                </a>
-                <a
-                  *ngIf="resource.machine_ip == 'base_image'"
-                  style="padding:1em;"
-                >
-                  <img
-                    height="100px"
-                    width="100px"
-                    style="cursor: pointer;padding:1em;"
-                    class="zoom"
-                    (click)="go_in(resource.experiment)"
-                    src="assets/images/desktop.png"
-                  />
-                </a>
-                <a
-                  style="padding:1em;"
-                  *ngIf="resource.machine_ip == 'base_jupyter'"
-                >
-                  <img
-                    height="100px"
-                    width="100px"
-                    style="cursor: pointer;padding:1em;"
-                    class="zoom"
-                    (click)="go_in(resource.experiment)"
-                    src="assets/images/jupyter.png"
+                    src="{{get_icon(resource.public_name)}}"
                   />
                 </a>
                 <br />
+                <b>Machine type: </b>{{ resource.public_name }} <br />
                 <b>Proposal ID : </b>{{ resource.experiment }} <br />
                 <b>Machine name: </b>{{ resource.machine_name }} <br />
-                <b>Machine type: </b>{{ resource.machine_ip }} <br />
                 <b>Creation Date : </b>{{ resource.creation_date }} <br />
                 <b>Expiration Date : </b>{{ resource.last_accessed_date }}
                 <br />
@@ -178,7 +127,7 @@
                     <li role="presentation">
                       <a
                         (click)="
-                          !!stop_and_remove_container(resource.experiment)
+                          !!stop_and_remove_resource(resource.experiment, resource.public_name)
                         "
                         class="btn-lg"
                         role="menuitem"
