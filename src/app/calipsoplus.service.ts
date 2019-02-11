@@ -22,7 +22,7 @@ import { CalipsoSettings } from "./calipso-settings";
 import { LOGO_FACILITY } from "./calipso-constants";
 import { CalipsoUserType } from "./calipso-user-type";
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class CalipsoplusService {
   backendUrl_calipso =
     environment.backendUrl_calipso + environment.backendUrl_basehref;
