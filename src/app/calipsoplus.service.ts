@@ -9,8 +9,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 import { CalipsoFacility } from "./calipso-facility";
 import { CalipsoExperiment } from "./calipso-experiment";
-import { CalipsoDataset } from "./calipso-dataset";
-import { CalipsoSoftware } from "./calipso-software";
+
 import { CalipsoContainer } from "./calipso-container";
 import { CalipsoQuota } from "./calipso-quota";
 import { CalipsoImage } from "./calipso-image";
@@ -37,22 +36,20 @@ export class CalipsoplusService {
   umbrellaLogoutUrl = this.backendUrl_calipso + "umbrella/logout/";
   logoutUrl = this.backendUrl_calipso + "logout/";
 
-  facilitiesUrl = this.backendUrl_calipso + "facility/";
-
   favoriteUrl = this.backendUrl_calipso + "favorite/$ID/";
 
   quotaUrl = this.backendUrl_calipso + "quota/$USERNAME/";
   usedQuotaUrl = this.backendUrl_calipso + "used_quota/$USERNAME/";
   imageQuotaUrl = this.backendUrl_calipso + "image/$PUBLIC_NAME/";
+  imageListUrl = this.backendUrl_calipso + "images/";
   experimentsUrl = this.backendUrl_calipso + "experiments/$USERNAME/";
-  runContainersUrl =
-    this.backendUrl_calipso +
-    "container/run/$USERNAME/$EXPERIMENT/$BASE_IMAGE/";
-  removeContainersUrl =
-    this.backendUrl_calipso + "container/rm/$USERNAME/$CONTAINER/";
-  stopContainersUrl =
-    this.backendUrl_calipso + "container/stop/$USERNAME/$CONTAINER/";
-  listContainersUrl = this.backendUrl_calipso + "container/list/$USERNAME/";
+  runResourceUrl =
+    this.backendUrl_calipso + "resource/run/$USERNAME/$EXPERIMENT/$BASE_IMAGE/";
+  removeResourceUrl =
+    this.backendUrl_calipso + "resource/rm/$USERNAME/$RESOURCE/$PUBLIC_NAME/";
+  stopResourceUrl =
+    this.backendUrl_calipso + "resource/stop/$USERNAME/$RESOURCE/$PUBLIC_NAME/";
+  listResourceUrl = this.backendUrl_calipso + "resource/list/$USERNAME/";
 
   settingsCalipsoUrl = this.backendUrl_calipso + "settings/";
 
@@ -135,36 +132,6 @@ export class CalipsoplusService {
     }
   ];
 
-  DATASETS: CalipsoDataset[] = [
-    {
-      id: 1,
-      subject: "Dataset 1",
-      type: "FAT32",
-      location: "/srv/datasets1/d1A1.dst"
-    },
-    {
-      id: 2,
-      subject: "Dataset 2",
-      type: "FAT64",
-      location: "/srv/datasets1/d1A2.dst"
-    },
-    {
-      id: 3,
-      subject: "Dataset 3",
-      type: "PNG",
-      location: "/srv/datasets2/d2A1.dst"
-    }
-  ];
-
-  SOFTWARE: CalipsoSoftware[] = [
-    { id: 1, subject: "Phynix", command: "./phynix.sh" },
-    { id: 2, subject: "Tree", command: "./tree.sh" },
-    { id: 3, subject: "Fixme", command: "./fixme.sh" },
-    { id: 4, subject: "Cati", command: "./cati.sh" },
-    { id: 5, subject: "Jomsa", command: "./jomsa_start.sh" },
-    { id: 6, subject: "Mayson", command: "./mayson.sh" }
-  ];
-
   EXPERIMENTS: CalipsoExperiment[] = [];
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -208,11 +175,9 @@ export class CalipsoplusService {
     search_data: string,
     filter: string
   ): Observable<CalipsoPaginationExperiment> {
-
     let headers = new HttpHeaders({
       "Content-Type": "application/json"
     });
-
 
     let url = this.experimentsUrl.replace("$USERNAME", username);
     url = url.concat("?page=", page.toString(), "&ordering=", order.toString());
@@ -248,10 +213,17 @@ export class CalipsoplusService {
     //return this.http.get<CalipsoFacility[]>(this.facilitiesUrl);
   }
 
-  public getImageByPublicName(public_name: string): Observable<CalipsoImage> {
+  public getImageQuotaByPublicName(
+    public_name: string
+  ): Observable<CalipsoImage> {
     let url = this.imageQuotaUrl.replace("$PUBLIC_NAME", public_name);
     return this.http.get<CalipsoImage>(url, { withCredentials: true });
   }
+
+  public getAllAvailableImages(): Observable<CalipsoImage[]> {
+    return this.http.get<CalipsoImage[]>(this.imageListUrl, { withCredentials: true });
+  }
+
 
   public getCalipsoQuota(username: string): Observable<CalipsoQuota> {
     let url = this.quotaUrl.replace("$USERNAME", username);
@@ -263,16 +235,6 @@ export class CalipsoplusService {
   ): Observable<CalipsoQuota> {
     let url = this.usedQuotaUrl.replace("$USERNAME", username);
     return this.http.get<CalipsoQuota>(url, { withCredentials: true });
-  }
-
-  public getDatasetsFromExperiment(
-    experiment_id
-  ): Observable<CalipsoDataset[]> {
-    return of(this.DATASETS);
-  }
-
-  public getSoftware(): Observable<CalipsoSoftware[]> {
-    return of(this.SOFTWARE);
   }
 
   public auth(username: string, password: string) {
@@ -300,10 +262,6 @@ export class CalipsoplusService {
         .pop()
         .split(";")
         .shift();
-  }
-
-  public getAvalilableSoftware(): Observable<CalipsoSoftware[]> {
-    return of(this.SOFTWARE);
   }
 
   public unauth() {
@@ -358,16 +316,16 @@ export class CalipsoplusService {
   public listContainersActive(
     username: string
   ): Observable<CalipsoContainer[]> {
-    let url = this.listContainersUrl.replace("$USERNAME", username);
+    let url = this.listResourceUrl.replace("$USERNAME", username);
     return this.http.get<CalipsoContainer[]>(url, { withCredentials: true });
   }
 
-  public runContainer(
+  public runResource(
     username: string,
     experiment: string,
     base_image: string
   ): Observable<CalipsoContainer> {
-    let url = this.runContainersUrl.replace("$USERNAME", username);
+    let url = this.runResourceUrl.replace("$USERNAME", username);
     let mid_url = url.replace("$EXPERIMENT", experiment);
     let run_url = mid_url.replace("$BASE_IMAGE", base_image);
 
@@ -386,10 +344,12 @@ export class CalipsoplusService {
 
   public removeContainer(
     username: string,
-    experiment_proposal_id: string
+    resource_name: string,
+    public_name: string
   ): Observable<CalipsoContainer> {
-    let remove_url = this.removeContainersUrl.replace("$USERNAME", username);
-    let url = remove_url.replace("$CONTAINER", experiment_proposal_id);
+    let username_url = this.removeResourceUrl.replace("$USERNAME", username);
+    let remove_url = username_url.replace("$PUBLIC_NAME", public_name);
+    let url = remove_url.replace("$RESOURCE", resource_name);
 
     return this.http
       .get<CalipsoContainer>(url, { withCredentials: true })
@@ -400,10 +360,12 @@ export class CalipsoplusService {
 
   public stopContainer(
     username: string,
-    experiment_proposal_id: string
+    resource_name: string,
+    public_name: string
   ): Observable<CalipsoContainer> {
-    let stop_url = this.stopContainersUrl.replace("$USERNAME", username);
-    let url = stop_url.replace("$CONTAINER", experiment_proposal_id);
+    let username_url = this.stopResourceUrl.replace("$USERNAME", username);
+    let stop_url = username_url.replace("$PUBLIC_NAME", public_name);
+    let url = stop_url.replace("$RESOURCE", resource_name);
 
     return this.http
       .get<CalipsoContainer>(url, { withCredentials: true })
@@ -425,27 +387,27 @@ export class CalipsoplusService {
       date.getMinutes();
     return str_date;
   }
-  public removeDateAccess(container_name: string) {
-    localStorage.removeItem(container_name);
+  public removeDateAccess(resource_name: string) {
+    localStorage.removeItem(resource_name);
   }
-  public updateDateAccess(container_name: string) {
+  public updateDateAccess(resource_name: string) {
     let date_access = new Date();
-    localStorage.setItem(container_name, this.formatDate(date_access));
+    localStorage.setItem(resource_name, this.formatDate(date_access));
   }
-  public getDateAccess(container_name: string) {
-    return localStorage.getItem(container_name);
+  public getDateAccess(resource_name: string) {
+    return localStorage.getItem(resource_name);
   }
 
-  public go_into_container(
-    container_name: string,
+  public go_into_resource(
+    resource_name: string,
     username: string,
     password: string
   ) {
-    this.updateDateAccess(container_name);
+    this.updateDateAccess(resource_name);
     var paramenters = btoa("un=" + username + "&up=" + password);
     window.open(
       this.guacamoleUrl + "?t=" + paramenters,
-      container_name,
+      resource_name,
       "menubar=no, location=no, toolbar=no, scrollbars=yes, height=500"
     );
   }
@@ -535,4 +497,10 @@ export class CalipsoplusService {
       );
     }
   }
+
+
+  public get_icon(base_image:string){
+    return("assets/images/computer.jpg");
+  }
+
 }
