@@ -3,6 +3,7 @@ import { CalipsoplusService } from "../calipsoplus.service";
 
 import { CalipsoResource } from "../calipso-resource";
 import { CalipsoContainer } from "../calipso-container";
+import { CalipsoImage } from "../calipso-image";
 
 import { Router } from "@angular/router";
 import { CalipsoQuota } from "../calipso-quota";
@@ -23,6 +24,7 @@ export enum Status {
 export class SelectCalipsoResourceFormComponent implements OnInit {
   containers: CalipsoContainer[] = [];
   resources: CalipsoResource[] = [];
+  availableImages: CalipsoImage[] = [];
 
   constructor(
     private calipsoService: CalipsoplusService,
@@ -72,7 +74,8 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
                   str_creation_date,
                   "-",
                   date_access,
-                  c.container_info
+                  c.container_info,
+                  c.public_name
                 );
                 this.resources.push(resource);
                 this.statusActiveSessions[resource.experiment] = Status.running;
@@ -89,6 +92,17 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
     } else this.router.navigate(["/"]);
   }
 
+  public load_all_images() {
+    this.calipsoService.getAllAvailableImages().subscribe(images => {
+      this.availableImages = images;
+    });
+  }
+
+  public get_icon(base_image:string){
+    return this.calipsoService.get_icon(base_image);
+  }
+
+
   ngOnInit() {
     if (this.calipsoService.isLogged()) {
       this.calipsoService.getCalipsoUserType().subscribe(user_type => {
@@ -100,6 +114,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
           this.safe_locked_button = true;
           this.staff_forbbiden = true;
         }
+        this.load_all_images();
         this.resources_update();
       });
     } else {
@@ -115,7 +130,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
     );
     if (c == null) console.log("error win up");
     else if (c.host_port == "") {
-      this.calipsoService.go_into_container(
+      this.calipsoService.go_into_resource(
         c.container_name,
         c.guacamole_username,
         c.guacamole_password
@@ -125,7 +140,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
     }
   }
 
-  public stop_and_remove_container(proposal_id: string) {
+  public stop_and_remove_resource(proposal_id: string, public_name: string) {
     let username = this.getUsername();
     this.statusActiveSessions[proposal_id] = Status.busy;
     this.safe_locked_button = true;
@@ -133,13 +148,13 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
     var c = this.containers.find(x => x.calipso_experiment == proposal_id);
 
     this.calipsoService
-      .stopContainer(username, c.container_name)
+      .stopContainer(username, c.container_name, public_name)
       .subscribe(data => {
         this.containers.find(x => x.id == data.id).container_status =
           data.container_status;
 
         this.calipsoService
-          .removeContainer(username, c.container_name)
+          .removeContainer(username, c.container_name, public_name)
           .subscribe(cdata => {
             this.check_quota(cdata.public_name);
 
@@ -187,7 +202,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
     this.actualRunningContainer[username] = base_image;
     this.safe_locked_button = true;
 
-    this.calipsoService.runContainer(username, username, base_image).subscribe(
+    this.calipsoService.runResource(username, username, base_image).subscribe(
       data => {
         if (data != null) {
           this.containers.push(data);
@@ -230,7 +245,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
           this.max_num_machines_exceeded = max_available <= 0;
 
           this.calipsoService
-            .getImageByPublicName(base_image)
+            .getImageQuotaByPublicName(base_image)
             .subscribe(image_quota => {
               this.max_num_cpu_exceeded =
                 cpu_available - image_quota.cpu < 0;

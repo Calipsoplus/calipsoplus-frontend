@@ -300,55 +300,19 @@
                 >
                   Launch !
                 </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                  <li role="presentation">
-                    <a
-                      class="btn-lg"
-                      role="menuitem"
-                      tabindex="-1"
-                      (click)="
-                        !!new_resource(
-                          'base_image',
-                          experiment_selected.proposal_id,
-                          session.session_number
-                        )
-                      "
-                      href="#"
-                      >Desktop</a
-                    >
-                  </li>
-                  <li role="presentation">
-                    <a
-                      class="btn-lg"
-                      role="menuitem"
-                      tabindex="-1"
-                      (click)="
-                        !!new_resource(
-                          'base_jupyter',
-                          experiment_selected.proposal_id,
-                          session.session_number
-                        )
-                      "
-                      href="#"
-                      >Jupyter</a
-                    >
-                  </li>
-                  <li role="presentation">
-                    <a
-                      class="btn-lg"
-                      role="menuitem"
-                      tabindex="-1"
-                      (click)="
-                        !!new_resource(
-                          'base_image_ubuntu',
-                          experiment_selected.proposal_id,
-                          session.session_number
-                        )
-                      "
-                      href="#"
-                      >Ubuntu</a
-                    >
-                  </li>
+
+                <ul  class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                    <li *ngFor="let image of availableImages" role="presentation">
+                      <a
+                        class="btn-lg"
+                        role="menuitem"
+                        tabindex="-1"
+                        (click)="!!new_resource(
+                            image.public_name,
+                            experiment_selected.proposal_id,
+                            session.session_number)"
+                        href="#">{{image.public_name}}</a>
+                    </li>
                 </ul>
               </div>
             </td>
@@ -404,7 +368,7 @@
       </table>
     </div>
 
-    <hr class="col-12" />
+    <hr class="col-12"/>
     <h2 class="col-12 text-center">
       <span class="badge badge-warning">{{ message_resources }}</span>
     </h2>
@@ -414,13 +378,13 @@
         <thead>
           <tr class="d-flex">
             <th class="col" *ngFor="let resource of resources">
-              <h2>
+              <h3>
                 <a (click)="!!gotoExperiment(resource.info)" href="">
-                  <span class="badge badge-primary"
-                    >{{ resource.experiment }} from {{ resource.info }}</span
+                  <span class="text-center badge badge-primary"
+                    >{{ resource.experiment }} / {{ resource.info }}</span
                   >
                 </a>
-              </h2>
+              </h3>
             </th>
           </tr>
         </thead>
@@ -428,7 +392,6 @@
           <tr class="d-flex">
             <td class="col" *ngFor="let resource of resources">
               <a
-                *ngIf="resource.machine_ip == 'base_image_ubuntu'"
                 style="padding:1em;"
               >
                 <img
@@ -437,39 +400,13 @@
                   style="cursor: pointer;padding:1em;"
                   class="zoom"
                   (click)="go_in(resource.experiment)"
-                  src="assets/images/ubuntu.png"
-                />
-              </a>
-              <a
-                *ngIf="resource.machine_ip == 'base_image'"
-                style="padding:1em;"
-              >
-                <img
-                  height="100px"
-                  width="100px"
-                  style="cursor: pointer;padding:1em;"
-                  class="zoom"
-                  (click)="go_in(resource.experiment)"
-                  src="assets/images/desktop.png"
-                />
-              </a>
-              <a
-                style="padding:1em;"
-                *ngIf="resource.machine_ip == 'base_jupyter'"
-              >
-                <img
-                  height="100px"
-                  width="100px"
-                  style="cursor: pointer;padding:1em;"
-                  class="zoom"
-                  (click)="go_in(resource.experiment)"
-                  src="assets/images/jupyter.png"
+                  src="{{get_icon(resource.public_name)}}"
                 />
               </a>
               <br />
+              <b>Type: </b>{{ resource.machine_ip }} <br />
               <b>Id : </b>{{ resource.experiment }} <br />
               <b>Name: </b>{{ resource.machine_name }} <br />
-              <b>Type: </b>{{ resource.machine_ip }} <br />
               <b>Creation Date : </b>{{ resource.creation_date }} <br />
               <b>Expiration Date : </b>{{ resource.last_accessed_date }} <br />
               <b>Last Access : </b>{{ resource.expiration_date }}
@@ -488,7 +425,7 @@
                 >
                   Options
                 </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="menu2">
+                <ul class="dropdown-menu text-center" role="menu" aria-labelledby="menu2">
                   <li role="presentation">
                     <a
                       class="btn-lg"
@@ -501,7 +438,7 @@
                   </li>
                   <li role="presentation">
                     <a
-                      (click)="!!stop_and_remove_container(resource.experiment)"
+                      (click)="!!stop_and_remove_resource(resource.experiment, resource.public_name)"
                       class="btn-lg"
                       role="menuitem"
                       tabindex="-1"
