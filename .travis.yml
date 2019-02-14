@@ -13,8 +13,9 @@ addons:
 
 before_script:
   - npm install -g @angular/cli
+  - cd calipsoplus-frontend
+  - cp src/environments/environment.docker.ts src/environments/environment.ts
 
 script:
-  - cp src/environments/environment.docker.ts src/environments/environment.ts
   - ng lint
   - ng test --watch=false
