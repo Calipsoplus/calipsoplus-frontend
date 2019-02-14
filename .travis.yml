@@ -4,14 +4,12 @@ node_js:
 dist: xenial
 sudo: true
 
-addons:
-  chrome: stable
-
 branches:
   only:
       - master
       - develop
-
+addons:
+  chrome: stable
 cache:
   directories:
   - node_modules
@@ -22,5 +20,3 @@ before_script:
 script:
   - ng lint
   - ng test --watch=false
-  
-	
