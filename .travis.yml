@@ -13,8 +13,7 @@ addons:
 
 before_script:
   - npm install -g @angular/cli
-  - cd calipsoplus-frontend
-  - cp src/environments/environment.docker.ts src/environments/environment.ts
+  - cp $TRAVIS_BUILD_DIR/src/environments/environment.docker.ts $TRAVIS_BUILD_DIR/src/environments/environment.ts
 
 script:
   - ng lint
