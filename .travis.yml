@@ -18,5 +18,6 @@ before_script:
   - npm install -g @angular/cli
 
 script:
+  - touch src/environments/environment.ts
   - ng lint
   - ng test --watch=false
