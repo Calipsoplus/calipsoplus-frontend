@@ -1,4 +1,4 @@
 export class CalipsoUmbrellaSession {
   constructor(public EAAHash: string,
-              public uid:string){ }
+              public uid: string) { }
 }

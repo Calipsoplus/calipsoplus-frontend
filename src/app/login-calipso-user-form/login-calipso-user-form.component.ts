@@ -1,11 +1,11 @@
-import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
-import { CalipsoplusService } from "../calipsoplus.service";
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { CalipsoplusService } from '../calipsoplus.service';
 
 @Component({
-  selector: "app-login-calipso-user-form",
-  templateUrl: "./login-calipso-user-form.component.html",
-  styleUrls: ["./login-calipso-user-form.component.css"]
+  selector: 'app-login-calipso-user-form',
+  templateUrl: './login-calipso-user-form.component.html',
+  styleUrls: ['./login-calipso-user-form.component.css']
 })
 export class LoginCalipsoUserFormComponent implements OnInit {
   username: string;
@@ -25,16 +25,16 @@ export class LoginCalipsoUserFormComponent implements OnInit {
     this.calipsoService.unauth().subscribe(
       resp => {
         this.calipsoService.auth(this.username, this.password).subscribe(
-          resp => {
-              this.router.navigate(["/experiment"]);
+          response => {
+              this.router.navigate(['/experiment']);
           },
           error => {
-            alert("Invalid credentials");
+            alert('Invalid credentials');
           }
         );
       },
       error => {
-        console.log("Error in logout");
+        console.log('Error in logout');
       }
     );
   }
@@ -49,7 +49,7 @@ export class LoginCalipsoUserFormComponent implements OnInit {
 
   ngOnInit() {
     if (this.calipsoService.isLogged()) {
-      this.router.navigate(["/experiment"]);
+      this.router.navigate(['/experiment']);
     }
   }
 }

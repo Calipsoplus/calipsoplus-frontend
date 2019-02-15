@@ -33,20 +33,7 @@ describe('PartnersCalipsoPageComponent', () => {
   });
 
   it('should have the title "Partners involved" in a h1 tag', async(() => {
-    // const fixture = TestBed.createComponent(PartnersCalipsoPageComponent);
-    // fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('h1').textContent).toContain('Partners involved');
-  }));
-
-  it('should have some of the names of the partners on the page in h2', async(() => {
-    const partnersElms = fixture.debugElement.queryAll(By.css('h2'));
-    const albaELM = partnersElms[0].nativeElement;
-    const desyELM = partnersElms[1].nativeElement;
-    const diamondELM = partnersElms[2].nativeElement;
-
-    expect(albaELM.textContent).toContain('ALBA');
-    expect(desyELM.textContent).toContain('DESY');
-    expect(diamondELM.textContent).toContain('Diamond Light Source');
   }));
 });
