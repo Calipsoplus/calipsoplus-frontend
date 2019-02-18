@@ -1,0 +1,41 @@
+<app-facility-nav></app-facility-nav>
+
+<div class="row col">
+<app-admin-nav></app-admin-nav>
+  <!-- resources list -->
+
+  <div class="col">
+    <h1 center>Available Container Images</h1>
+    <table class="table">
+      <thead>
+      <tr class="d-flex">
+        <th class="col" *ngFor="let image of images">Image</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="d-flex">
+        <td class="col" *ngFor="let image of images">
+          <br />
+          <b>Public Name: </b>{{image.public_name}}
+          <br />
+          <b>Docker Image: </b>{{image.image}}
+          <br />
+          <b>Protocol: </b>{{image.protocol}}
+          <br />
+          <b>CPU: </b>{{image.cpu}}
+          <br />
+          <b>Memory: </b>{{image.memory}}
+          <br />
+          <b>HDD: </b>{{image.hdd}}
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!images.length">
+      <hr>
+      <div class="text-center col">
+        <h2>No images found</h2>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,117 @@
+<app-facility-nav></app-facility-nav>
+
+<div class="row col">
+  <app-admin-nav></app-admin-nav>
+
+  <div class="col">
+    <div class="row">
+
+      <div class="col-md-6">
+        <h1>User: {{calipsoUser?.user.username}}</h1>
+        <h2>Details</h2>
+        <h3> Last login: {{calipsoUser?.user.last_login}}</h3>
+      </div>
+
+      <div class="col-md-6">
+        <h1>Quota</h1>
+
+        <table class="table">
+          <thead>
+          <tr class="d-flex">
+            <th class="col-sm-2"></th>
+            <th class="col-sm-2">Default</th>
+            <th class="col-sm-2">Used</th>
+            <th class="col-sm-2">Available</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="d-flex">
+            <td class="col-sm-2">Machines</td>
+            <td class="col-sm-2">{{quotas?.max_simultaneous}}</td>
+            <td class="col-sm-2">{{used_quota?.max_simultaneous}}</td>
+            <td class="col-sm-2">{{available_quota?.max_simultaneous}}</td>
+          </tr>
+          <tr class="d-flex">
+            <td class="col-sm-2">CPU</td>
+            <td class="col-sm-2">{{quotas?.cpu}}</td>
+            <td class="col-sm-2">{{used_quota?.cpu}}</td>
+            <td class="col-sm-2">{{available_quota?.cpu}}</td>
+          </tr>
+          <tr class="d-flex">
+            <td class="col-sm-2">RAM</td>
+            <td class="col-sm-2">{{quotas?.memory}}</td>
+            <td class="col-sm-2">{{used_quota?.memory}}</td>
+            <td class="col-sm-2">{{available_quota?.memory}}</td>
+          </tr>
+          <tr class="d-flex">
+            <td class="col-sm-2">HDD</td>
+            <td class="col-sm-2">{{quotas?.hdd}}</td>
+            <td class="col-sm-2">{{used_quota?.hdd}}</td>
+            <td class="col-sm-2">{{available_quota?.hdd}}</td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+      <div class="row">
+        <div class="col-md-6">
+        <h2>Containers</h2>
+        <tr class="d-flex">
+          <td class="col" *ngFor="let resource of resources">
+            <a>
+              <img height="100px" width="100px" style="cursor: pointer;padding:1em;" class="zoom" (click)="go_in(resource.experiment)"
+                src="{{get_icon(resource.public_name)}}"/>
+            </a>
+            <br />
+            <b>Proposal ID : </b>{{resource.experiment}}
+            <br />
+            <b>Machine name: </b>{{resource.machine_name}}
+            <br />
+            <b>Machine type: </b>{{resource.machine_ip}}
+            <br />
+            <b>Creation Date : </b>{{resource.creation_date}}
+            <br />
+            <b>Expiration Date : </b>{{resource.last_accessed_date}}
+            <br />
+            <b>Last Access : </b>{{resource.expiration_date}}
+          </td>
+        </tr>
+        <div *ngIf="!resources.length">
+          <hr>
+          <div class="text-center col">
+            <h2>No resources found</h2>
+          </div>
+        </div>
+        </div>
+        <div class="col-md-6">
+          <h2>Virtual Machines</h2>
+          <tr class="d-flex">
+            <td class="col" *ngFor="let resource of virtualMachines">
+              <a style="padding:1em;">
+                <img height="100px" width="100px" style="cursor: pointer;padding:1em;" class="zoom" src="{{get_icon(resource.public_name)}}"/>
+              </a>
+              <br />
+              <b>Proposal ID : </b>{{resource.experiment}}
+              <br />
+              <b>Machine name: </b>{{resource.machine_name}}
+              <br />
+              <b>Machine type: </b>{{resource.machine_ip}}
+              <br />
+              <b>Creation Date : </b>{{resource.creation_date}}
+              <br />
+              <b>Expiration Date : </b>{{resource.last_accessed_date}}
+              <br />
+              <b>Last Access : </b>{{resource.expiration_date}}
+            </td>
+          </tr>
+          <div *ngIf="!virtualMachines.length">
+            <hr>
+            <div class="text-center col">
+              <h2>No resources found</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

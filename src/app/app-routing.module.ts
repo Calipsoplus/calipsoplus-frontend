@@ -9,17 +9,26 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { SelectCalipsoFavoriteFormComponent } from './select-calipso-favorite-form/select-calipso-favorite-form.component';
 
 import { SelectCalipsoExperimentFormComponent } from './select-calipso-experiment-form/select-calipso-experiment-form.component';
+import {AdminDashboardComponent} from './admin/admin-dashboard/admin-dashboard.component';
+import {CalipsoContainerImagesComponent} from './admin/calipso-container-images/calipso-container-images.component';
+import {CalipsoVmImagesComponent} from './admin/calipso-vm-images/calipso-vm-images.component';
+import {CalipsoUserProfileComponent} from './admin/calipso-user-profile/calipso-user-profile.component';
+import {CalipsoUsersComponent} from './admin/calipso-users/calipso-users.component';
 
 const routes: Routes = [
   { path: '', component: PartnersCalipsoPageComponent },
+  { path: 'admin', component: AdminDashboardComponent },
+  { path: 'admin/container-images', component: CalipsoContainerImagesComponent },
+  { path: 'admin/virtual-machine-images', component: CalipsoVmImagesComponent },
+  { path: 'admin/user/:username', component: CalipsoUserProfileComponent },
+  { path: 'admin/users', component: CalipsoUsersComponent },
+  { path: 'autologin', component: LoginCalipsoUserFormComponent },
+  { path: 'experiment', component: SelectCalipsoExperimentFormComponent },
+  { path: 'favorite', component: SelectCalipsoFavoriteFormComponent },
   { path: 'login', component: LoginCalipsoUserFormComponent },
   { path: 'logout', component: LoginCalipsoUserFormComponent },
-  { path: 'experiment', component: SelectCalipsoExperimentFormComponent },
-  { path: 'resource', component: SelectCalipsoResourceFormComponent },
   { path: 'quota', component: SelectCalipsoQuotaFormComponent },
-  { path: 'favorite', component: SelectCalipsoFavoriteFormComponent },
-  { path: 'autologin', component: LoginCalipsoUserFormComponent },
-
+  { path: 'resource', component: SelectCalipsoResourceFormComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 

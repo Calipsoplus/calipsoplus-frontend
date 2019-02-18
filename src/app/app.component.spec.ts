@@ -14,6 +14,13 @@ import {ExperimentNavComponent} from './experiment-nav/experiment-nav.component'
 import {SelectCalipsoQuotaFormComponent} from './select-calipso-quota-form/select-calipso-quota-form.component';
 import {FormsModule} from '@angular/forms';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {AdminDashboardComponent} from './admin/admin-dashboard/admin-dashboard.component';
+import {AdminNavComponent} from './admin/admin-nav/admin-nav.component';
+import {CalipsoUsersComponent} from './admin/calipso-users/calipso-users.component';
+import {CalipsoContainerImagesComponent} from './admin/calipso-container-images/calipso-container-images.component';
+import {CalipsoVmImagesComponent} from './admin/calipso-vm-images/calipso-vm-images.component';
+import {CalipsoVmComponent} from './calipso-vm/calipso-vm.component';
+import {CalipsoUserProfileComponent} from './admin/calipso-user-profile/calipso-user-profile.component';
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -29,7 +36,14 @@ describe('AppComponent', () => {
         ExperimentNavComponent,
         SelectCalipsoQuotaFormComponent,
         PageNotFoundComponent,
-        SelectCalipsoFavoriteFormComponent
+        SelectCalipsoFavoriteFormComponent,
+        AdminDashboardComponent,
+        AdminNavComponent,
+        CalipsoUsersComponent,
+        CalipsoContainerImagesComponent,
+        CalipsoVmImagesComponent,
+        CalipsoVmComponent,
+        CalipsoUserProfileComponent
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     }).compileComponents();

@@ -20,7 +20,7 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
 
   quotas: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
   used_quota: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
-  image_selected: CalipsoImage = new CalipsoImage('name', 'image', 0, '0', '0', '1');
+  image_selected: CalipsoImage = new CalipsoImage('name', 'image', '', 0, '0', '0', '1');
 
   available_quota: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
 
@@ -48,11 +48,11 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
                   parseInt(this.quotas.hdd.slice(0, -1), 10) -
                   parseInt(this.used_quota.hdd.slice(0, -1), 10) +
                   'G';
-
             });
         },
         error => {
           this.router.navigate(['/']);
+          // console.log('Security error');
         }
       );
 
