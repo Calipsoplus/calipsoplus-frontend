@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SelectCalipsoFavoriteFormComponent } from './select-calipso-favorite-form.component';
+import { SelectCalipsoFavoriteFormComponent } from '../select-calipso-favorite-form/select-calipso-favorite-form.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
 describe('SelectCalipsoFavoriteFormComponent', () => {

@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "subject": "Dataset 1",
+    "type": "FAT32",
+    "location": "/srv/datasets1/d1A1.dst"
+  },
+  {
+    "id": 2,
+    "subject": "Dataset 2",
+    "type": "FAT64",
+    "location": "/srv/datasets1/d1A2.dst"
+  },
+  {
+    "id": 3,
+    "subject": "Dataset 3",
+    "type": "PNG",
+    "location": "/srv/datasets2/d2A1.dst"
+  }
+]

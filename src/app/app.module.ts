@@ -21,6 +21,15 @@ import { SelectCalipsoQuotaFormComponent } from './select-calipso-quota-form/sel
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SelectCalipsoFavoriteFormComponent } from './select-calipso-favorite-form/select-calipso-favorite-form.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {AdminDashboardComponent} from './admin/admin-dashboard/admin-dashboard.component';
+import {AdminNavComponent} from './admin/admin-nav/admin-nav.component';
+import {CalipsoUsersComponent} from './admin/calipso-users/calipso-users.component';
+import {CalipsoContainerImagesComponent} from './admin/calipso-container-images/calipso-container-images.component';
+import {CalipsoVmImagesComponent} from './admin/calipso-vm-images/calipso-vm-images.component';
+import { CalipsoVmComponent } from './calipso-vm/calipso-vm.component';
+import {CalipsoUserProfileComponent} from './admin/calipso-user-profile/calipso-user-profile.component';
+import {AuthGuard} from './auth-guard.service';
+
 
 
 
@@ -44,9 +53,16 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     ExperimentNavComponent,
     SelectCalipsoQuotaFormComponent,
     PageNotFoundComponent,
-    SelectCalipsoFavoriteFormComponent
+    SelectCalipsoFavoriteFormComponent,
+    AdminDashboardComponent,
+    AdminNavComponent,
+    CalipsoUsersComponent,
+    CalipsoContainerImagesComponent,
+    CalipsoVmImagesComponent,
+    CalipsoVmComponent,
+    CalipsoUserProfileComponent
   ],
-  providers: [CalipsoplusService],
+  providers: [CalipsoplusService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

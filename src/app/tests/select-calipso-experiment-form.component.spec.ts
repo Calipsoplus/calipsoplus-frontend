@@ -1,17 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SelectCalipsoQuotaFormComponent } from './select-calipso-quota-form.component';
+import { SelectCalipsoExperimentFormComponent } from '../select-calipso-experiment-form/select-calipso-experiment-form.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
-describe('SelectCalipsoQuotaFormComponent', () => {
-  let component: SelectCalipsoQuotaFormComponent;
-  let fixture: ComponentFixture<SelectCalipsoQuotaFormComponent>;
+describe('SelectCalipsoExperimentFormComponent', () => {
+  let component: SelectCalipsoExperimentFormComponent;
+  let fixture: ComponentFixture<SelectCalipsoExperimentFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SelectCalipsoQuotaFormComponent ],
+      declarations: [ SelectCalipsoExperimentFormComponent ],
       imports: [HttpClientTestingModule, RouterTestingModule],
       schemas: [NO_ERRORS_SCHEMA]
     })
@@ -19,7 +19,7 @@ describe('SelectCalipsoQuotaFormComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SelectCalipsoQuotaFormComponent);
+    fixture = TestBed.createComponent(SelectCalipsoExperimentFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

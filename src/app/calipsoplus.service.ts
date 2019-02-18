@@ -20,11 +20,12 @@ import { CalipsoUmbrellaSession } from './calipso-umbrella-session';
 import { CalipsoSettings } from './calipso-settings';
 import { LOGO_FACILITY } from './calipso-constants';
 import { CalipsoUserType } from './calipso-user-type';
+import {CalipsoPaginationUser} from './CalipsoPaginationUser';
+import {CalipsoUser} from './calipso-user';
 
 @Injectable({providedIn: 'root'})
 export class CalipsoplusService {
-  backendUrl_calipso =
-    environment.backendUrl_calipso + environment.backendUrl_basehref;
+  backendUrl_calipso = environment.backendUrl_calipso + environment.backendUrl_basehref;
   guacamoleUrl = environment.guacamoleUrl;
 
   authUrl = this.backendUrl_calipso + 'login/';
@@ -42,13 +43,12 @@ export class CalipsoplusService {
   imageQuotaUrl = this.backendUrl_calipso + 'image/$PUBLIC_NAME/';
   imageListUrl = this.backendUrl_calipso + 'images/';
   experimentsUrl = this.backendUrl_calipso + 'experiments/$USERNAME/';
-  runResourceUrl =
-    this.backendUrl_calipso + 'resource/run/$USERNAME/$EXPERIMENT/$BASE_IMAGE/';
-  removeResourceUrl =
-    this.backendUrl_calipso + 'resource/rm/$USERNAME/$RESOURCE/$PUBLIC_NAME/';
-  stopResourceUrl =
-    this.backendUrl_calipso + 'resource/stop/$USERNAME/$RESOURCE/$PUBLIC_NAME/';
+  runResourceUrl = this.backendUrl_calipso + 'resource/run/$USERNAME/$EXPERIMENT/$BASE_IMAGE/';
+  removeResourceUrl = this.backendUrl_calipso + 'resource/rm/$USERNAME/$RESOURCE/$PUBLIC_NAME/';
+  stopResourceUrl = this.backendUrl_calipso + 'resource/stop/$USERNAME/$RESOURCE/$PUBLIC_NAME/';
   listResourceUrl = this.backendUrl_calipso + 'resource/list/$USERNAME/';
+  usersUrl = this.backendUrl_calipso + 'users/';
+  userUrl = this.backendUrl_calipso + 'user/$USERNAME/';
 
   settingsCalipsoUrl = this.backendUrl_calipso + 'settings/';
 
@@ -162,6 +162,21 @@ export class CalipsoplusService {
   ): Observable<CalipsoQuota> {
     const url = this.usedQuotaUrl.replace('$USERNAME', username);
     return this.http.get<CalipsoQuota>(url, { withCredentials: true });
+  }
+
+  public getUsers( page: number, order: string, search_data: string): Observable<CalipsoPaginationUser> {
+    let url = this.usersUrl;
+    url = url.concat('?page=', page.toString(), '&ordering=', order.toString());
+    if (search_data !== '') { url = url.concat('&search=', search_data.toString()); }
+
+    return this.http.get<CalipsoPaginationUser>(url, {
+      withCredentials: true
+    });
+  }
+
+  public getCalipsoUser(username: string): Observable<CalipsoUser> {
+    const url = this.userUrl.replace('$USERNAME', username);
+    return this.http.get<CalipsoUser>(url, {withCredentials: true});
   }
 
   public auth(username: string, password: string) {
