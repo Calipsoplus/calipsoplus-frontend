@@ -18,10 +18,11 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
     private router: Router
   ) {}
 
-  quotas: CalipsoQuota= new CalipsoQuota(0, 0, "0", "0");
-  used_quota: CalipsoQuota= new CalipsoQuota(0, 0, "0", "0");
-  image_selected: CalipsoImage= new CalipsoImage(0, "0", "0");
-  available_quota: CalipsoQuota= new CalipsoQuota(0, 0, "0", "0");
+  quotas: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
+  used_quota: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
+  image_selected: CalipsoImage = new CalipsoImage('name', 'image', 0, '0', '0', '1');
+
+  available_quota: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
 
   ngOnInit() {
     if (this.calipsoService.isLogged()) {
@@ -37,16 +38,16 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
                 this.available_quota.cpu =
                   this.quotas.cpu - this.used_quota.cpu;
                 this.available_quota.memory =
-                  parseInt(this.quotas.memory.slice(0, -1)) -
-                  parseInt(this.used_quota.memory.slice(0, -1)) +
-                  "G";
+                  parseInt(this.quotas.memory.slice(0, -1), 10) -
+                  parseInt(this.used_quota.memory.slice(0, -1), 10) +
+                  'G';
                 this.available_quota.max_simultaneous =
                   this.quotas.max_simultaneous -
                   this.used_quota.max_simultaneous;
                 this.available_quota.hdd =
-                  parseInt(this.quotas.hdd.slice(0, -1)) -
-                  parseInt(this.used_quota.hdd.slice(0, -1)) +
-                  "G";
+                  parseInt(this.quotas.hdd.slice(0, -1), 10) -
+                  parseInt(this.used_quota.hdd.slice(0, -1), 10) +
+                  'G';
 
             });
         },
@@ -55,15 +56,17 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
         }
       );
 
-      // get default image user for all containers
+      // get default image, may be incorrect!
+      // must be refactorized
       this.calipsoService
-        .getImageByPublicName('base_image')
+        .getImageQuotaByPublicName('base_image')
         .subscribe(image_quota => {
-            this.image_selected = image_quota;
-          },
-          error => {
-            this.router.navigate(['/']);
-          });
+          this.image_selected = image_quota;
+        },
+        error => {
+          this.router.navigate(['/']);
+          console.log('base_image not found!');
+        });
     } else {
       this.router.navigate(['/']);
     }

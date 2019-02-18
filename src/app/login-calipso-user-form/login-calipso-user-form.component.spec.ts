@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginCalipsoUserFormComponent } from './login-calipso-user-form.component';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('LoginCalipsoUserFormComponent', () => {
   let component: LoginCalipsoUserFormComponent;
@@ -8,7 +12,10 @@ describe('LoginCalipsoUserFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LoginCalipsoUserFormComponent ]
+      declarations: [ LoginCalipsoUserFormComponent ],
+      imports: [FormsModule, HttpClientTestingModule, RouterTestingModule],
+      schemas: [ NO_ERRORS_SCHEMA ]
+
     })
     .compileComponents();
   }));

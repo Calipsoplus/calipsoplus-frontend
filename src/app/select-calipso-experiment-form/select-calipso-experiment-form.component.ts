@@ -8,11 +8,13 @@ import { CalipsoContainer } from '../calipso-container';
 import { CalipsoQuota } from '../calipso-quota';
 import { CalipsoPaginationExperiment } from '../calipso-pagination-experiment';
 
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/free-solid-svg-icons";
-import { far } from "@fortawesome/free-regular-svg-icons";
-import { CalipsoSession } from "../calipso-sessions";
-import { CalipsoResource } from "../calipso-resource";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
+
+import { CalipsoSession } from '../calipso-sessions';
+import { CalipsoImage } from '../calipso-image';
+import { CalipsoResource } from '../calipso-resource';
 
 library.add(fas, far);
 
@@ -23,7 +25,6 @@ export enum Status {
   full = 3, // forbidden
   error = 4 // error
 }
-
 
 @Component({
   selector: 'app-select-calipso-experiment-form',
@@ -38,6 +39,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   containers: CalipsoContainer[] = [];
   resources: CalipsoResource[] = [];
+  availableImages: CalipsoImage[] = [];
 
   pagination: CalipsoPaginationExperiment = new CalipsoPaginationExperiment(
     0,
@@ -48,8 +50,8 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   );
   actual_page = 1;
   total_pages: number[] = [];
-  sort_field: string = "";
-  header_column_sorted: string = "proposal_id";
+  sort_field = '';
+  header_column_sorted = 'proposal_id';
 
   experiments: CalipsoExperiment[];
   experiment_selected: CalipsoExperiment;
@@ -57,8 +59,8 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   sessions: CalipsoSession[];
 
-  used_quota: CalipsoQuota=new CalipsoQuota(0, 0, "0", "0");;
-  user_quota: CalipsoQuota=new CalipsoQuota(0, 0, "0", "0");;
+  used_quota: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
+  user_quota: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
 
   statusActiveSessions: { [key: string]: Status } = {};
 
@@ -71,12 +73,12 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   search_key = '';
 
-  safe_locked_button: boolean = false;
+  safe_locked_button = false;
 
-  message_resources = "";
-  message_proposals = "";
+  message_resources = '';
+  message_proposals = '';
 
-  last_sorted = "";
+  last_sorted = '';
 
   constructor(
     private calipsoService: CalipsoplusService,
@@ -93,20 +95,20 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   public ifDisabled(session: CalipsoSession) {
     if (
-      this.statusActiveSessions[session.session_number] == Status.running ||
+      this.statusActiveSessions[session.session_number] === Status.running ||
       this.safe_locked_button ||
       this.max_num_machines_exceeded ||
       this.max_num_cpu_exceeded ||
       this.max_memory_exceeded ||
       this.max_hdd_exceeded
-    )
-      return "disabled";
-    else return "";
+    ) {
+      return 'disabled';
+    } else { return ''; }
   }
 
   public star_on(serial: string, id: string) {
     this.calipsoService.favorite_experiment(id, 1).subscribe(data => {
-      var c = this.experiments.find(x => x.proposal_id == serial);
+      const c = this.experiments.find(x => x.proposal_id === serial);
       if (c != null) {
         c.favorite = true;
       } else { this.load_experiments(this.actual_page); }
@@ -115,7 +117,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   public star_off(serial: string, id: string) {
     this.calipsoService.favorite_experiment(id, 0).subscribe(data => {
-      var c = this.experiments.find(x => x.proposal_id == serial);
+      const c = this.experiments.find(x => x.proposal_id === serial);
       if (c != null) {
         c.favorite = false;
       } else { this.load_experiments(this.actual_page); }
@@ -129,7 +131,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   }
 
   public if_is_sorted(sort_field: string) {
-    if (sort_field == this.header_column_sorted) {
+    if (sort_field === this.header_column_sorted) {
       return 'column_selected';
     } else { return ''; }
   }
@@ -140,7 +142,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
     this.header_column_sorted = sort_field;
 
-    if (this.last_sorted != sort_field) {
+    if (this.last_sorted !== sort_field) {
       this.sort_field = sort_field;
     } else {
       this.sort_field = '-' + sort_field;
@@ -159,48 +161,48 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
         this.calipsoService.getCalipsoQuota(username).subscribe(user_quota => {
           this.user_quota = user_quota;
 
-          let max_available =
-            this.user_quota.max_simultaneous -
-            this.used_quota.max_simultaneous;
-          let cpu_available = this.user_quota.cpu - this.used_quota.cpu;
-          let hdd_available =
-            parseInt(this.user_quota.hdd.slice(0, -1)) -
-            parseInt(this.used_quota.hdd.slice(0, -1));
-          let memory_available =
-            parseInt(this.user_quota.memory.slice(0, -1)) -
-            parseInt(this.used_quota.memory.slice(0, -1));
+          const max_available =
+            this.user_quota.max_simultaneous - this.used_quota.max_simultaneous;
+          const cpu_available = this.user_quota.cpu - this.used_quota.cpu;
+          const hdd_available =
+            parseInt(this.user_quota.hdd.slice(0, -1), 10) -
+            parseInt(this.used_quota.hdd.slice(0, -1), 10);
+          const memory_available =
+            parseInt(this.user_quota.memory.slice(0, -1), 10) -
+            parseInt(this.used_quota.memory.slice(0, -1), 10);
 
           this.max_num_machines_exceeded = max_available <= 0;
 
           this.calipsoService
-            .getImageByPublicName(base_image)
+            .getImageQuotaByPublicName(base_image)
             .subscribe(image_quota => {
-              this.max_num_cpu_exceeded =
-                cpu_available - image_quota.cpu < 0;
+              this.max_num_cpu_exceeded = cpu_available - image_quota.cpu < 0;
               this.max_memory_exceeded =
-                memory_available -
-                  parseInt(image_quota.memory.slice(0, -1)) <
-                0;
+                memory_available - parseInt(image_quota.memory.slice(0, -1), 10) < 0;
               this.max_hdd_exceeded =
-                hdd_available - parseInt(image_quota.hdd.slice(0, -1)) < 0;
+                hdd_available - parseInt(image_quota.hdd.slice(0, -1), 10) < 0;
             });
         });
       });
   }
 
+  public load_all_images() {
+    this.calipsoService.getAllAvailableImages().subscribe(images => {
+      this.availableImages = images;
+    });
+  }
+
   public compare_if_disabled(bol: boolean) {
-    if (bol) { return 'disabled'; }
-    else { return ''; }
+    if (bol) { return 'disabled'; } else { return ''; }
   }
   public compare_if_active(bol: boolean) {
-    if (bol) { return 'active'; }
-    else { return ''; }
+    if (bol) { return 'active'; } else { return ''; }
   }
 
   public showPage(page: number) {
     const total_pages = this.pagination.count / this.pagination.page_size;
-    const medium_pages = false; //(total_pages/2-1<page)&&(page<total_pages/2+2);
-    const actual: boolean = this.actual_page == page;
+    const medium_pages = false; // (total_pages/2-1<page)&&(page<total_pages/2+2);
+    const actual: boolean = this.actual_page === page;
     const near: boolean =
       this.actual_page - 2 < page && page < this.actual_page + 2;
 
@@ -209,9 +211,9 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   public load_experiments(page: number) {
     this.experiment_selected = null;
-    let filter = "";
-    this.message_proposals = "Loading proposals...";
-    if (this.only_favorites) filter = "1";
+    let filter = '';
+    this.message_proposals = 'Loading proposals...';
+    if (this.only_favorites) { filter = '1'; }
 
     if (this.total_pages) {
       this.total_pages.splice(0, this.total_pages.length);
@@ -223,7 +225,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
       const username = this.calipsoService.getLoggedUserName();
       this.safe_locked_button = false;
 
-      //get all containers active from user
+      // get all containers active from user
       this.calipsoService.listContainersActive(username).subscribe(res => {
         this.containers = res;
 
@@ -258,18 +260,18 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
                 }
               }
 
-              if (this.experiments.length == 0) {
-                if (this.only_favorites)
-                  this.message_proposals = "No favorite proposals found";
-                else this.message_proposals = "No proposals found";
-              } else this.message_proposals = "";
+              if (this.experiments.length === 0) {
+                if (this.only_favorites) {
+                  this.message_proposals = 'No favorite proposals found';
+                } else { this.message_proposals = 'No proposals found'; }
+              } else { this.message_proposals = ''; }
 
               // search experiment in container
               this.experiments.forEach(element => {
                 this.sessions = element.sessions;
                 this.sessions.forEach(sselement => {
                   const c = this.containers.find(
-                    x => x.calipso_experiment == sselement.session_number
+                    x => x.calipso_experiment === sselement.session_number
                   );
 
                   if (c == null) {
@@ -306,7 +308,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
                       }
                     }
                     this.safe_locked_button = false;
-                    this.message_resources = "";
+                    this.message_resources = '';
                   }
                 });
               });
@@ -324,9 +326,9 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   }
 
   public getContainersActive() {
-    //get all containers active from user
-    let username = this.calipsoService.getLoggedUserName();
-    this.message_resources = "Loading resources...";
+    // get all containers active from user
+    const username = this.calipsoService.getLoggedUserName();
+    this.message_resources = 'Loading resources...';
 
     if (this.resources) {
       this.resources.splice(0, this.resources.length);
@@ -335,48 +337,51 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     this.calipsoService.listContainersActive(username).subscribe(
       res => {
         this.containers = res;
-        if (this.containers.length == 0) {
-          this.message_resources = "No resources found";
+        if (this.containers.length === 0) {
+          this.message_resources = 'No resources found';
         }
 
         this.containers.forEach(element => {
-          var c = this.containers.find(
+          const c = this.containers.find(
             x =>
-              x.calipso_experiment == element.calipso_experiment &&
-              x.calipso_experiment != username
+              x.calipso_experiment === element.calipso_experiment &&
+              x.calipso_experiment !== username
           );
           if (c != null) {
-            let date = new Date(c.creation_date);
-            let str_creation_date = this.calipsoService.formatDate(date);
-            let date_access = this.calipsoService.getDateAccess(
+            const date = new Date(c.creation_date);
+            const str_creation_date = this.calipsoService.formatDate(date);
+            const date_access = this.calipsoService.getDateAccess(
               c.container_name
             );
-            if (c.container_status == "created") {
-              var resource: CalipsoResource = new CalipsoResource(
+            if (c.container_status === 'created') {
+              const resource: CalipsoResource = new CalipsoResource(
                 c.calipso_experiment,
                 c.container_name,
                 c.public_name,
                 str_creation_date,
-                "-",
+                '-',
                 date_access,
-                c.container_info
+                c.container_info,
+                c.public_name
               );
-              this.message_resources = "";
+              this.message_resources = '';
               this.resources.push(resource);
             }
           }
-          if (this.resources.length == 0)
-            this.message_resources = "No resources found";
+          if (this.resources.length === 0) {
+            this.message_resources = 'No resources found';
+          }
         });
       },
       err => {
-        this.router.navigate(["/"]);
+        this.router.navigate(['/']);
       }
     );
   }
 
   ngOnInit() {
     if (this.calipsoService.isLogged()) {
+      this.load_all_images();
       this.load_experiments(this.actual_page);
       this.getContainersActive();
     } else {
@@ -384,19 +389,23 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     }
   }
 
-  public run(proposal_id, session_proposal_id, base_image: string) {
+  public get_icon(base_image: string) {
+    return this.calipsoService.get_icon(base_image);
+  }
+
+  public run(proposal_id, session_proposal_id, public_name: string) {
     this.statusActiveSessions[session_proposal_id] = Status.busy;
-    this.actualRunningContainer[session_proposal_id] = base_image;
-    this.message_resources = "Launching...";
+    this.actualRunningContainer[session_proposal_id] = public_name;
+    this.message_resources = 'Launching...';
 
     this.safe_locked_button = true;
 
-    //maybe check de base image for its
+    // maybe check de base image for its
     this.calipsoService
-      .runContainer(
+      .runResource(
         this.calipsoService.getLoggedUserName(),
-        proposal_id + "~" + session_proposal_id,
-        base_image
+        proposal_id + '~' + session_proposal_id,
+        public_name
       )
       .subscribe(
         data => {
@@ -409,72 +418,80 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
             this.statusActiveSessions[session_proposal_id] = Status.error;
           }
           this.safe_locked_button = false;
-          this.message_resources = "";
+          this.message_resources = '';
         },
         error => {
-          this.statusActiveSessions[session_proposal_id] = Status.error;
-          this.safe_locked_button = false;
-          console.log('Ooops!');
+          this.error_on_stop(session_proposal_id);
         }
       );
   }
 
-  public stop_and_remove_container(session_proposal_id: string) {
-    let username = this.calipsoService.getLoggedUserName();
+  private error_on_stop(session_proposal_id: string) {
+    this.statusActiveSessions[session_proposal_id] = Status.error;
+    this.safe_locked_button = false;
+    console.log('error on stop');
+  }
+
+  public stop_and_remove_resource(
+    session_proposal_id: string,
+    public_name: string
+  ) {
+    const username = this.calipsoService.getLoggedUserName();
     this.safe_locked_button = true;
 
     this.statusActiveSessions[session_proposal_id] = Status.busy;
-    this.message_resources = "Wait...";
+    this.message_resources = 'Wait...';
 
-    var c = this.containers.find(
-      x => x.calipso_experiment == session_proposal_id
+    const c = this.containers.find(
+      x => x.calipso_experiment === session_proposal_id
     );
 
     this.calipsoService
-      .stopContainer(username, c.container_name)
-      .subscribe(data => {
-        this.containers.find(x => x.id == data.id).container_status =
-          data.container_status;
+      .stopContainer(username, c.container_name, public_name)
+      .subscribe(
+        data => {
+          this.containers.find(x => x.id === data.id).container_status =
+            data.container_status;
 
-        this.calipsoService
-          .removeContainer(username, c.container_name)
-          .subscribe(cdata => {
-            this.containers.find(x => x.id == cdata.id).container_status =
-              cdata.container_status;
+          this.calipsoService
+            .removeContainer(username, c.container_name, public_name)
+            .subscribe(
+              cdata => {
+                this.containers.find(x => x.id === cdata.id).container_status =
+                  cdata.container_status;
 
-            this.containers.forEach((item, index) => {
-              if (item.container_name === cdata.container_name) {
-                this.containers.splice(index, 1);
-                this.calipsoService.removeDateAccess(cdata.container_name);
+                this.containers.forEach((item, index) => {
+                  if (item.container_name === cdata.container_name) {
+                    this.containers.splice(index, 1);
+                    this.calipsoService.removeDateAccess(cdata.container_name);
+                  }
+                });
+                if (this.containers.length === 0) {
+                  this.message_resources = 'No resources found.';
+                }
+
+                this.getContainersActive();
+                this.statusActiveSessions[cdata.calipso_experiment] =
+                  Status.idle;
+                this.safe_locked_button = false;
+
+                this.check_quota(c.public_name);
+              },
+              err => {
+                this.error_on_stop(session_proposal_id);
               }
-            });
-            if (this.containers.length == 0)
-              this.message_resources = "No resources found.";
-
-            this.getContainersActive();
-            this.statusActiveSessions[cdata.calipso_experiment] = Status.idle;
-            this.safe_locked_button = false;
-
-            this.check_quota(c.public_name);
-          },
-          err => {
-            this.statusActiveSessions[session_proposal_id] = Status.error;
-            this.safe_locked_button = false;
-            console.log("error on stop");
-          });
-      },
-      err => {
-        this.statusActiveSessions[session_proposal_id] = Status.error;
-        this.safe_locked_button = false;
-        console.log("error on stop");
-      });
+            );
+        },
+        err => {
+          this.error_on_stop(session_proposal_id);
+        }
+      );
   }
 
   public go_in(session: string) {
-    var c = this.containers.find(x => x.calipso_experiment == session);
-    if (c == null) console.log("error win up");
-    else if (c.host_port == "") {
-      this.calipsoService.go_into_container(
+    const c = this.containers.find(x => x.calipso_experiment === session);
+    if (c == null) { console.log('error win up'); } else if (c.host_port === '') {
+      this.calipsoService.go_into_resource(
         c.container_name,
         c.guacamole_username,
         c.guacamole_password
@@ -484,39 +501,14 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     }
   }
 
-  public getContainerType(proposal_id: string) {
-    var c = this.containers.find(x => x.calipso_experiment == proposal_id);
-    let type = "Default";
-
-    if (c != null) {
-      switch (c.public_name) {
-        case 'base_image': {
-          type = 'Desktop';
-          break;
-        }
-        case 'base_jupyter': {
-          type = 'Jupyter';
-          break;
-        }
-        case 'base_image_ubuntu': {
-          type = 'Ubuntu';
-          break;
-        }
-      }
-    }
-    return type;
-  }
-
   public selectExperiment(proposal_id: string) {
     this.experiments.forEach(element => {
-      if (element.proposal_id == proposal_id) {
+      if (element.proposal_id === proposal_id) {
         this.experiment_selected = element;
 
-          if(element.sessions.length==0){
-            this.message_proposals = "This proposal has not sessions.";
-          }else this.message_proposals = "";
-
-
+        if (element.sessions.length === 0) {
+          this.message_proposals = 'This proposal has not sessions.';
+        } else { this.message_proposals = ''; }
       }
     });
   }
@@ -528,46 +520,45 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   public gotoExperiment(proposal_id: string) {
     this.search_key = proposal_id;
-    let username = this.calipsoService.getLoggedUserName();
+    const username = this.calipsoService.getLoggedUserName();
 
-    if (proposal_id == username) {
-      this.router.navigate(["/ownresources"]);
+    if (proposal_id === username) {
+      this.router.navigate(['/ownresources']);
       return;
     }
 
     this.experiment_selected = null;
-    if (this.experiments) this.experiments.splice(0, this.experiments.length);
+    if (this.experiments) { this.experiments.splice(0, this.experiments.length); }
 
     // get all experiments for a username
     this.calipsoService
-      .getCalipsoExperiments(username, 1, this.sort_field, this.search_key, "")
+      .getCalipsoExperiments(username, 1, this.sort_field, this.search_key, '')
       .subscribe(
         experiment => {
           this.experiments = experiment.results;
           // search experiment in container
           this.experiments.forEach(element => {
-            if (element.proposal_id == proposal_id) {
+            if (element.proposal_id === proposal_id) {
               this.experiment_selected = element;
               this.sessions = element.sessions;
               this.sessions.forEach(sselement => {
-                var c = this.containers.find(
-                  x => x.calipso_experiment == sselement.session_number
-                );
+                const c = this.containers.find(
+                  x => x.calipso_experiment === sselement.session_number);
 
                 if (c == null) {
                   this.statusActiveSessions[sselement.session_number] =
                     Status.idle;
                 } else {
                   this.check_quota(c.public_name);
-                  this.actualRunningContainer[sselement.session_number] = "";
+                  this.actualRunningContainer[sselement.session_number] = '';
 
                   switch (c.container_status) {
-                    case "busy": {
+                    case 'busy': {
                       this.statusActiveSessions[sselement.session_number] =
                         Status.busy;
                       break;
                     }
-                    case "created": {
+                    case 'created': {
                       this.statusActiveSessions[sselement.session_number] =
                         Status.running;
                       this.actualRunningContainer[sselement.session_number] =
@@ -575,8 +566,8 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
                       break;
                     }
-                    case "stopped":
-                    case "removed": {
+                    case 'stopped':
+                    case 'removed': {
                       this.statusActiveSessions[sselement.session_number] =
                         Status.idle;
                       break;
@@ -592,11 +583,11 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
               });
             }
           });
-          this.search_key = "";
+          this.search_key = '';
         },
         err => {
-          this.search_key = "";
-          console.log("experiment not found");
+          this.search_key = '';
+          console.log('experiment not found');
         }
       );
   }
