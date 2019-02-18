@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PartnersCalipsoPageComponent } from './partners-calipso-page.component';
+import { PartnersCalipsoPageComponent } from '../partners-calipso-page/partners-calipso-page.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {AppRoutingModule} from '../app-routing.module';

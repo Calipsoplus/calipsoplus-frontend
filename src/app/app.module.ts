@@ -28,6 +28,7 @@ import {CalipsoContainerImagesComponent} from './admin/calipso-container-images/
 import {CalipsoVmImagesComponent} from './admin/calipso-vm-images/calipso-vm-images.component';
 import { CalipsoVmComponent } from './calipso-vm/calipso-vm.component';
 import {CalipsoUserProfileComponent} from './admin/calipso-user-profile/calipso-user-profile.component';
+import {AuthGuard} from './auth-guard.service';
 
 
 
@@ -61,7 +62,7 @@ import {CalipsoUserProfileComponent} from './admin/calipso-user-profile/calipso-
     CalipsoVmComponent,
     CalipsoUserProfileComponent
   ],
-  providers: [CalipsoplusService],
+  providers: [CalipsoplusService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

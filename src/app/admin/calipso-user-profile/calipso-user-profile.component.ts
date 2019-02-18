@@ -7,7 +7,6 @@ import { Location } from '@angular/common';
 import {CalipsoContainer} from '../../calipso-container';
 import {CalipsoResource} from '../../calipso-resource';
 import {CalipsoQuota} from '../../calipso-quota';
-import {CalipsoImage} from '../../calipso-image';
 
 @Component({
   selector: 'app-calipso-user-profile',

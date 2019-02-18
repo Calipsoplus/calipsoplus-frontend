@@ -14,14 +14,15 @@ import {CalipsoContainerImagesComponent} from './admin/calipso-container-images/
 import {CalipsoVmImagesComponent} from './admin/calipso-vm-images/calipso-vm-images.component';
 import {CalipsoUserProfileComponent} from './admin/calipso-user-profile/calipso-user-profile.component';
 import {CalipsoUsersComponent} from './admin/calipso-users/calipso-users.component';
+import {AuthGuard} from './auth-guard.service';
 
 const routes: Routes = [
   { path: '', component: PartnersCalipsoPageComponent },
-  { path: 'admin', component: AdminDashboardComponent },
-  { path: 'admin/container-images', component: CalipsoContainerImagesComponent },
-  { path: 'admin/virtual-machine-images', component: CalipsoVmImagesComponent },
-  { path: 'admin/user/:username', component: CalipsoUserProfileComponent },
-  { path: 'admin/users', component: CalipsoUsersComponent },
+  { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuard]},
+  { path: 'admin/container-images', component: CalipsoContainerImagesComponent, canActivate: [AuthGuard] },
+  { path: 'admin/virtual-machine-images', component: CalipsoVmImagesComponent, canActivate: [AuthGuard] },
+  { path: 'admin/user/:username', component: CalipsoUserProfileComponent, canActivate: [AuthGuard] },
+  { path: 'admin/users', component: CalipsoUsersComponent, canActivate: [AuthGuard] },
   { path: 'autologin', component: LoginCalipsoUserFormComponent },
   { path: 'experiment', component: SelectCalipsoExperimentFormComponent },
   { path: 'favorite', component: SelectCalipsoFavoriteFormComponent },

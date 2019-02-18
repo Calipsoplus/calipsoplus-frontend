@@ -1,23 +1,23 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExperimentNavComponent } from './experiment-nav.component';
+import { FacilityNavComponent } from '../facility-nav/facility-nav.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 
-describe('ExperimentNavComponent', () => {
-  let component: ExperimentNavComponent;
-  let fixture: ComponentFixture<ExperimentNavComponent>;
+describe('FacilityNavComponent', () => {
+  let component: FacilityNavComponent;
+  let fixture: ComponentFixture<FacilityNavComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExperimentNavComponent ],
-      imports : [HttpClientTestingModule, RouterTestingModule]
+      declarations: [ FacilityNavComponent ],
+      imports: [HttpClientTestingModule, RouterTestingModule]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExperimentNavComponent);
+    fixture = TestBed.createComponent(FacilityNavComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,17 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CalipsoUsersComponent } from './calipso-users.component';
+import { CalipsoUserProfileComponent } from '../admin/calipso-user-profile/calipso-user-profile.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 
-describe('CalipsoUsersComponent', () => {
-  let component: CalipsoUsersComponent;
-  let fixture: ComponentFixture<CalipsoUsersComponent>;
+describe('CalipsoUserProfileComponent', () => {
+  let component: CalipsoUserProfileComponent;
+  let fixture: ComponentFixture<CalipsoUserProfileComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CalipsoUsersComponent ],
+      declarations: [ CalipsoUserProfileComponent ],
       imports: [HttpClientTestingModule, RouterTestingModule],
       schemas: [NO_ERRORS_SCHEMA]
     })
@@ -19,7 +19,7 @@ describe('CalipsoUsersComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CalipsoUsersComponent);
+    fixture = TestBed.createComponent(CalipsoUserProfileComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
