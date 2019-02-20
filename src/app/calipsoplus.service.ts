@@ -155,7 +155,7 @@ export class CalipsoplusService {
       'Content-Type': 'application/json',
       'X-CSRFToken': server_token
     });
-    const url = this.imageUrl.replace('$PUBLIC_NAME', newImage.public_name.trim())
+    const url = this.imageUrl.replace('$PUBLIC_NAME', newImage.public_name.trim());
     return this.http.post(url,
       {
         'public_name':  newImage.public_name.trim(),
