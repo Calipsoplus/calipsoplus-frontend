@@ -40,7 +40,7 @@ export class CalipsoplusService {
   favoriteUrl = this.backendUrl_calipso + 'favorite/$ID/';
   quotaUrl = this.backendUrl_calipso + 'quota/$USERNAME/';
   usedQuotaUrl = this.backendUrl_calipso + 'used_quota/$USERNAME/';
-  imageQuotaUrl = this.backendUrl_calipso + 'image/$PUBLIC_NAME/';
+  imageUrl = this.backendUrl_calipso + 'image/$PUBLIC_NAME/';
   imageListUrl = this.backendUrl_calipso + 'images/';
   experimentsUrl = this.backendUrl_calipso + 'experiments/$USERNAME/';
   runResourceUrl = this.backendUrl_calipso + 'resource/run/$USERNAME/$EXPERIMENT/$BASE_IMAGE/';
@@ -72,7 +72,6 @@ export class CalipsoplusService {
 
     if (server_token === undefined) {
       server_token = 'none';
-      // console.log("token_not_found!");
     }
 
     const headers = new HttpHeaders({
@@ -141,10 +140,40 @@ export class CalipsoplusService {
     return this.http.get<CalipsoFacility[]>('../assets/data/facilities.json');
   }
   public getImageQuotaByPublicName(
-    public_name: string
-  ): Observable<CalipsoImage> {
-    const url = this.imageQuotaUrl.replace('$PUBLIC_NAME', public_name);
+    public_name: string): Observable<CalipsoImage> {
+    const url = this.imageUrl.replace('$PUBLIC_NAME', public_name);
     return this.http.get<CalipsoImage>(url, { withCredentials: true });
+  }
+
+  public addNewImage(newImage: CalipsoImage) {
+    let server_token = this.getCookie('csrftoken');
+    if (server_token === undefined) {
+      server_token = 'none';
+      // console.log("token_not_found!");
+    }
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'X-CSRFToken': server_token
+    });
+    const url = this.imageUrl.replace('$PUBLIC_NAME', newImage.public_name.trim())
+    return this.http.post(url,
+      {
+        'public_name':  newImage.public_name.trim(),
+        'image':  newImage.image.trim(),
+        'protocol': newImage.protocol.trim(),
+        'cpu': newImage.cpu,
+        'memory': newImage.memory.trim(),
+        'hdd': newImage.hdd.trim(),
+        'resource_type': newImage.resource_type
+      }, { headers: headers, withCredentials: true})
+      .subscribe(
+        resp  => {
+          console.log('Response', resp);
+        },
+        error  => {
+          console.log('Error', error);
+        }
+      );
   }
 
   public getAllAvailableImages(): Observable<CalipsoImage[]> {

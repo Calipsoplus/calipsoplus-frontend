@@ -1,0 +1,61 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.css" />
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">New Container Image</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {{model | json }}
+  <div class="modal-body">
+    <form #imageForm="ngForm">
+
+      <div class="form-group">
+        <label for="public_name">Public Name</label>
+        <input type="text" class="form-control" id="public_name" required [(ngModel)]="model.public_name" name="public_name">
+      </div>
+
+      <div class="form-group">
+        <label for="image">Image</label>
+        <input type="text" class="form-control" id="image" required [(ngModel)]="model.image" name="image">
+      </div>
+
+      <div class="form-group">
+        <label for="protocol">Protocol</label>
+        <input type="text" class="form-control" id="protocol" required [(ngModel)]="model.protocol" name="protocol">
+      </div>
+
+      <div class="form-group">
+        <label for="cpu">CPUs</label>
+        <input type="text" class="form-control" id="cpu" required [(ngModel)]="model.cpu" name="cpu">
+      </div>
+
+      <div class="form-group">
+        <label for="memory">Memory</label>
+        <input type="text" class="form-control" id="memory" required [(ngModel)]="model.memory" name="memory">
+      </div>
+
+      <div class="form-group">
+        <label for="hdd">HDD</label>
+        <input type="text" class="form-control" id="hdd" required [(ngModel)]="model.hdd" name="hdd">
+      </div>
+
+      <div class="form-group">
+      <label for="resource">Resource Type</label>
+      <select class="form-control" id="resource" required [(ngModel)]="model.resource_type" name="resource">>
+        <option *ngFor="let resource of resources" [value]="resource">{{resource}}</option>
+      </select>
+      </div>
+
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click'); onSubmit()">Save</button>
+  </div>
+</ng-template>
+
+<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Add Image</button>
+
+<hr>
