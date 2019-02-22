@@ -10,7 +10,6 @@ import {CalipsoplusService} from '../../calipsoplus.service';
   styleUrls: ['./new-container-image-form.component.css']
 })
 export class NewContainerImageFormComponent implements OnInit {
-  closeResult: string;
   submitted = false;
 
   model = new CalipsoImage('public_name', 'image', 'RDP', 1, '10G', '50G',
