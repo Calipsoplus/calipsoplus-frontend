@@ -2,7 +2,7 @@
   "extends": [
     "config:base"
   ],
-  "schedule": ["after 10pm and before 5am on every saturday"],
+  "schedule": ["after 10pm and before 5am every saturday"],
   "rebaseStalePrs": true,
   "automerge": true,
   "major": {
