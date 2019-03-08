@@ -4,6 +4,7 @@ import { CalipsoContainerImagesComponent } from '../admin/calipso-container-imag
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {By} from '@angular/platform-browser';
 
 describe('CalipsoContainerImagesComponent', () => {
   let component: CalipsoContainerImagesComponent;
@@ -24,7 +25,14 @@ describe('CalipsoContainerImagesComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  // it('should create', () => {
+  //   expect(component).toBeTruthy();
+  // });
+
+  // it('should find button', () => {
+  //   const fixture: ComponentFixture<CalipsoContainerImagesComponent> = TestBed.createComponent(RegisterComponent);
+  //   fixture.detectChanges();
+  //   const containerForm = fixture.componentInstance.containerForm;
+  //   expect(result.nativeElement.textContent).toContain('Add Image');
+  // });
 });

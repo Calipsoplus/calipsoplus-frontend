@@ -20,7 +20,7 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
 
   quotas: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
   used_quota: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
-  image_selected: CalipsoImage = new CalipsoImage('name', 'image', '', 0, '0', '0', '1');
+  image_selected: CalipsoImage = new CalipsoImage('name', 'image', '', '',  0, '0', '0', '1');
 
   available_quota: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
 
@@ -29,11 +29,11 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
       const username = this.calipsoService.getLoggedUserName();
       this.calipsoService.getCalipsoQuota(username).subscribe(
         quotas => {
-          this.quotas = quotas;
+          this.setQuota(quotas);
           this.calipsoService
             .getCalipsoAvailableImageQuota(username)
             .subscribe(used => {
-              this.used_quota = used;
+              this.setUsedQuota(used);
 
                 this.available_quota.cpu =
                   this.quotas.cpu - this.used_quota.cpu;
@@ -70,5 +70,13 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
     } else {
       this.router.navigate(['/']);
     }
+  }
+
+  setUsedQuota(quota: CalipsoQuota) {
+    this.used_quota = quota;
+  }
+
+  setQuota(quota: CalipsoQuota) {
+    this.quotas = quota;
   }
 }

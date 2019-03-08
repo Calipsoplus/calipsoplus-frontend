@@ -40,7 +40,7 @@ export class CalipsoplusService {
   favoriteUrl = this.backendUrl_calipso + 'favorite/$ID/';
   quotaUrl = this.backendUrl_calipso + 'quota/$USERNAME/';
   usedQuotaUrl = this.backendUrl_calipso + 'used_quota/$USERNAME/';
-  imageQuotaUrl = this.backendUrl_calipso + 'image/$PUBLIC_NAME/';
+  imageUrl = this.backendUrl_calipso + 'image/$PUBLIC_NAME/';
   imageListUrl = this.backendUrl_calipso + 'images/';
   experimentsUrl = this.backendUrl_calipso + 'experiments/$USERNAME/';
   runResourceUrl = this.backendUrl_calipso + 'resource/run/$USERNAME/$EXPERIMENT/$BASE_IMAGE/';
@@ -58,9 +58,6 @@ export class CalipsoplusService {
 
   defaultCalipsoSettings: CalipsoSettings = new CalipsoSettings(false);
 
-  FACILITIES: CalipsoFacility[] = [];
-  EXPERIMENTS: CalipsoExperiment[] = [];
-
   constructor(private http: HttpClient, private router: Router) {}
 
   public favorite_experiment(id: string, value: number) {
@@ -72,7 +69,6 @@ export class CalipsoplusService {
 
     if (server_token === undefined) {
       server_token = 'none';
-      // console.log("token_not_found!");
     }
 
     const headers = new HttpHeaders({
@@ -141,14 +137,80 @@ export class CalipsoplusService {
     return this.http.get<CalipsoFacility[]>('../assets/data/facilities.json');
   }
   public getImageQuotaByPublicName(
-    public_name: string
-  ): Observable<CalipsoImage> {
-    const url = this.imageQuotaUrl.replace('$PUBLIC_NAME', public_name);
+    public_name: string): Observable<CalipsoImage> {
+    const url = this.imageUrl.replace('$PUBLIC_NAME', public_name);
     return this.http.get<CalipsoImage>(url, { withCredentials: true });
   }
 
+  public addNewImage(newImage: CalipsoImage) {
+    let server_token = this.getCookie('csrftoken');
+    if (server_token === undefined) {
+      server_token = 'none';
+      // console.log("token_not_found!");
+    }
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'X-CSRFToken': server_token
+    });
+    const url = this.imageUrl.replace('$PUBLIC_NAME', newImage.public_name.trim());
+    return this.http.post(url,
+      {
+        'public_name':  newImage.public_name.trim(),
+        'image':  newImage.image.trim(),
+        'protocol': newImage.protocol.trim(),
+        'cpu': newImage.cpu,
+        'memory': newImage.memory.trim(),
+        'hdd': newImage.hdd.trim(),
+        'resource_type': 'docker'
+      }, { headers: headers, withCredentials: true})
+      .subscribe(
+        resp  => {
+          console.log('Response', resp);
+        },
+        error  => {
+          console.log('Error', error);
+        }
+      );
+  }
+
+  public addNewVmImage(newImage: CalipsoImage) {
+    let server_token = this.getCookie('csrftoken');
+    if (server_token === undefined) {
+      server_token = 'none';
+      console.log('token_not_found!');
+    }
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'X-CSRFToken': server_token
+    });
+    const url = this.imageUrl.replace('$PUBLIC_NAME', newImage.public_name.trim());
+    return this.http.post(url,
+      {
+        'public_name':  newImage.public_name.trim(),
+        'image':  newImage.image.trim(),
+        'flavor': newImage.flavor,
+        'protocol': '',
+        'cpu': '',
+        'memory': '',
+        'hdd': '',
+        'resource_type': 'virtual machine'
+      }, { headers: headers, withCredentials: true})
+      .subscribe(
+        resp  => {
+          console.log('Response', resp);
+        },
+        error  => {
+          console.log('Error', error);
+        }
+      );
+  }
+
   public getAllAvailableImages(): Observable<CalipsoImage[]> {
-    return this.http.get<CalipsoImage[]>(this.imageListUrl, { withCredentials: true });
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'X-CSRFToken': this.getCookie('csrftoken')
+    });
+    return this.http.get<CalipsoImage[]>(this.imageListUrl, { headers: headers, withCredentials: true });
   }
 
 
@@ -157,9 +219,8 @@ export class CalipsoplusService {
     return this.http.get<CalipsoQuota>(url, { withCredentials: true });
   }
 
-  public getCalipsoAvailableImageQuota(
-    username: string
-  ): Observable<CalipsoQuota> {
+  public getCalipsoAvailableImageQuota(username: string): Observable<CalipsoQuota> {
+    // TODO: Check this is used or available url
     const url = this.usedQuotaUrl.replace('$USERNAME', username);
     return this.http.get<CalipsoQuota>(url, { withCredentials: true });
   }
@@ -341,11 +402,7 @@ export class CalipsoplusService {
     return localStorage.getItem(resource_name);
   }
 
-  public go_into_resource(
-    resource_name: string,
-    username: string,
-    password: string
-  ) {
+  public go_into_resource(resource_name: string, username: string, password: string) {
     this.updateDateAccess(resource_name);
     const paramenters = btoa('un=' + username + '&up=' + password);
     window.open(
@@ -367,7 +424,6 @@ export class CalipsoplusService {
 
   public authWithEAAHash(username: string, eaahash: string) {
     const body = `{"EAAHash":"${eaahash}", "uid":"${username}"}`;
-
     let server_token = this.getCookie('csrftoken');
 
     if (server_token === undefined) {
@@ -398,6 +454,10 @@ export class CalipsoplusService {
   public goExternalLoginUmbrella() {
     // console.log("Go to umbrella login page");
     window.location.href = this.umbrellaLoginUrl;
+  }
+
+  public goOpenIdConnect() {
+    window.location.href = environment.openIdConnectUrl;
   }
 
   public goExternalLoginWOU() {
@@ -445,5 +505,4 @@ export class CalipsoplusService {
   public get_icon(base_image: string) {
     return('assets/images/computer.jpg');
   }
-
 }

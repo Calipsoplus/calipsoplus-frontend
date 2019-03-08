@@ -1,36 +1,34 @@
 <app-facility-nav></app-facility-nav>
 
 <div class="row col">
-<app-admin-nav></app-admin-nav>
+  <app-admin-nav></app-admin-nav>
   <!-- resources list -->
 
-  <div class="col">
-    <h1 center>Available Container Images</h1>
-    <table class="table">
-      <thead>
-      <tr class="d-flex">
-        <th class="col" *ngFor="let image of images">Image</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr class="d-flex">
-        <td class="col" *ngFor="let image of images">
-          <br />
-          <b>Public Name: </b>{{image.public_name}}
-          <br />
-          <b>Docker Image: </b>{{image.image}}
-          <br />
-          <b>Protocol: </b>{{image.protocol}}
-          <br />
-          <b>CPU: </b>{{image.cpu}}
-          <br />
-          <b>Memory: </b>{{image.memory}}
-          <br />
-          <b>HDD: </b>{{image.hdd}}
-        </td>
-      </tr>
-      </tbody>
-    </table>
+  <div class="col-md-9">
+    <div class="col-4">
+      <h1 center>Available Container Images</h1>
+    </div>
+    <div class="col-8">
+      <app-new-container-image-form></app-new-container-image-form>
+    </div>
+    <br>
+    <br>
+
+    <div class="col-md-3" *ngFor="let image of images">
+      <h3>{{image.public_name}}</h3>
+      <p>
+        Image: {{image.image}} <br/>
+        Protocol: {{image.protocol}} <br/>
+        CPU: {{image.cpu}} <br/>
+        RAM: {{image.memory}} <br/>
+        HDD: {{image.hdd}} <br/>
+      </p>
+      <button type="button" class="btn btn-primary">Modify</button>
+      <button type="button" class="btn btn-danger">Delete</button>
+      <br/>
+      <br/>
+    </div>
+
     <div *ngIf="!images.length">
       <hr>
       <div class="text-center col">

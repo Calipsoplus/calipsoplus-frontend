@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { HttpClientModule } from '@angular/common/http';
 
@@ -29,7 +29,8 @@ import {CalipsoVmImagesComponent} from './admin/calipso-vm-images/calipso-vm-ima
 import { CalipsoVmComponent } from './calipso-vm/calipso-vm.component';
 import {CalipsoUserProfileComponent} from './admin/calipso-user-profile/calipso-user-profile.component';
 import {AuthGuard} from './auth-guard.service';
-
+import { NewContainerImageFormComponent } from './admin/new-container-image-form/new-container-image-form.component';
+import {NewVmImageFormComponent} from './admin/new-vm-image-form/new-vm-image-form.component';
 
 
 
@@ -37,6 +38,7 @@ import {AuthGuard} from './auth-guard.service';
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
     FontAwesomeModule,
@@ -60,7 +62,9 @@ import {AuthGuard} from './auth-guard.service';
     CalipsoContainerImagesComponent,
     CalipsoVmImagesComponent,
     CalipsoVmComponent,
-    CalipsoUserProfileComponent
+    CalipsoUserProfileComponent,
+    NewContainerImageFormComponent,
+    NewVmImageFormComponent,
   ],
   providers: [CalipsoplusService, AuthGuard],
   bootstrap: [AppComponent]

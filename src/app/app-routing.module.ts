@@ -16,7 +16,7 @@ import {CalipsoUserProfileComponent} from './admin/calipso-user-profile/calipso-
 import {CalipsoUsersComponent} from './admin/calipso-users/calipso-users.component';
 import {AuthGuard} from './auth-guard.service';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', component: PartnersCalipsoPageComponent },
   { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuard]},
   { path: 'admin/container-images', component: CalipsoContainerImagesComponent, canActivate: [AuthGuard] },
@@ -26,11 +26,12 @@ const routes: Routes = [
   { path: 'autologin', component: LoginCalipsoUserFormComponent },
   { path: 'experiment', component: SelectCalipsoExperimentFormComponent },
   { path: 'favorite', component: SelectCalipsoFavoriteFormComponent },
-  { path: 'login', component: LoginCalipsoUserFormComponent },
+  { path: 'login', component: LoginCalipsoUserFormComponent, pathMatch: 'full' },
   { path: 'logout', component: LoginCalipsoUserFormComponent },
   { path: 'quota', component: SelectCalipsoQuotaFormComponent },
   { path: 'resource', component: SelectCalipsoResourceFormComponent },
-  { path: '**', component: PageNotFoundComponent }
+  { path: '404', component: PageNotFoundComponent },
+  { path: '**', redirectTo: '404', pathMatch: 'full' }
 ];
 
 @NgModule({
