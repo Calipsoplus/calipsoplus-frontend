@@ -47,6 +47,10 @@ export class LoginCalipsoUserFormComponent implements OnInit {
     this.calipsoService.goExternalLoginUmbrella();
   }
 
+  public login_openid() {
+    this.calipsoService.goOpenIdConnect();
+  }
+
   ngOnInit() {
     if (this.calipsoService.isLogged()) {
       this.router.navigate(['/experiment']);

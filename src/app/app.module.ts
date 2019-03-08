@@ -30,7 +30,7 @@ import { CalipsoVmComponent } from './calipso-vm/calipso-vm.component';
 import {CalipsoUserProfileComponent} from './admin/calipso-user-profile/calipso-user-profile.component';
 import {AuthGuard} from './auth-guard.service';
 import { NewContainerImageFormComponent } from './admin/new-container-image-form/new-container-image-form.component';
-
+import {NewVmImageFormComponent} from './admin/new-vm-image-form/new-vm-image-form.component';
 
 
 
@@ -38,6 +38,7 @@ import { NewContainerImageFormComponent } from './admin/new-container-image-form
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
     FontAwesomeModule,
@@ -62,7 +63,8 @@ import { NewContainerImageFormComponent } from './admin/new-container-image-form
     CalipsoVmImagesComponent,
     CalipsoVmComponent,
     CalipsoUserProfileComponent,
-    NewContainerImageFormComponent
+    NewContainerImageFormComponent,
+    NewVmImageFormComponent,
   ],
   providers: [CalipsoplusService, AuthGuard],
   bootstrap: [AppComponent]
