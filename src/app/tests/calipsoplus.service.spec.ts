@@ -26,7 +26,7 @@ describe('CalipsoplusService', () => {
 
   let testUser: CalipsoUser;
   let testQuota: CalipsoQuota;
-  const backendUrl_calipso = environment.backendUrl_calipso + environment.backendUrl_basehref
+  const backendUrl_calipso = environment.backendUrl_calipso + environment.backendUrl_basehref;
   beforeEach(() => {
 
     TestBed.configureTestingModule({

@@ -7,9 +7,6 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {CalipsoImage} from '../../calipso-image';
 import {By} from '@angular/platform-browser';
-import {Router} from '@angular/router';
-
-
 
 
 describe('NewContainerImageFormComponent', () => {
@@ -26,10 +23,10 @@ describe('NewContainerImageFormComponent', () => {
   }));
 
   beforeEach(() => {
-    // fixture = TestBed.createComponent(NewContainerImageFormComponent);
-    // // component = fixture.componentInstance;
-    // fixture.detectChanges();
-    // component.ngOnInit();
+    fixture = TestBed.createComponent(NewContainerImageFormComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    component.ngOnInit();
   });
 
   // it('should create', () => {

@@ -5,16 +5,12 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {Router} from '@angular/router';
 
-import {routes} from '../app-routing.module';
-
-import {PartnersCalipsoPageComponent} from '../partners-calipso-page/partners-calipso-page.component';
-import {AppRoutingModule} from '../app-routing.module';
 
 describe('FacilityNavComponent', () => {
   let component: FacilityNavComponent;
   let fixture: ComponentFixture<FacilityNavComponent>;
   let location: Location;
-  let router: Router
+  let router: Router;
 
 
   beforeEach(async(() => {
