@@ -37,7 +37,7 @@ npm install -g @angular/cli
 In the project folder, run `npm install` to download any required dependencies.
 
 ### Running the development server
-To start a development server, run `ng serve`. This will start a development server listening in [http://localhost:4200](http://localhost:4200). The application will automatically reload if you change any of the source files.
+To start a development server, run `ng serve --base-href /`. This will start a development server listening in [http://localhost:4200](http://localhost:4200). The application will automatically reload if you change any of the source files.
 
 ## Configuration
 
