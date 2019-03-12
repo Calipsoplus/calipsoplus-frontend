@@ -133,7 +133,6 @@ export class CalipsoplusService {
   }
 
   public getCalipsoFacilities(): Observable<CalipsoFacility[]> {
-    // return this.http.get<CalipsoFacility[]>('../assets/data/facilities.json').map((res: any) => res.json());
     return this.http.get<CalipsoFacility[]>('../assets/data/facilities.json');
   }
   public getImageQuotaByPublicName(
@@ -207,8 +206,8 @@ export class CalipsoplusService {
 
   public getAllAvailableImages(): Observable<CalipsoImage[]> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'X-CSRFToken': this.getCookie('csrftoken')
+      'Content-Type': 'application/json'
+      //'X-CSRFToken': this.getCookie('csrftoken')
     });
     return this.http.get<CalipsoImage[]>(this.imageListUrl, { headers: headers, withCredentials: true });
   }

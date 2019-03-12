@@ -31,7 +31,7 @@ export class PartnersCalipsoPageComponent implements OnInit {
   }
 
   public enterFacility(url: string) {
-      window.location.href = url + 'login';
+      window.location.href = url + '/login';
    }
   public isLogged() {
     return this.calipsoService.isLogged();
