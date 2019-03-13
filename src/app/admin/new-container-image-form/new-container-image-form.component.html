@@ -1,0 +1,60 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.css" />
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">New Container Image</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {{model | json }}
+
+  <div class="modal-body">
+
+    <form (ngSubmit)="onSubmit()" [formGroup]="containerForm">
+      <div class="form-group">
+        <label for="publicName" id="public_name_label">Public Name</label>
+        <input class="form-control" id="publicName" formControlName="publicName">
+        <div *ngIf="publicNameCtrl.dirty && publicNameCtrl.hasError('required')" id="login-warning">Login is required</div>
+      </div>
+
+      <div class="form-group">
+        <label for="image">Image</label>
+        <input class="form-control" id="image" formControlName="image">
+        <div *ngIf="imageCtrl.dirty && imageCtrl.hasError('required')">Password is required</div>
+      </div>
+
+      <div class="form-group">
+        <label for="protocol">Protocol</label>
+        <input class="form-control" id="protocol" formControlName="protocol">
+        <div *ngIf="imageCtrl.dirty && imageCtrl.hasError('required')">Password is required</div>
+      </div>
+
+      <div class="form-group">
+        <label for="cpu">CPUs</label>
+        <input class="form-control" id="cpu" formControlName="cpu">
+        <div *ngIf="cpuCtrl.dirty && cpuCtrl.hasError('required')">Password is required</div>
+      </div>
+
+      <div class="form-group">
+        <label for="memory">Memory</label>
+        <input class="form-control" id="memory" formControlName="memory">
+        <div *ngIf="memoryCtrl.dirty && memoryCtrl.hasError('required')">Password is required</div>
+      </div>
+
+      <div class="form-group">
+        <label for="resource">Resource Type</label>
+        <input class="form-control" id="resource" formControlName="resource">
+        <div *ngIf="resourceCtrl.dirty && resourceCtrl.hasError('required')">Password is required</div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click'); onSubmit()">Save</button>
+      </div>
+
+    </form>
+  </div>
+</ng-template>
+
+<button id="addimage" class="btn btn-lg btn-outline-primary" (click)="open(content)"> Add Image </button>

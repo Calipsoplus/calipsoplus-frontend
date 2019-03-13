@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SelectCalipsoResourceFormComponent } from './select-calipso-resource-form.component';
+import { SelectCalipsoResourceFormComponent } from '../select-calipso-resource-form/select-calipso-resource-form.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
