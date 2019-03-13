@@ -76,7 +76,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "calipsoplus-app:build",
-            "port": 8180,
+            "port": 8001,
             "host": "0.0.0.0"
           },
           "configurations": {
