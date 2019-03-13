@@ -78,6 +78,7 @@ describe('MainNavComponent', () => {
 
   it('navigate to "" redirects you to 404', fakeAsync(() => {
     router.navigate(['asdfasdf']).then( () => {
+      tick();
       expect(location.path()).toBe('/404');
     });
   }));
