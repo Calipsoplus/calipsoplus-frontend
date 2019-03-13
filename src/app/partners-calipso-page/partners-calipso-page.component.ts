@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CalipsoFacility } from '../calipso-facility';
 import { CalipsoplusService } from '../calipsoplus.service';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-partners-calipso-page',
@@ -31,7 +32,9 @@ export class PartnersCalipsoPageComponent implements OnInit {
   }
 
   public enterFacility(url: string) {
-      window.location.href = url + '/login';
+    // TODO: overwrite url for dependency with the environment.
+    url = environment.frontend_calipso;
+    window.location.href = url + 'login';
    }
   public isLogged() {
     return this.calipsoService.isLogged();

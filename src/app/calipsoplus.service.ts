@@ -207,7 +207,6 @@ export class CalipsoplusService {
   public getAllAvailableImages(): Observable<CalipsoImage[]> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
-      //'X-CSRFToken': this.getCookie('csrftoken')
     });
     return this.http.get<CalipsoImage[]>(this.imageListUrl, { headers: headers, withCredentials: true });
   }
