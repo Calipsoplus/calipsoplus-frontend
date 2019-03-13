@@ -133,7 +133,7 @@ export class CalipsoplusService {
   }
 
   public getCalipsoFacilities(): Observable<CalipsoFacility[]> {
-    return this.http.get<CalipsoFacility[]>('../assets/data/facilities.json');
+    return this.http.get<CalipsoFacility[]>(environment.frontend_calipso + 'assets/data/facilities.json');
   }
   public getImageQuotaByPublicName(
     public_name: string): Observable<CalipsoImage> {
