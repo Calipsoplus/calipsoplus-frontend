@@ -1,0 +1,39 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.css" />
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">New VM Image</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {{model | json }}
+  <div class="modal-body">
+    <form #imageForm="ngForm">
+
+      <div class="form-group">
+        <label for="public_name">Public Name</label>
+        <input type="text" class="form-control" id="public_name" required [(ngModel)]="model.public_name" name="public_name">
+      </div>
+
+      <div class="form-group">
+        <label for="image">Image</label>
+        <input type="text" class="form-control" id="image" required [(ngModel)]="model.image" name="image">
+      </div>
+
+      <div class="form-group">
+        <label for="flavor">Flavor</label>
+        <input type="text" class="form-control" id="flavor" required [(ngModel)]="model.flavor" name="flavor">
+      </div>
+
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click'); onSubmit()">Save</button>
+  </div>
+</ng-template>
+
+<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Add Image</button>
+
+<hr>

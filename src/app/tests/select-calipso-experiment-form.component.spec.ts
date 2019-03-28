@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SelectCalipsoExperimentFormComponent } from './select-calipso-experiment-form.component';
+import { SelectCalipsoExperimentFormComponent } from '../select-calipso-experiment-form/select-calipso-experiment-form.component';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 
 describe('SelectCalipsoExperimentFormComponent', () => {
   let component: SelectCalipsoExperimentFormComponent;
@@ -8,7 +11,9 @@ describe('SelectCalipsoExperimentFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SelectCalipsoExperimentFormComponent ]
+      declarations: [ SelectCalipsoExperimentFormComponent ],
+      imports: [HttpClientTestingModule, RouterTestingModule],
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   }));

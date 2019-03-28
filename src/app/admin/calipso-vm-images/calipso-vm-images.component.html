@@ -1,0 +1,37 @@
+<app-facility-nav></app-facility-nav>
+
+<div class="row col">
+  <app-admin-nav></app-admin-nav>
+
+  <div class="col-md-9">
+    <div class="col-4">
+      <h1 center>Available Virtual Machine Images</h1>
+    </div>
+    <div class="col-8">
+      <app-new-vm-image-form></app-new-vm-image-form>
+    </div>
+    <br>
+    <br>
+
+    <div class="col-md-3" *ngFor="let image of images">
+      <h3>{{image.public_name}}</h3>
+      <p>
+        Image: {{image.image}} <br/>
+        Protocol: {{image.protocol}} <br/>
+        CPU: {{image.cpu}} <br/>
+        RAM: {{image.memory}} <br/>
+        HDD: {{image.hdd}} <br/>
+      </p>
+      <button type="button" class="btn btn-primary">Modify</button>
+      <button type="button" class="btn btn-danger">Delete</button>
+      <br/>
+    </div>
+
+    <div *ngIf="!images.length">
+      <hr>
+      <div class="text-center col">
+        <h2>No virtual machines found</h2>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,13 +1,13 @@
-import { Component, OnInit } from "@angular/core";
-import { CalipsoplusService } from "../calipsoplus.service";
-import { Router } from "@angular/router";
-import { environment } from "../../environments/environment";
-import { LOGO_FACILITY } from "../calipso-constants";
+import { Component, OnInit } from '@angular/core';
+import { CalipsoplusService } from '../calipsoplus.service';
+import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
+import { LOGO_FACILITY } from '../calipso-constants';
 
 @Component({
-  selector: "app-facility-nav",
-  templateUrl: "./facility-nav.component.html",
-  styleUrls: ["./facility-nav.component.css"]
+  selector: 'app-facility-nav',
+  templateUrl: './facility-nav.component.html',
+  styleUrls: ['./facility-nav.component.css']
 })
 export class FacilityNavComponent implements OnInit {
   constructor(
@@ -25,7 +25,7 @@ export class FacilityNavComponent implements OnInit {
     return this.calipsoService.isLogged();
   }
 
-  public logout(){
+  public logout() {
     this.calipsoService.logout();
   }
 }

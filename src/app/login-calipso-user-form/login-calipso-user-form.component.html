@@ -14,6 +14,16 @@
     </div>
   </div>
 
+  <div class="center-all">Click on the logo bellow to sign in with your OpenID Connect account</div>
+
+  <div class="row text-center">
+    <div class="col">
+      <a class="nav-link dropdown-menu-right" (click)="!!login_openid()" href="#">
+        <img src="assets/images/openidconnect.jpeg" width="400" />
+      </a>
+    </div>
+  </div>
+
   <div *ngIf="this.isSettingsLocalLogin()">
     <h5 class="center-all">Or</h5>
     <div class="center-all">Click <a href="#" (click)="!!toggle_ShowMeLocalLogin()">here</a> to sign in with your local

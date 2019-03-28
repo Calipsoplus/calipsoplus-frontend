@@ -1,0 +1,16 @@
+<div class="col-2 collapse d-md-flex bg-light pt-2 h-100" id="sidebar">
+  <ul class="nav flex-column flex-nowrap">
+    <li class="nav-item"><a class="nav-link" routerLink="/admin/users">Users</a></li>
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#submenu1" data-toggle="collapse" data-target="#submenu1">Images</a>
+      <div class="collapse" id="submenu1" aria-expanded="false">
+        <ul class="flex-column pl-2 nav">
+          <li class="nav-item"><a class="nav-link py-0" routerLink="/admin/container-images">Container</a></li>
+          <li class="nav-item"><a class="nav-link py-0" routerLink="/admin/virtual-machine-images">VM</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item"><a class="nav-link" routerLink="/admin">Containers</a></li>
+    <li class="nav-item"><a class="nav-link" routerLink="/admin">VM</a></li>
+  </ul>
+</div>

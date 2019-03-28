@@ -1,0 +1,89 @@
+<app-facility-nav></app-facility-nav>
+<div class="row col">
+  <app-admin-nav></app-admin-nav>
+
+  <!-- user list -->
+
+  <div class="col">
+    <div class="row">
+      <h1 class="col-sm-4">{{title}}</h1>
+      <div class="col-sm-5"></div>
+      <div class="col-sm-3">
+        <div class="input-group align-vertical">
+          <input type="text" (keyup.enter)="search_action(searchkey.value)" class="form-control" value="{{search_key}}"
+                 #searchkey placeholder="Search..." />&nbsp;&nbsp;
+          <a href="#" (click)="!!search_action(searchkey.value)">
+            <fa-icon style="color:black;" [icon]="['fa', 'search']"></fa-icon>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <table class="table sortable">
+      <thead>
+      <tr class="d-flex">
+        <th class="col-sm-2 {{if_is_sorted('id')}}" (click)="sort_by_field('id')">
+          User Id &nbsp;&nbsp;
+          <fa-icon [icon]="['fas', 'sort']"></fa-icon>
+        </th>
+        <th class="col-sm-3 {{if_is_sorted('username')}}" (click)="sort_by_field('user__username')">
+          Username&nbsp;&nbsp;
+          <fa-icon [icon]="['fas', 'sort']"></fa-icon>
+        </th>
+        <th class="col-sm-3">
+          Last Login&nbsp;&nbsp;
+          <fa-icon [icon]="['fas', 'sort']"></fa-icon>
+        </th>
+      </tr>
+      </thead>
+      <tbody *ngFor="let user of users">
+
+      <tr class="d-flex">
+        <td class="col-sm-2">{{user.id}}</td>
+        <td class="col-sm-3"><a routerLink="/admin/user/{{user.user.username}}">{{user.user.username}}</a></td>
+        <td class="col-sm-2">{{user.user.last_login}}</td>
+      </tr>
+      </tbody>
+
+    </table>
+
+    <hr>
+
+    <div class="col-sm-12">
+      <nav aria-label="experiments pagination">
+        <ul class="pagination pagination-sm justify-content-center ">
+          <li class="page-item {{compare_if_disabled(actual_page==1)}}">
+            <button class="page-link " (click)="load_experiments(this.actual_page-1)">
+              <span aria-hidden="true">&laquo;</span>
+            </button>
+          </li>
+          <div *ngFor="let page of total_pages">
+            <div *ngIf="this.showPage(page)">
+              <li class="page-item {{compare_if_active(actual_page==page)}}">
+                <button class="page-link" (click)="load_experiments(page)">
+                  <span>{{page}}</span>
+                </button>
+              </li>
+            </div>
+            <div *ngIf="!this.showPage(page)">
+              <li class="page-item disabled">
+                <button class="page-link">
+                  <span>...</span>
+                </button>
+              </li>
+            </div>
+          </div>
+
+
+          <li class="page-item {{compare_if_disabled(actual_page>=pagination.count/pagination.page_size)}}">
+            <button class="page-link" (click)="load_experiments(this.actual_page+1)">
+              <span aria-hidden="true">&raquo;</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+    </div>
+
+  </div>
+</div>
