@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CalipsoplusService } from '../calipsoplus.service';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { LOGO_FACILITY } from '../calipso-constants';
 
 @Component({
   selector: 'app-facility-nav',
