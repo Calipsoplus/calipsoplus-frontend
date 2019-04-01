@@ -1,5 +1,5 @@
 // put the logo facitility url
-export const LOGO_FACILITY = 'https://www.cells.es/logo.png';
+export const LOGO_FACILITY = 'assets/images/insert-logo-here.jpg';
 
 
 
