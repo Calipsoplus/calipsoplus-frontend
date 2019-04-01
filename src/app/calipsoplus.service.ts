@@ -18,7 +18,6 @@ import { Router } from '@angular/router';
 import { CalipsoPaginationExperiment } from './calipso-pagination-experiment';
 import { CalipsoUmbrellaSession } from './calipso-umbrella-session';
 import { CalipsoSettings } from './calipso-settings';
-import { LOGO_FACILITY } from './calipso-constants';
 import { CalipsoUserType } from './calipso-user-type';
 import {CalipsoPaginationUser} from './CalipsoPaginationUser';
 import {CalipsoUser} from './calipso-user';
@@ -88,7 +87,7 @@ export class CalipsoplusService {
   }
 
   public getMyLogo(): string {
-    return LOGO_FACILITY;
+    return environment.facilityLogo;
   }
 
   public getCalipsoExperiments(
@@ -240,6 +239,17 @@ export class CalipsoplusService {
     return this.http.get<CalipsoUser>(url, {withCredentials: true});
   }
 
+  public openIdAuth() {
+      this.http.get(this.backendUrl_calipso + 'authenticated/', {withCredentials: true, observe: 'response'})
+      .subscribe((response) => {
+        if (response.status === 200) {
+          const username = response.body['username'];
+          this.login(username, 'OpenID');
+        }
+        this.goOpenIdConnect();
+      });
+  }
+
   public auth(username: string, password: string) {
     const body = `{"username":"${username}","password":"${password}"}`;
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
@@ -314,7 +324,14 @@ export class CalipsoplusService {
   }
 
   public isLogged(): boolean {
+    if ('ct' in sessionStorage) {
+      return 'ct' in sessionStorage;
+    }
+    if (environment.openIdConnectEnabled) {
+      this.openIdAuth();
+    }
     return 'ct' in sessionStorage;
+
   }
 
   public listContainersActive(
