@@ -3,7 +3,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 import {CalipsoImage} from '../../calipso-image';
 import {CalipsoplusService} from '../../calipsoplus.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 
 @Component({
@@ -12,46 +12,31 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styleUrls: ['./new-container-image-form.component.css']
 })
 export class NewContainerImageFormComponent implements OnInit {
-  submitted = false;
 
-  publicNameCtrl: FormControl;
-  imageCtrl: FormControl;
-  protocolCtrl: FormControl;
-  cpuCtrl: FormControl;
-  memoryCtrl: FormControl;
-  hddCtrl: FormControl;
-  resourceCtrl: FormControl;
-  containerForm: FormGroup;
+  containerImageForm: FormGroup;
+  protocolsSupported = ['RDP', 'VNC'];
+  ngOnInit() {
 
-  model = new CalipsoImage('public_name', 'image', 'RDP', '', 1, '10G', '50G',
-    'container');
-  resources = ['docker', 'kubernetes', 'static link', 'virtual machine'];
+    this.containerImageForm = this.fb.group({
+    publicName: ['', Validators.required],
+    image: ['', Validators.required],
+    protocol: ['', Validators.required],
+    cpu: ['', Validators.required],
+    memory: ['', Validators.required],
+    hdd: ['', Validators.required],
+    resource: ['', Validators.required],
+  });
+  }
 
   constructor(private modalService: NgbModal, private calipsoService: CalipsoplusService, private fb: FormBuilder) {}
 
-  ngOnInit() {
-    this.publicNameCtrl = this.fb.control('', Validators.required);
-    this.imageCtrl = this.fb.control('', Validators.required);
-    this.protocolCtrl = this.fb.control('', Validators.required);
-    this.cpuCtrl = this.fb.control('', Validators.required);
-    this.memoryCtrl = this.fb.control('', Validators.required);
-    this.hddCtrl = this.fb.control('', Validators.required);
-    this.resourceCtrl = this.fb.control('', Validators.required);
-    this.containerForm = this.fb.group({
-      publicName: this.publicNameCtrl,
-      image: this.imageCtrl,
-      protocol: this.protocolCtrl,
-      cpu: this.cpuCtrl,
-      memory: this.memoryCtrl,
-      hdd: this.hddCtrl,
-      resource: this.resourceCtrl
-    });
-  }
-
   onSubmit() {
-    this.submitted = true;
+    const newImage = new CalipsoImage(this.containerImageForm.value['publicName'], this.containerImageForm.value['image'],
+      this.containerImageForm.value['protocol'], '', this.containerImageForm.value['cpu'],  this.containerImageForm.value['memory'],
+      this.containerImageForm.value['hdd'], this.containerImageForm.value['resource']);
     console.log('post requesting!');
-    this.calipsoService.addNewImage(this.model);
+    console.log(newImage);
+    this.calipsoService.addNewImage(newImage);
   }
 
   open(content) {

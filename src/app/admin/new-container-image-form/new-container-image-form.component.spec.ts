@@ -5,9 +5,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {CalipsoImage} from '../../calipso-image';
-import {By} from '@angular/platform-browser';
-
 
 describe('NewContainerImageFormComponent', () => {
   let component: NewContainerImageFormComponent;
@@ -29,34 +26,56 @@ describe('NewContainerImageFormComponent', () => {
     component.ngOnInit();
   });
 
-  // it('should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
+  it('form invalid when empty', () => {
+    expect(component.containerImageForm.valid).toBeFalsy();
+  });
 
-  // it('should create default container image to be edited', () => {
-  //   expect(component.model).not.toBeNull();
-  // });
+  it('public name required field validity', () => {
+    const publicName = component.containerImageForm.controls['publicName'];
+    const errors = publicName.errors || {};
+    expect(errors['required']).toBeTruthy();
+  });
 
-  // it('should change image name using html form', () => {
-  //   fixture = TestBed.createComponent(NewContainerImageFormComponent);
-  //   fixture.detectChanges();
-  //   const containerForm = fixture.componentInstance.containerForm;
-  //
-  //   expect(containerForm.valid).toBe(false);
-  //   expect(containerForm.get('image')).not.toBeNull('Form should have a `image` field');
-  //
-  //   const nativeElement = fixture.nativeElement;
-  //   const button = nativeElement.querySelector('button');
-  //   expect(button.getAttribute('disabled')).not.toBeNull('Your submit button should be disabled if the form is invalid');
-  //
-  //   const login = nativeElement.querySelector('#publicName');
-  //   expect(login).not.toBeNull('Your template should have an input for the login');
-  //   // login.value = 'Cédric';
-  //   // login.dispatchEvent(new Event('input'));
-  //
-  //   fixture.detectChanges();
-  //
-  //   expect(button.getAttribute('disabled')).toBeNull('Your submit button should not be disabled if the form is invalid');
-  //
-  // });
+  it('image required field validity', () => {
+    const image = component.containerImageForm.controls['image'];
+    const errors = image.errors || {};
+    expect(errors['required']).toBeTruthy();
+  });
+
+  it('protocol required field validity', () => {
+    const protocol = component.containerImageForm.controls['protocol'];
+    const errors = protocol.errors || {};
+    expect(errors['required']).toBeTruthy();
+  });
+
+  it('cpu required field validity', () => {
+    const cpu = component.containerImageForm.controls['cpu'];
+    const errors = cpu.errors || {};
+    expect(errors['required']).toBeTruthy();
+  });
+
+  it('memory required field validity', () => {
+    const memory = component.containerImageForm.controls['memory'];
+    const errors = memory.errors || {};
+    expect(errors['required']).toBeTruthy();
+  });
+
+  it('hdd required field validity', () => {
+    const hdd = component.containerImageForm.controls['hdd'];
+    const errors = hdd.errors || {};
+    expect(errors['required']).toBeTruthy();
+  });
+
+  it('should require all fields to be valid before button is active', () => {
+    expect(component.containerImageForm.valid).toBeFalsy();
+    component.containerImageForm.controls['publicName'].setValue('new image name');
+    component.containerImageForm.controls['image'].setValue('new image url');
+    component.containerImageForm.controls['protocol'].setValue('RDP');
+    component.containerImageForm.controls['cpu'].setValue(4);
+    component.containerImageForm.controls['memory'].setValue('5G');
+    component.containerImageForm.controls['hdd'].setValue('10G');
+    expect(component.containerImageForm.valid).toBeFalsy();
+    component.containerImageForm.controls['resource'].setValue('Docker');
+    expect(component.containerImageForm.valid).toBeTruthy();
+  });
 });
