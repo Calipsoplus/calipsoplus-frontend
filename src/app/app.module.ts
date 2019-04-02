@@ -42,7 +42,7 @@ import {NewVmImageFormComponent} from './admin/new-vm-image-form/new-vm-image-fo
     AppRoutingModule,
     HttpClientModule,
     FontAwesomeModule,
-    NgbModule.forRoot()
+    NgbModule
   ],
   declarations: [
     AppComponent,

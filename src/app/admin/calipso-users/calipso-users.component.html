@@ -12,7 +12,7 @@
         <div class="input-group align-vertical">
           <input type="text" (keyup.enter)="search_action(searchkey.value)" class="form-control" value="{{search_key}}"
                  #searchkey placeholder="Search..." />&nbsp;&nbsp;
-          <a href="#" (click)="!!search_action(searchkey.value)">
+          <a [routerLink]="" (click)="search_action(searchkey.value)">
             <fa-icon style="color:black;" [icon]="['fa', 'search']"></fa-icon>
           </a>
         </div>
