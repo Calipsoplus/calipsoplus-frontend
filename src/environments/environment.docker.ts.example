@@ -4,6 +4,8 @@ export const environment = {
   backendUrl_calipso: '/',
   backendUrl_basehref: 'services/',
   guacamoleUrl: '/guac/',
+  openIdConnectEnabled: true,
   openIdConnectUrl: 'http://example.com/oidc/authenticate',
+  facilityLogo: 'assets/images/insert-logo-here.jpg',
   env : 'docker'
 };

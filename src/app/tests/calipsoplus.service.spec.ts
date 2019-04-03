@@ -3,7 +3,6 @@ import {TestBed, inject, async, tick, fakeAsync} from '@angular/core/testing';
 import { CalipsoplusService } from '../calipsoplus.service';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
-import { LOGO_FACILITY } from '../calipso-constants';
 import {CalipsoFacility} from '../calipso-facility';
 import {CalipsoUser} from '../calipso-user';
 import {User} from '../user';
@@ -56,7 +55,7 @@ describe('CalipsoplusService', () => {
 
   it('Should return the logo url found in the constants', inject([CalipsoplusService],
     (calipsoplusService: CalipsoplusService) => {
-      expect(calipsoplusService.getMyLogo()).toEqual(LOGO_FACILITY);
+      expect(calipsoplusService.getMyLogo()).toEqual(environment.facilityLogo);
     }));
 
   it('Should return the facilities in Calipsoplus', inject([CalipsoplusService],
