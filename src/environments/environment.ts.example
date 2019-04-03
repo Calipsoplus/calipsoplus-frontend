@@ -9,7 +9,9 @@ export const environment = {
   backendUrl_calipso: "https://vagrant-ubuntu-trusty-64/",
   backendUrl_basehref: "calipso/",
   guacamoleUrl: "http://192.168.33.15:8080/",
-  openIdConnectUrl: 'http://example.com/oidc/authenticate'
+  openIdConnectEnabled: true,
+  openIdConnectUrl: 'http://example.com/oidc/authenticate',
+  facilityLogo: 'assets/images/insert-logo-here.jpg',
   env : "dev"
 };
 

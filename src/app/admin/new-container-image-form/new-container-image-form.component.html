@@ -8,53 +8,40 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  {{model | json }}
+  <form [formGroup]="containerImageForm" (ngSubmit)="onSubmit()" class="px-lg-5 pt-0">
 
-  <div class="modal-body">
+    <label>Public Name:</label>
+    <input type="text" formControlName="publicName" required class="form-control mb-4">
 
-    <form (ngSubmit)="onSubmit()" [formGroup]="containerForm">
-      <div class="form-group">
-        <label for="publicName" id="public_name_label">Public Name</label>
-        <input class="form-control" id="publicName" formControlName="publicName">
-        <div *ngIf="publicNameCtrl.dirty && publicNameCtrl.hasError('required')" id="login-warning">Login is required</div>
-      </div>
+    <label>Image: </label>
+    <input type="text" formControlName="image" required class="form-control mb-4">
 
-      <div class="form-group">
-        <label for="image">Image</label>
-        <input class="form-control" id="image" formControlName="image">
-        <div *ngIf="imageCtrl.dirty && imageCtrl.hasError('required')">Password is required</div>
-      </div>
+    <label>Protocol: </label>
 
-      <div class="form-group">
-        <label for="protocol">Protocol</label>
-        <input class="form-control" id="protocol" formControlName="protocol">
-        <div *ngIf="imageCtrl.dirty && imageCtrl.hasError('required')">Password is required</div>
-      </div>
+    <select class="form-control mb-4" formControlName="protocol">
+    <option value="">Please select a protocol</option>
+    <option *ngFor="let protocol of protocolsSupported"
+            [value]="protocol"> {{protocol}}
+    </option>
+    </select>
 
-      <div class="form-group">
-        <label for="cpu">CPUs</label>
-        <input class="form-control" id="cpu" formControlName="cpu">
-        <div *ngIf="cpuCtrl.dirty && cpuCtrl.hasError('required')">Password is required</div>
-      </div>
+    <label>CPU: </label>
+    <input type="text" formControlName="cpu" required class="form-control mb-4">
 
-      <div class="form-group">
-        <label for="memory">Memory</label>
-        <input class="form-control" id="memory" formControlName="memory">
-        <div *ngIf="memoryCtrl.dirty && memoryCtrl.hasError('required')">Password is required</div>
-      </div>
+    <label>Memory:</label>
+    <input type="text" formControlName="memory" required class="form-control mb-4">
 
-      <div class="form-group">
-        <label for="resource">Resource Type</label>
-        <input class="form-control" id="resource" formControlName="resource">
-        <div *ngIf="resourceCtrl.dirty && resourceCtrl.hasError('required')">Password is required</div>
-      </div>
+    <label>HDD: </label>
+    <input type="text" formControlName="hdd" required class="form-control mb-4">
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click'); onSubmit()">Save</button>
-      </div>
+    <label>Resource: </label>
+    <input type="text" formControlName="resource" required class="form-control mb-4">
 
-    </form>
-  </div>
+    <p>
+      Form Value: {{ containerImageForm.value | json }}
+    </p>
+
+    <button type="submit" class="btn btn-primary" [disabled]="!containerImageForm.valid">Submit</button>
+  </form>
 </ng-template>
-
 <button id="addimage" class="btn btn-lg btn-outline-primary" (click)="open(content)"> Add Image </button>

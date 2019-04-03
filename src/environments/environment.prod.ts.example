@@ -4,5 +4,8 @@ export const environment = {
   backendUrl_calipso: "https://calipsobackend.domain.tld/",
   backendUrl_basehref: "calipsoplus-services/",
   guacamoleUrl: "https://calipsofrontend.domain.tld/gacces/",
+  openIdConnectEnabled: true,
+  openIdConnectUrl: 'http://example.com/oidc/authenticate',
+  facilityLogo: 'assets/images/insert-logo-here.jpg',
   env : "prod"
 };
