@@ -490,7 +490,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   public go_in(session: string) {
     const c = this.containers.find(x => x.calipso_experiment === session);
-    if (c == null) { console.log('error win up'); } else if (c.host_port === '') {
+    if (c == null) { console.log('error win up'); } else if (!c.host_port.startsWith('http')) {
       this.calipsoService.go_into_resource(
         c.container_name,
         c.guacamole_username,
