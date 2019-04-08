@@ -488,7 +488,7 @@ export class CalipsoplusService {
   public logout() {
     // console.log("login_local:"+this.calipsoService.calipsoSettings.local_auth);
 
-    if (this.getLoginType() === 'local') {
+    if (this.getLoginType() === 'local' || this.getLoginType() === 'OpenID') {
       this.removeStorage();
       this.unauth().subscribe(
         resp => {
