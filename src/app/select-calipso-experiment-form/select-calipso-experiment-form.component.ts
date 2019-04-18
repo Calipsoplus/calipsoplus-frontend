@@ -240,9 +240,8 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
           )
           .subscribe(
             experiment => {
-              this.pagination = experiment;
-              this.experiments = this.pagination.results;
-
+               this.pagination = experiment;
+               this.experiments = this.pagination.results;
               let points = true;
               for (
                 let i = 0;
@@ -385,7 +384,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
       this.load_experiments(this.actual_page);
       this.getContainersActive();
     } else {
-      this.router.navigate(['/']);
+      this.router.navigate(['/login']);
     }
   }
 
