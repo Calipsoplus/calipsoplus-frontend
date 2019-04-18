@@ -384,7 +384,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
       this.load_experiments(this.actual_page);
       this.getContainersActive();
     } else {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/']);
     }
   }
 
