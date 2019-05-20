@@ -47,7 +47,7 @@ describe('SelectCalipsoQuotaFormComponent', () => {
     const userSpy = spyOn(calipsoplusService, 'isLogged').and.returnValue(false);
     component.ngOnInit();
     expect(calipsoplusService.isLogged).toHaveBeenCalled();
-    expect(location.path()).toBe('');
+    expect(location.path()).toBe('/');
 
   }));
 
