@@ -8548,7 +8548,13 @@
     padding: 5px;
   }
 
+.collection-heading {
+  text-align: center;
+  font-size: 2rem;
+
+}
+
   h2, h3 {
     text-align: center
   }
-  
+
