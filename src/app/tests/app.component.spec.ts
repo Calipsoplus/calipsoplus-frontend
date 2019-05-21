@@ -21,6 +21,8 @@ import {CalipsoContainerImagesComponent} from '../admin/calipso-container-images
 import {CalipsoVmImagesComponent} from '../admin/calipso-vm-images/calipso-vm-images.component';
 import {CalipsoVmComponent} from '../calipso-vm/calipso-vm.component';
 import {CalipsoUserProfileComponent} from '../admin/calipso-user-profile/calipso-user-profile.component';
+import { UserNavComponent } from '../user-nav/user-nav.component';
+
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -43,7 +45,8 @@ describe('AppComponent', () => {
         CalipsoContainerImagesComponent,
         CalipsoVmImagesComponent,
         CalipsoVmComponent,
-        CalipsoUserProfileComponent
+        CalipsoUserProfileComponent,
+        UserNavComponent
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     }).compileComponents();
