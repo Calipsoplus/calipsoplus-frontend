@@ -43,7 +43,7 @@ import { UserNavComponent } from './user-nav/user-nav.component';
     AppRoutingModule,
     HttpClientModule,
     FontAwesomeModule,
-    NgbModule.forRoot()
+    NgbModule
   ],
   declarations: [
     AppComponent,

@@ -4,7 +4,7 @@
     "name": "ALBA Light Source",
     "description":
     "ALBA is a 3rd generation Synchrotron Light facility located in Cerdanyola del Vallès, (Barcelona), being the newest source in the Mediterranean area. It is a complex of electron accelerators to produce synchrotron light, which allows the visualization of the atomic structure of matter as well as the study of its properties.  The 3 GeV electron beam energy at ALBA is achieved by combining a LInear ACcelerator (LINAC) and a low-emittance, full-energy BOOSTER placed in the same tunnel as the STORAGE RING. ALBA's 270 meter perimeter has 17 straight sections all of which are available for the installation of insertion devices",
-    "url": "http://192.168.33.10:8001"
+    "url": "http://localhost:8001"
   },
   {
     "id": 7,

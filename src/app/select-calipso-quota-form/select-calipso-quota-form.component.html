@@ -20,52 +20,40 @@
           <th class="col">Your default quota</th>
           <th class="col">Your used quota</th>
           <th class="col">Your available quota</th>
-          <th class="col">Default image</th>
         </tr>
       </thead>
       <tbody>
         <tr class="d-flex">
           <td class="col">
-            <b>machines : </b> {{ quotas.max_simultaneous }}
+            <strong>machines : </strong> {{ quotas.max_simultaneous }}
             <br/>
-            <b>cpus : </b> {{ quotas.cpu }}
+            <strong>cpus : </strong> {{ quotas.cpu }}
             <br/>
-            <b>memory : </b> {{ quotas.memory }}
+            <strong>memory : </strong> {{ quotas.memory }}
             <br/>
-            <b>storage: </b> {{ quotas.hdd }}
+            <strong>storage: </strong> {{ quotas.hdd }}
             <br/>
             <br/>
           </td>
           <td class="col">
-            <b>machines : </b> {{ used_quota.max_simultaneous }}
+            <strong>machines : </strong> {{ used_quota.max_simultaneous }}
             <br/>
-            <b>cpus : </b> {{ used_quota.cpu }}
+            <strong>cpus : </strong> {{ used_quota.cpu }}
             <br/>
-            <b>memory : </b> {{ used_quota.memory }}
+            <strong>memory : </strong> {{ used_quota.memory }}
             <br/>
-            <b>storage: </b> {{ used_quota.hdd }}
-            <br/>
-            <br/>
-          </td>
-          <td class="col" >
-            <b>machines : </b> {{ available_quota.max_simultaneous }}
-            <br/>
-            <b>cpus : </b> {{ available_quota.cpu }}
-            <br/>
-            <b>memory : </b> {{ available_quota.memory }}
-            <br/>
-            <b>storage: </b> {{ available_quota.hdd }}
+            <strong>storage: </strong> {{ used_quota.hdd }}
             <br/>
             <br/>
           </td>
           <td class="col" >
-            <b>-</b>
+            <strong>machines : </strong> {{ available_quota.max_simultaneous }}
             <br/>
-            <b>cpus : </b> {{ image_selected.cpu }}
+            <strong>cpus : </strong> {{ available_quota.cpu }}
             <br/>
-            <b>memory : </b> {{ image_selected.memory }}
+            <strong>memory : </strong> {{ available_quota.memory }}
             <br/>
-            <b>storage: </b> {{ image_selected.hdd }}
+            <strong>storage: </strong> {{ available_quota.hdd }}
             <br/>
             <br/>
           </td>
