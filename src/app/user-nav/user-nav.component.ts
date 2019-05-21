@@ -8,22 +8,15 @@ import { Router } from '@angular/router';
 })
 export class UserNavComponent implements OnInit {
 
-  constructor(private router:Router) { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
 
-  navigateExperiments(){
-    this.router.navigate['admin'];
+  navigateExperiments() {
+    this.router.navigate(['/experiment']);
   }
   navigateJupyter() {
-    this.router.navigate[''];
+    this.router.navigate(['/']);
   }
-  navigateContainers() {
-
-  }
-  navigateVirtualMachines() {
-
-  }
-
 }
