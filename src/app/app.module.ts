@@ -31,6 +31,7 @@ import {CalipsoUserProfileComponent} from './admin/calipso-user-profile/calipso-
 import {AuthGuard} from './auth-guard.service';
 import { NewContainerImageFormComponent } from './admin/new-container-image-form/new-container-image-form.component';
 import {NewVmImageFormComponent} from './admin/new-vm-image-form/new-vm-image-form.component';
+import { UserNavComponent } from './user-nav/user-nav.component';
 
 
 
@@ -65,6 +66,7 @@ import {NewVmImageFormComponent} from './admin/new-vm-image-form/new-vm-image-fo
     CalipsoUserProfileComponent,
     NewContainerImageFormComponent,
     NewVmImageFormComponent,
+    UserNavComponent,
   ],
   providers: [CalipsoplusService, AuthGuard],
   bootstrap: [AppComponent]

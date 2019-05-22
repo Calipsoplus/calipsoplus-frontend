@@ -7,5 +7,7 @@ export const environment = {
   openIdConnectEnabled: true,
   openIdConnectUrl: 'http://example.com/oidc/authenticate',
   facilityLogo: 'assets/images/insert-logo-here.jpg',
+  jupyterhubEnabled: false,
+  jupyterjubUrl: 'http://jupyter.example.com',
   env : 'docker'
 };

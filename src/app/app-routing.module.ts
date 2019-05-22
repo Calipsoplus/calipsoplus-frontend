@@ -15,9 +15,11 @@ import {CalipsoVmImagesComponent} from './admin/calipso-vm-images/calipso-vm-ima
 import {CalipsoUserProfileComponent} from './admin/calipso-user-profile/calipso-user-profile.component';
 import {CalipsoUsersComponent} from './admin/calipso-users/calipso-users.component';
 import {AuthGuard} from './auth-guard.service';
+import {UserNavComponent} from './user-nav/user-nav.component';
 
 export const routes: Routes = [
   { path: '', component: PartnersCalipsoPageComponent },
+  { path: 'navigation', component: UserNavComponent },
   { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuard]},
   { path: 'admin/container-images', component: CalipsoContainerImagesComponent, canActivate: [AuthGuard] },
   { path: 'admin/virtual-machine-images', component: CalipsoVmImagesComponent, canActivate: [AuthGuard] },

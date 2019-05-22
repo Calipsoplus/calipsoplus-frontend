@@ -24,6 +24,7 @@ import {CalipsoContainerImagesComponent} from '../admin/calipso-container-images
 import {CalipsoVmImagesComponent} from '../admin/calipso-vm-images/calipso-vm-images.component';
 import {CalipsoVmComponent} from '../calipso-vm/calipso-vm.component';
 import {CalipsoUserProfileComponent} from '../admin/calipso-user-profile/calipso-user-profile.component';
+import {UserNavComponent} from '../user-nav/user-nav.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {by} from 'protractor';
@@ -55,7 +56,9 @@ describe('MainNavComponent', () => {
         CalipsoContainerImagesComponent,
         CalipsoVmImagesComponent,
         CalipsoVmComponent,
-        CalipsoUserProfileComponent],
+        CalipsoUserProfileComponent,
+        UserNavComponent
+      ],
       imports: [HttpClientTestingModule, RouterTestingModule.withRoutes(routes), FormsModule],
       schemas: [NO_ERRORS_SCHEMA]
     })

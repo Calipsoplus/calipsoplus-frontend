@@ -26,7 +26,7 @@ export class LoginCalipsoUserFormComponent implements OnInit {
       resp => {
         this.calipsoService.auth(this.username, this.password).subscribe(
           response => {
-              this.router.navigate(['/experiment']);
+              this.router.navigate(['/navigation']);
           },
           error => {
             alert('Invalid credentials');
@@ -53,7 +53,7 @@ export class LoginCalipsoUserFormComponent implements OnInit {
 
   ngOnInit() {
     if (this.calipsoService.isLogged()) {
-      this.router.navigate(['/experiment']);
+      this.router.navigate(['/navigation']);
     }
   }
 }
