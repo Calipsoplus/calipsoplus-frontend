@@ -11,7 +11,7 @@ import { CalipsoplusService } from '../calipsoplus.service';
 })
 export class UserNavComponent implements OnInit {
 
-  jupyterhubEnabled = environment.jupyterhubEnabled;
+  jupyterhubEnabled = environment.servers.jupyterhub.enabled;
   isAdmin = false;
 
   constructor(private router: Router,
@@ -33,7 +33,7 @@ export class UserNavComponent implements OnInit {
 
   navigateJupyter() {
     if (this.jupyterhubEnabled) {
-      window.location.href = environment.jupyterjubUrl;
+      window.location.href = environment.servers.jupyterhub.url;
     }
   }
 
