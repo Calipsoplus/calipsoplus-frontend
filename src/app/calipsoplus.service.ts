@@ -237,6 +237,19 @@ export class CalipsoplusService {
     return this.http.get<CalipsoUser>(url, {withCredentials: true});
   }
 
+  public isAdmin(): Promise<boolean> {
+    const username = this.getLoggedUserName();
+    return this.getCalipsoUser(username)
+      .toPromise()
+      .then((res) => {
+        return res.user.is_superuser;
+      })
+      .catch((err) => {
+        console.error(err);
+        return false;
+      });
+  }
+
   public openIdAuth() {
       this.http.get(this.backendUrl_calipso + 'authenticated/', {withCredentials: true, observe: 'response'})
       .subscribe((response) => {
