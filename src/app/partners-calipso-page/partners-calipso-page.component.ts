@@ -33,7 +33,7 @@ export class PartnersCalipsoPageComponent implements OnInit {
 
   public enterFacility(url: string) {
     // TODO: overwrite url for dependency with the environment.
-    url = environment.frontend_calipso;
+    url = environment.frontend.url;
     window.location.href = url + 'login';
    }
   public isLogged() {

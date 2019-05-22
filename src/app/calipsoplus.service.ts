@@ -24,8 +24,8 @@ import {CalipsoUser} from './calipso-user';
 
 @Injectable({providedIn: 'root'})
 export class CalipsoplusService {
-  backendUrl_calipso = environment.backendUrl_calipso + environment.backendUrl_basehref;
-  guacamoleUrl = environment.guacamoleUrl;
+  backendUrl_calipso = environment.servers.api.url + environment.servers.api.basehref;
+  guacamoleUrl = environment.servers.guacamole.url;
 
   authUrl = this.backendUrl_calipso + 'login/';
   umbrellaLoginUrl = this.backendUrl_calipso + 'umbrella/login/';
@@ -87,7 +87,7 @@ export class CalipsoplusService {
   }
 
   public getMyLogo(): string {
-    return environment.facilityLogo;
+    return environment.frontend.facilityLogo;
   }
 
   public getCalipsoExperiments(
@@ -132,7 +132,7 @@ export class CalipsoplusService {
   }
 
   public getCalipsoFacilities(): Observable<CalipsoFacility[]> {
-    return this.http.get<CalipsoFacility[]>(environment.frontend_calipso + 'assets/data/facilities.json');
+    return this.http.get<CalipsoFacility[]>(environment.frontend.url + 'assets/data/facilities.json');
   }
   public getImageQuotaByPublicName(
     public_name: string): Observable<CalipsoImage> {
@@ -338,7 +338,7 @@ export class CalipsoplusService {
     if ('ct' in sessionStorage) {
       return 'ct' in sessionStorage;
     }
-    if (environment.openIdConnectEnabled) {
+    if (environment.auth.oidc.enabled) {
       this.openIdAuth();
     }
     return 'ct' in sessionStorage;
@@ -485,7 +485,7 @@ export class CalipsoplusService {
   }
 
   public goOpenIdConnect() {
-    window.location.href = environment.openIdConnectUrl;
+    window.location.href = environment.auth.oidc.url;
   }
 
   public goExternalLoginWOU() {
@@ -518,9 +518,9 @@ export class CalipsoplusService {
         resp => {
           // console.log("logout done from umbrella");
           window.location.href =
-            environment.backendUrl_calipso +
+            environment.servers.api.url +
             'Shibboleth.sso/Logout?return=' +
-            environment.frontend_calipso;
+            environment.frontend.url;
         },
         error => {
           // console.log("Error in umbrella logout");

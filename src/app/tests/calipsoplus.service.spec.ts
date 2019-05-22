@@ -25,7 +25,7 @@ describe('CalipsoplusService', () => {
 
   let testUser: CalipsoUser;
   let testQuota: CalipsoQuota;
-  const backendUrl_calipso = environment.backendUrl_calipso + environment.backendUrl_basehref;
+  const backendUrl_calipso = environment.servers.api.url + environment.servers.api.basehref;
   beforeEach(() => {
 
     TestBed.configureTestingModule({
@@ -55,7 +55,7 @@ describe('CalipsoplusService', () => {
 
   it('Should return the logo url found in the constants', inject([CalipsoplusService],
     (calipsoplusService: CalipsoplusService) => {
-      expect(calipsoplusService.getMyLogo()).toEqual(environment.facilityLogo);
+      expect(calipsoplusService.getMyLogo()).toEqual(environment.frontend.facilityLogo);
     }));
 
   it('Should return the facilities in Calipsoplus', inject([CalipsoplusService],

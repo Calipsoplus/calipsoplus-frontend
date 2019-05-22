@@ -1,13 +1,27 @@
 export const environment = {
   production: true,
-  frontend_calipso: "https://calipsofrontend.domain.tld/",
-  backendUrl_calipso: "https://calipsobackend.domain.tld/",
-  backendUrl_basehref: "calipsoplus-services/",
-  guacamoleUrl: "https://calipsofrontend.domain.tld/gacces/",
-  openIdConnectEnabled: true,
-  openIdConnectUrl: 'http://example.com/oidc/authenticate',
-  facilityLogo: 'assets/images/insert-logo-here.jpg',
-  jupyterhubEnabled: false,
-  jupyterjubUrl: 'http://jupyter.example.com',
-  env : "prod"
+  servers: {
+    api: {
+      url: 'https://calipsobackend.domain.tld/',
+      basehref: 'calipsoplus-services//'
+    },
+    guacamole: {
+      url: 'https://calipsofrontend.domain.tld/gacces/'
+    },
+    jupyterhub: {
+      enabled: false,
+      url: 'http://jupyter.example.com'
+    }
+  },
+  auth: {
+    oidc: {
+      enabled: false,
+      url: 'http://example.com/oidc/authenticate'
+    }
+  },
+  frontend: {
+    url: 'https://calipsofrontend.domain.tld/',
+    facilityLogo: 'assets/images/insert-logo-here.jpg'
+  },
+  env : 'prod'
 };

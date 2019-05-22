@@ -69,9 +69,9 @@ export class MainNavComponent implements OnInit {
         resp => {
           // console.log("logout done from umbrella");
           window.location.href =
-            environment.backendUrl_calipso +
+            environment.servers.api.url +
             'Shibboleth.sso/Logout?return=' +
-            environment.frontend_calipso;
+            environment.frontend.url;
         },
         error => {
           // console.log("Error in umbrella logout");
@@ -85,6 +85,6 @@ export class MainNavComponent implements OnInit {
   }
 
   public getFrontendUrl() {
-    return environment.frontend_calipso;
+    return environment.frontend.url;
   }
 }
