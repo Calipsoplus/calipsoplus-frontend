@@ -3,7 +3,7 @@ export const environment = {
   servers: {
     api: {
       url: 'https://calipsobackend.domain.tld/',
-      basehref: 'calipsoplus-services//'
+      basehref: 'calipsoplus-services/'
     },
     guacamole: {
       url: 'https://calipsofrontend.domain.tld/gacces/'
