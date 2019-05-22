@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {environment} from '../../environments/environment';
+import { CalipsoplusService } from '../calipsoplus.service';
+
 
 @Component({
   selector: 'app-user-nav',
@@ -10,12 +12,20 @@ import {environment} from '../../environments/environment';
 export class UserNavComponent implements OnInit {
 
   jupyterhubEnabled = environment.jupyterhubEnabled;
+  isAdmin = false;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+              private calipsoService: CalipsoplusService) { }
 
   ngOnInit() {
+    this.checkAdmin();
   }
 
+  checkAdmin() {
+    this.calipsoService.isAdmin().then(res => {
+      this.isAdmin = res;
+    });
+  }
 
   navigateExperiments() {
     this.router.navigate(['/experiment']);
