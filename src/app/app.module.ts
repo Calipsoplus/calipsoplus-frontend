@@ -28,12 +28,11 @@ import {CalipsoContainerImagesComponent} from './admin/calipso-container-images/
 import {CalipsoVmImagesComponent} from './admin/calipso-vm-images/calipso-vm-images.component';
 import { CalipsoVmComponent } from './calipso-vm/calipso-vm.component';
 import {CalipsoUserProfileComponent} from './admin/calipso-user-profile/calipso-user-profile.component';
-import {AuthGuard} from './auth-guard.service';
+import {AuthGuard} from './guards/auth-guard.service';
 import { NewContainerImageFormComponent } from './admin/new-container-image-form/new-container-image-form.component';
 import {NewVmImageFormComponent} from './admin/new-vm-image-form/new-vm-image-form.component';
 import { UserNavComponent } from './user-nav/user-nav.component';
-
-
+import {AdminGuard} from './guards/admin-guard.service';
 
 @NgModule({
   imports: [
@@ -68,7 +67,7 @@ import { UserNavComponent } from './user-nav/user-nav.component';
     NewVmImageFormComponent,
     UserNavComponent,
   ],
-  providers: [CalipsoplusService, AuthGuard],
+  providers: [CalipsoplusService, AuthGuard, AdminGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

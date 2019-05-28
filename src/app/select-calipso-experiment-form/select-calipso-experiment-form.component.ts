@@ -379,13 +379,9 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.calipsoService.isLogged()) {
       this.load_all_images();
       this.load_experiments(this.actual_page);
       this.getContainersActive();
-    } else {
-      this.router.navigate(['/']);
-    }
   }
 
   public get_icon(base_image: string) {

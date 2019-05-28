@@ -24,7 +24,6 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
   available_quota: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
 
   ngOnInit() {
-    if (this.calipsoService.isLogged()) {
       const username = this.calipsoService.getLoggedUserName();
       this.calipsoService.getCalipsoQuota(username).subscribe(
         quotas => {
@@ -54,11 +53,7 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
           this.router.navigate(['/']);
         }
       );
-    } else {
-      this.router.navigate(['/']);
     }
-
-  }
 
   setUsedQuota(quota: CalipsoQuota) {
     this.used_quota = quota;
