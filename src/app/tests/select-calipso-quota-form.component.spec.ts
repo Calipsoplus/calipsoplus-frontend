@@ -42,15 +42,6 @@ describe('SelectCalipsoQuotaFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('Should return redirect to / if user is not logged in', inject([CalipsoplusService],
-    (calipsoplusService: CalipsoplusService) => {
-    const userSpy = spyOn(calipsoplusService, 'isLogged').and.returnValue(false);
-    component.ngOnInit();
-    expect(calipsoplusService.isLogged).toHaveBeenCalled();
-    expect(location.path()).toBe('/');
-
-  }));
-
   // it('Should return quota', inject([CalipsoplusService],
   //   (calipsoplusService: CalipsoplusService) => {
   //     calipsoplusService.login('calipso1', 'local');

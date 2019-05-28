@@ -104,7 +104,6 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
 
 
   ngOnInit() {
-    if (this.calipsoService.isLogged()) {
       this.calipsoService.getCalipsoUserType().subscribe(user_type => {
         const username = this.getUsername();
         this.statusActiveSessions[username] = Status.idle;
@@ -117,12 +116,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
         this.load_all_images();
         this.resources_update();
       });
-    } else {
-      this.router.navigate(['/']);
     }
-
-
-  }
 
   public go_in(session_proposal_id: string) {
     const c = this.containers.find(
