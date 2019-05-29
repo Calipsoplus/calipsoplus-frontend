@@ -13,6 +13,7 @@ addons:
 
 before_script:
   - npm install -g @angular/cli
+  - ng analytics off
   - cp src/environments/environment.docker.ts.example src/environments/environment.ts
 
 script:
