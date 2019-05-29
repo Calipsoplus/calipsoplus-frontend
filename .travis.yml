@@ -12,8 +12,7 @@ addons:
   chrome: stable
 
 before_script:
-  - npm install -g @angular/cli
-  - ng analytics off
+  - npm install -g @angular/cli@7.2.0
   - cp src/environments/environment.docker.ts.example src/environments/environment.ts
 
 script:
