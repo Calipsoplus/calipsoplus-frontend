@@ -2,15 +2,18 @@ import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, Route,
 import { Observable } from 'rxjs';
 import {CalipsoplusService} from '../calipsoplus.service';
 import {Injectable} from '@angular/core';
+import {AuthenticationService} from '../authentication.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate, CanActivateChild {
-  constructor(private calipsoService: CalipsoplusService,
-              private _router: Router) {
+  constructor(
+    private authService: AuthenticationService,
+    private calipsoService: CalipsoplusService,
+    private _router: Router) {
   }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.calipsoService.getLoggedUserName() != null) {
+    if (this.authService.getLoggedUserName() != null) {
       // User authenticated sucessfully
       return true;
     }

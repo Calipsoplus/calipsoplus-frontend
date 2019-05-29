@@ -7,6 +7,7 @@ import { CalipsoImage } from '../calipso-image';
 
 import { Router } from '@angular/router';
 import { CalipsoQuota } from '../calipso-quota';
+import {AuthenticationService} from '../authentication.service';
 
 export enum Status {
   idle = 0, // ready
@@ -27,6 +28,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
   availableImages: CalipsoImage[] = [];
 
   constructor(
+    private authService: AuthenticationService,
     private calipsoService: CalipsoplusService,
     private router: Router
   ) {}
@@ -48,8 +50,8 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
     if (this.resources) { this.resources.splice(0, this.resources.length); }
     if (this.containers) { this.containers.splice(0, this.containers.length); }
 
-    if (this.calipsoService.isLogged()) {
-      const username = this.calipsoService.getLoggedUserName();
+    if (this.authService.isLogged()) {
+      const username = this.authService.getLoggedUserName();
 
       // get all containers active from user
       this.calipsoService.listContainersActive(username).subscribe(res => {
@@ -98,8 +100,8 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
     });
   }
 
-  public get_icon(base_image: string) {
-    return this.calipsoService.get_icon(base_image);
+  public get_icon() {
+    return this.calipsoService.get_icon();
   }
 
 
@@ -185,7 +187,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
   }
 
   public getUsername() {
-    return this.calipsoService.getLoggedUserName();
+    return this.authService.getLoggedUserName();
   }
 
   public run(base_image: string) {
@@ -215,7 +217,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
     );
   }
   private check_quota(base_image: string) {
-    const username = this.calipsoService.getLoggedUserName();
+    const username = this.authService.getLoggedUserName();
     this.calipsoService
       .getCalipsoAvailableImageQuota(username)
       .subscribe(used => {

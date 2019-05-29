@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
 import {Observable} from 'rxjs';
 import {CalipsoplusService} from '../calipsoplus.service';
+import {AuthenticationService} from '../authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ export class AdminGuard implements CanActivate, CanActivateChild {
   isAdmin = false;
 
   constructor(
+    private authService: AuthenticationService,
     private calipsoService: CalipsoplusService,
     private router: Router) { }
 
@@ -21,7 +23,7 @@ export class AdminGuard implements CanActivate, CanActivateChild {
   }
 
   checkAdmin() {
-    this.calipsoService.isAdmin().then(res => {
+    this.authService.isAdmin().then(res => {
       this.isAdmin = res;
     });
 
