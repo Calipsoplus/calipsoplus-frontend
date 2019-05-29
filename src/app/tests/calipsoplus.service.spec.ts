@@ -214,42 +214,6 @@ describe('CalipsoplusService', () => {
     httpTestingController.verify();
   }));
 
-  it ('Should login() set ct and cb in session storage' , inject([CalipsoplusService], (calipsoplusService: CalipsoplusService) => {
-    expect(sessionStorage.getItem('ct')).toBeNull();
-    expect(sessionStorage.getItem('cb')).toBeNull();
-    calipsoplusService.login(testUser.user.username, '1');
-
-    expect(sessionStorage.getItem('ct')).toEqual(testUser.user.username);
-    expect(sessionStorage.getItem('cb')).toEqual('1');
-    calipsoplusService.removeStorage();
-
-  }));
-
-  it ('Should return the login type' , inject([CalipsoplusService], (calipsoplusService: CalipsoplusService) => {
-    sessionStorage.setItem('cb', '1');
-    expect(calipsoplusService.getLoginType()).toEqual('1');
-    sessionStorage.setItem('cb', '0');
-    expect(calipsoplusService.getLoginType()).toEqual('0');
-  }));
-
-  it ('Should return if user is logged in or not' , inject([CalipsoplusService], (calipsoplusService: CalipsoplusService) => {
-    expect(calipsoplusService.isLogged()).toEqual(false);
-    sessionStorage.setItem('ct', testUser.user.username);
-    expect(calipsoplusService.isLogged()).toEqual(true);
-  }));
-
-  it ('Should remove ct and cb from local storage' , inject([CalipsoplusService], (calipsoplusService: CalipsoplusService) => {
-    sessionStorage.setItem('ct', testUser.user.username);
-    // Assuming 1 = local authentication
-    sessionStorage.setItem('cb', '1');
-
-    expect(sessionStorage.getItem('ct')).toEqual(testUser.user.username);
-    expect(sessionStorage.getItem('cb')).toEqual('1');
-    calipsoplusService.removeStorage();
-    expect(sessionStorage.getItem('ct')).toBeNull();
-    expect(sessionStorage.getItem('cb')).toBeNull();
-  }));
-
   it ('Should format date correctly' , inject([CalipsoplusService], (calipsoplusService: CalipsoplusService) => {
     let date = new Date(2018, 1, 12, 14, 10, 12, 5); // Month starts from 0
     expect(calipsoplusService.formatDate(date)).toEqual('12/2/2018 14:10');

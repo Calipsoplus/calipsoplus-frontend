@@ -15,6 +15,7 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 import { CalipsoSession } from '../calipso-sessions';
 import { CalipsoImage } from '../calipso-image';
 import { CalipsoResource } from '../calipso-resource';
+import {AuthenticationService} from '../authentication.service';
 
 library.add(fas, far);
 
@@ -81,6 +82,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   last_sorted = '';
 
   constructor(
+    private authService: AuthenticationService,
     private calipsoService: CalipsoplusService,
     private router: Router
   ) {}
@@ -152,7 +154,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   }
 
   private check_quota(base_image: string) {
-    const username = this.calipsoService.getLoggedUserName();
+    const username = this.authService.getLoggedUserName();
     this.calipsoService
       .getCalipsoAvailableImageQuota(username)
       .subscribe(used => {
@@ -220,9 +222,9 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     }
     if (this.experiments) { this.experiments.splice(0, this.experiments.length); }
 
-    if (this.calipsoService.isLogged()) {
+    if (this.authService.isLogged()) {
       this.actual_page = page;
-      const username = this.calipsoService.getLoggedUserName();
+      const username = this.authService.getLoggedUserName();
       this.safe_locked_button = false;
 
       // get all containers active from user
@@ -313,20 +315,20 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
               });
             },
             err => {
-              this.calipsoService.logout();
+              this.authService.logout();
 
               console.log('Security error');
             }
           );
       });
     } else {
-      this.calipsoService.logout();
+      this.authService.logout();
     }
   }
 
   public getContainersActive() {
     // get all containers active from user
-    const username = this.calipsoService.getLoggedUserName();
+    const username = this.authService.getLoggedUserName();
     this.message_resources = 'Loading resources...';
 
     if (this.resources) {
@@ -385,7 +387,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   }
 
   public get_icon(base_image: string) {
-    return this.calipsoService.get_icon(base_image);
+    return this.calipsoService.get_icon();
   }
 
   public run(proposal_id, session_proposal_id, public_name: string) {
@@ -398,7 +400,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     // maybe check de base image for its
     this.calipsoService
       .runResource(
-        this.calipsoService.getLoggedUserName(),
+        this.authService.getLoggedUserName(),
         proposal_id + '~' + session_proposal_id,
         public_name
       )
@@ -431,7 +433,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
     session_proposal_id: string,
     public_name: string
   ) {
-    const username = this.calipsoService.getLoggedUserName();
+    const username = this.authService.getLoggedUserName();
     this.safe_locked_button = true;
 
     this.statusActiveSessions[session_proposal_id] = Status.busy;
@@ -515,7 +517,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
 
   public gotoExperiment(proposal_id: string) {
     this.search_key = proposal_id;
-    const username = this.calipsoService.getLoggedUserName();
+    const username = this.authService.getLoggedUserName();
 
     if (proposal_id === username) {
       this.router.navigate(['/ownresources']);

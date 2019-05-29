@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {environment} from '../../environments/environment';
 import { CalipsoplusService } from '../calipsoplus.service';
+import {AuthenticationService} from '../authentication.service';
 
 
 @Component({
@@ -15,14 +16,15 @@ export class UserNavComponent implements OnInit {
   isAdmin = false;
 
   constructor(private router: Router,
-              private calipsoService: CalipsoplusService) { }
+              private calipsoService: CalipsoplusService,
+              private authService: AuthenticationService) { }
 
   ngOnInit() {
     this.checkAdmin();
   }
 
   checkAdmin() {
-    this.calipsoService.isAdmin().then(res => {
+    this.authService.isAdmin().then(res => {
       this.isAdmin = res;
     });
   }

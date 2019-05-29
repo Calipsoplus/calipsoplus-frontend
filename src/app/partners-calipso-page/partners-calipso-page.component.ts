@@ -3,6 +3,7 @@ import { CalipsoFacility } from '../calipso-facility';
 import { CalipsoplusService } from '../calipsoplus.service';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import {AuthenticationService} from '../authentication.service';
 
 @Component({
   selector: 'app-partners-calipso-page',
@@ -11,6 +12,7 @@ import { environment } from '../../environments/environment';
 })
 export class PartnersCalipsoPageComponent implements OnInit {
   constructor(
+    private authService: AuthenticationService,
     private calipsoService: CalipsoplusService,
     private router: Router
   ) {}
@@ -37,6 +39,6 @@ export class PartnersCalipsoPageComponent implements OnInit {
     window.location.href = url + 'login';
    }
   public isLogged() {
-    return this.calipsoService.isLogged();
+    return this.authService.isLogged();
   }
 }
