@@ -5,13 +5,30 @@
 
 export const environment = {
   production: false,
-  frontend_calipso: "http://calipso-frontend/",
-  backendUrl_calipso: "https://vagrant-ubuntu-trusty-64/",
-  backendUrl_basehref: "calipso/",
-  guacamoleUrl: "http://192.168.33.15:8080/",
-  openIdConnectEnabled: true,
-  openIdConnectUrl: 'http://example.com/oidc/authenticate',
-  facilityLogo: 'assets/images/insert-logo-here.jpg',
-  env : "dev"
+  servers: {
+    api: {
+      url: 'https://vagrant-ubuntu-trusty-64/',
+      basehref: 'calipso/'
+    },
+    guacamole: {
+      url: 'http://192.168.33.15:8080/'
+    },
+    jupyterhub: {
+      enabled: false,
+      url: 'http://jupyter.example.com'
+    }
+  },
+  auth: {
+    oidc: {
+      enabled: false,
+      url: 'http://example.com/oidc/authenticate'
+    }
+  },
+  frontend: {
+    url: 'http://calipso-frontend/',
+    facilityLogo: 'assets/images/insert-logo-here.jpg'
+  },
+  env : 'dev'
 };
+
 

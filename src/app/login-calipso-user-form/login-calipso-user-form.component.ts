@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CalipsoplusService } from '../calipsoplus.service';
+import {AuthenticationService} from '../authentication.service';
 
 @Component({
   selector: 'app-login-calipso-user-form',
@@ -18,15 +19,16 @@ export class LoginCalipsoUserFormComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private authService: AuthenticationService,
     public calipsoService: CalipsoplusService
   ) {}
 
   login_UO() {
-    this.calipsoService.unauth().subscribe(
+    this.authService.unauth().subscribe(
       resp => {
-        this.calipsoService.auth(this.username, this.password).subscribe(
+        this.authService.auth(this.username, this.password).subscribe(
           response => {
-              this.router.navigate(['/experiment']);
+              this.router.navigate(['/navigation']);
           },
           error => {
             alert('Invalid credentials');
@@ -44,16 +46,16 @@ export class LoginCalipsoUserFormComponent implements OnInit {
   }
 
   public login_umbrella() {
-    this.calipsoService.goExternalLoginUmbrella();
+    this.authService.goExternalLoginUmbrella();
   }
 
   public login_openid() {
-    this.calipsoService.goOpenIdConnect();
+    this.authService.goOpenIdConnect();
   }
 
   ngOnInit() {
-    if (this.calipsoService.isLogged()) {
-      this.router.navigate(['/experiment']);
+    if (this.authService.isLogged()) {
+      this.router.navigate(['/navigation']);
     }
   }
 }

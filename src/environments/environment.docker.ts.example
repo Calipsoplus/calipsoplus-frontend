@@ -1,11 +1,27 @@
 export const environment = {
   production: false,
-  frontend_calipso: 'http://web-front/',
-  backendUrl_calipso: '/',
-  backendUrl_basehref: 'services/',
-  guacamoleUrl: '/guac/',
-  openIdConnectEnabled: true,
-  openIdConnectUrl: 'http://example.com/oidc/authenticate',
-  facilityLogo: 'assets/images/insert-logo-here.jpg',
+  servers: {
+    api: {
+      url: '/',
+      basehref: 'services/'
+    },
+    guacamole: {
+      url: '/guac/'
+    },
+    jupyterhub: {
+      enabled: false,
+      url: 'http://jupyter.example.com'
+    }
+  },
+  auth: {
+    oidc: {
+      enabled: false,
+      url: 'http://example.com/oidc/authenticate'
+    }
+  },
+  frontend: {
+    url: 'http://web-front/',
+    facilityLogo: 'assets/images/insert-logo-here.jpg'
+  },
   env : 'docker'
 };
