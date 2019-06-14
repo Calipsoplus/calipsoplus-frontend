@@ -7,6 +7,7 @@ import { Location } from '@angular/common';
 import {CalipsoContainer} from '../../calipso-container';
 import {CalipsoResource} from '../../calipso-resource';
 import {CalipsoQuota} from '../../calipso-quota';
+import {AuthenticationService} from '../../authentication.service';
 
 @Component({
   selector: 'app-calipso-user-profile',
@@ -28,6 +29,7 @@ export class CalipsoUserProfileComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private location: Location,
+    private authService: AuthenticationService,
     private calipsoService: CalipsoplusService
   ) {}
 
@@ -38,7 +40,7 @@ export class CalipsoUserProfileComponent implements OnInit {
     this.getQuota();
   }
   getUser(): void {
-    this.calipsoService.getCalipsoUser(this.username).subscribe(
+    this.authService.getCalipsoUser(this.username).subscribe(
       res => {
         this.calipsoUser = res;
       },
@@ -127,8 +129,8 @@ export class CalipsoUserProfileComponent implements OnInit {
     }
   }
 
-  public get_icon(base_image: string) {
-    return this.calipsoService.get_icon(base_image);
+  public get_icon() {
+    return this.calipsoService.get_icon();
   }
 
 }

@@ -7,6 +7,7 @@ import { CalipsoImage } from '../calipso-image';
 
 import { Router } from '@angular/router';
 import { CalipsoQuota } from '../calipso-quota';
+import {AuthenticationService} from '../authentication.service';
 
 export enum Status {
   idle = 0, // ready
@@ -27,6 +28,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
   availableImages: CalipsoImage[] = [];
 
   constructor(
+    private authService: AuthenticationService,
     private calipsoService: CalipsoplusService,
     private router: Router
   ) {}
@@ -35,7 +37,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
   staff_forbbiden = false;
 
   statusActiveSessions: { [key: string]: Status } = {};
-  actualRunningContainer: { [key: string]: string } = {};
+
   used_quota: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
   user_quota: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
 
@@ -48,8 +50,8 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
     if (this.resources) { this.resources.splice(0, this.resources.length); }
     if (this.containers) { this.containers.splice(0, this.containers.length); }
 
-    if (this.calipsoService.isLogged()) {
-      const username = this.calipsoService.getLoggedUserName();
+    if (this.authService.isLogged()) {
+      const username = this.authService.getLoggedUserName();
 
       // get all containers active from user
       this.calipsoService.listContainersActive(username).subscribe(res => {
@@ -78,7 +80,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
                   c.public_name
                 );
                 this.resources.push(resource);
-                this.statusActiveSessions[resource.experiment] = Status.running;
+                this.statusActiveSessions[0] = Status.running;
                 this.check_quota(c.public_name);
               }
             }
@@ -98,16 +100,14 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
     });
   }
 
-  public get_icon(base_image: string) {
-    return this.calipsoService.get_icon(base_image);
+  public get_icon() {
+    return this.calipsoService.get_icon();
   }
 
 
   ngOnInit() {
-    if (this.calipsoService.isLogged()) {
       this.calipsoService.getCalipsoUserType().subscribe(user_type => {
-        const username = this.getUsername();
-        this.statusActiveSessions[username] = Status.idle;
+        this.statusActiveSessions[0] = Status.idle;
         if (user_type.result) {
           this.staff_forbbiden = false;
         } else {
@@ -117,12 +117,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
         this.load_all_images();
         this.resources_update();
       });
-    } else {
-      this.router.navigate(['/']);
     }
-
-
-  }
 
   public go_in(session_proposal_id: string) {
     const c = this.containers.find(
@@ -167,7 +162,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
               }
             });
 
-            this.statusActiveSessions[proposal_id] = Status.idle;
+            this.statusActiveSessions[0] = Status.idle;
             this.safe_locked_button = false;
 
             this.resources_update();
@@ -176,11 +171,8 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
   }
 
   public ifDisabled() {
-    const username = this.getUsername();
-
     if (
-      this.statusActiveSessions[username] === Status.busy ||
-      this.statusActiveSessions[username] === Status.running ||
+      this.statusActiveSessions[0] === Status.busy ||
       this.max_num_machines_exceeded ||
       this.max_num_cpu_exceeded ||
       this.max_memory_exceeded ||
@@ -191,37 +183,37 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
   }
 
   public getUsername() {
-    return this.calipsoService.getLoggedUserName();
+    return this.authService.getLoggedUserName();
   }
 
   public run(base_image: string) {
     const username = this.getUsername();
+    const resource_uuid = Math.random().toString(36).substr(2, 5);
 
-    this.statusActiveSessions[username] = Status.busy;
-    this.actualRunningContainer[username] = base_image;
+    this.statusActiveSessions[0] = Status.busy;
     this.safe_locked_button = true;
 
-    this.calipsoService.runResource(username, username, base_image).subscribe(
+    this.calipsoService.runResource(username, resource_uuid, base_image).subscribe(
       data => {
         if (data != null) {
           this.containers.push(data);
-          this.statusActiveSessions[username] = Status.running;
+          this.statusActiveSessions[0] = Status.running;
           this.resources_update();
           this.check_quota(data.public_name);
         } else {
-          this.statusActiveSessions[username] = Status.idle;
+          this.statusActiveSessions[0] = Status.idle;
         }
 
       },
       error => {
-        this.statusActiveSessions[username] = Status.idle;
+        this.statusActiveSessions[0] = Status.idle;
         this.safe_locked_button = false;
         console.log('Ooops!');
       }
     );
   }
   private check_quota(base_image: string) {
-    const username = this.calipsoService.getLoggedUserName();
+    const username = this.authService.getLoggedUserName();
     this.calipsoService
       .getCalipsoAvailableImageQuota(username)
       .subscribe(used => {

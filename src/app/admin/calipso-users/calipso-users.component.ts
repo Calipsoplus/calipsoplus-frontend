@@ -12,6 +12,7 @@ import {CalipsoContainer} from '../../calipso-container';
 import {CalipsoPaginationExperiment} from '../../calipso-pagination-experiment';
 import {CalipsoPaginationUser} from '../../CalipsoPaginationUser';
 import {CalipsoUser} from '../../calipso-user';
+import {AuthenticationService} from '../../authentication.service';
 
 library.add(fas, far);
 
@@ -74,6 +75,7 @@ safe_locked_button = false;
 last_sorted = '';
 
 constructor(
+  private authService: AuthenticationService,
   private calipsoService: CalipsoplusService,
   private router: Router
 ) {}
@@ -163,7 +165,7 @@ public load_experiments(page: number) {
             }
           },
           err => {
-            this.calipsoService.logout();
+            this.authService.logout();
 
             console.log('Security error');
           }
@@ -171,7 +173,7 @@ public load_experiments(page: number) {
 }
 
 ngOnInit() {
-  if (this.calipsoService.isLogged()) {
+  if (this.authService.isLogged()) {
     this.load_experiments(this.actual_page);
   } else {
     this.router.navigate(['/']);
