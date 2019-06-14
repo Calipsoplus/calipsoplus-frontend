@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { environment } from '../environments/environment';
@@ -16,25 +15,14 @@ import { CalipsoImage } from './calipso-image';
 
 import { Router } from '@angular/router';
 import { CalipsoPaginationExperiment } from './calipso-pagination-experiment';
-import { CalipsoUmbrellaSession } from './calipso-umbrella-session';
 import { CalipsoSettings } from './calipso-settings';
 import { CalipsoUserType } from './calipso-user-type';
 import {CalipsoPaginationUser} from './CalipsoPaginationUser';
-import {CalipsoUser} from './calipso-user';
 
 @Injectable({providedIn: 'root'})
 export class CalipsoplusService {
-  backendUrl_calipso = environment.backendUrl_calipso + environment.backendUrl_basehref;
-  guacamoleUrl = environment.guacamoleUrl;
-
-  authUrl = this.backendUrl_calipso + 'login/';
-  umbrellaLoginUrl = this.backendUrl_calipso + 'umbrella/login/';
-
-  umbrellaSessionUrl = this.backendUrl_calipso + 'umbrella/session/';
-  uoUserFromHashUrl = this.backendUrl_calipso + 'umbrella/wuo/';
-
-  umbrellaLogoutUrl = this.backendUrl_calipso + 'umbrella/logout/';
-  logoutUrl = this.backendUrl_calipso + 'logout/';
+  backendUrl_calipso = environment.servers.api.url + environment.servers.api.basehref;
+  guacamoleUrl = environment.servers.guacamole.url;
 
   favoriteUrl = this.backendUrl_calipso + 'favorite/$ID/';
   quotaUrl = this.backendUrl_calipso + 'quota/$USERNAME/';
@@ -53,11 +41,10 @@ export class CalipsoplusService {
 
   calipsoUserTypeUrl = this.backendUrl_calipso + 'login/type/';
 
-  UOWebUrl = 'https://useroffice.cells.es/Welcome';
 
   defaultCalipsoSettings: CalipsoSettings = new CalipsoSettings(false);
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient) {}
 
   public favorite_experiment(id: string, value: number) {
     const url = this.favoriteUrl.replace('$ID', id);
@@ -75,8 +62,7 @@ export class CalipsoplusService {
       'X-CSRFToken': server_token
     });
 
-    return this.http
-      .put(url, body, {
+    return this.http.put(url, body, {
         headers: headers,
         withCredentials: true,
         observe: 'response'
@@ -87,7 +73,7 @@ export class CalipsoplusService {
   }
 
   public getMyLogo(): string {
-    return environment.facilityLogo;
+    return environment.frontend.facilityLogo;
   }
 
   public getCalipsoExperiments(
@@ -132,7 +118,7 @@ export class CalipsoplusService {
   }
 
   public getCalipsoFacilities(): Observable<CalipsoFacility[]> {
-    return this.http.get<CalipsoFacility[]>(environment.frontend_calipso + 'assets/data/facilities.json');
+    return this.http.get<CalipsoFacility[]>(environment.frontend.url + 'assets/data/facilities.json');
   }
   public getImageQuotaByPublicName(
     public_name: string): Observable<CalipsoImage> {
@@ -144,7 +130,6 @@ export class CalipsoplusService {
     let server_token = this.getCookie('csrftoken');
     if (server_token === undefined) {
       server_token = 'none';
-      // console.log("token_not_found!");
     }
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -198,9 +183,20 @@ export class CalipsoplusService {
           console.log('Response', resp);
         },
         error  => {
-          console.log('Error', error);
+          console.error(error);
         }
       );
+  }
+
+  public getCookie(name: string) {
+    const value = '; ' + document.cookie;
+    const parts = value.split('; ' + name + '=');
+    if (parts.length === 2) {
+      return parts
+        .pop()
+        .split(';')
+        .shift();
+    }
   }
 
   public getAllAvailableImages(): Observable<CalipsoImage[]> {
@@ -232,126 +228,19 @@ export class CalipsoplusService {
     });
   }
 
-  public getCalipsoUser(username: string): Observable<CalipsoUser> {
-    const url = this.userUrl.replace('$USERNAME', username);
-    return this.http.get<CalipsoUser>(url, {withCredentials: true});
-  }
-
-  public openIdAuth() {
-      this.http.get(this.backendUrl_calipso + 'authenticated/', {withCredentials: true, observe: 'response'})
-      .subscribe((response) => {
-        if (response.status === 200) {
-          const username = response.body['username'];
-          this.login(username, 'OpenID');
-        }
-        this.goOpenIdConnect();
-      });
-  }
-
-  public auth(username: string, password: string) {
-    const body = `{"username":"${username}","password":"${password}"}`;
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
-    return this.http
-      .post(this.authUrl, body, {
-        headers: headers,
-        observe: 'response',
-        withCredentials: true
-      })
-      .map(res => {
-        // console.log("login:", this.getCookie("sessionid"));
-        this.login(username, 'local');
-        return res;
-      });
-  }
-
-  public getCookie(name: string) {
-    const value = '; ' + document.cookie;
-    const parts = value.split('; ' + name + '=');
-    if (parts.length === 2) {
-      return parts
-        .pop()
-        .split(';')
-        .shift();
-    }
-  }
-
-  public unauth() {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    sessionStorage.removeItem('ct');
-    return this.http
-      .get(this.logoutUrl, {
-        headers: headers,
-        observe: 'response',
-        withCredentials: true
-      })
-      .map(res => {
-        this.removeStorage();
-      });
-  }
-
-  public unauthUmbrella() {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http
-      .get(this.umbrellaLogoutUrl, {
-        headers: headers,
-        observe: 'response',
-        withCredentials: true
-      })
-      .map(res => {
-        this.removeStorage();
-      });
-  }
-
-  public removeStorage() {
-    sessionStorage.removeItem('ct');
-    sessionStorage.removeItem('cb');
-  }
-
-  public login(username: string, local_login: string) {
-    sessionStorage.setItem('ct', username);
-    sessionStorage.setItem('cb', local_login);
-  }
-
-  public getLoginType() {
-    return sessionStorage.getItem('cb');
-  }
-
-  public getLoggedUserName(): string {
-    return sessionStorage.getItem('ct');
-  }
-
-  public isLogged(): boolean {
-    if ('ct' in sessionStorage) {
-      return 'ct' in sessionStorage;
-    }
-    if (environment.openIdConnectEnabled) {
-      this.openIdAuth();
-    }
-    return 'ct' in sessionStorage;
-
-  }
-
-  public listContainersActive(
-    username: string
-  ): Observable<CalipsoContainer[]> {
+  public listContainersActive(username: string): Observable<CalipsoContainer[]> {
     const url = this.listResourceUrl.replace('$USERNAME', username);
     return this.http.get<CalipsoContainer[]>(url, { withCredentials: true });
   }
 
-  public runResource(
-    username: string,
-    experiment: string,
-    base_image: string
-  ): Observable<CalipsoContainer> {
+  public runResource(username: string, experiment: string, base_image: string): Observable<CalipsoContainer> {
     const url = this.runResourceUrl.replace('$USERNAME', username);
     const mid_url = url.replace('$EXPERIMENT', experiment);
     const run_url = mid_url.replace('$BASE_IMAGE', base_image);
 
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-    return this.http
-      .get<CalipsoContainer>(run_url, {
+    return this.http.get<CalipsoContainer>(run_url, {
         headers: headers,
         withCredentials: true,
         observe: 'response'
@@ -361,33 +250,23 @@ export class CalipsoplusService {
       });
   }
 
-  public removeContainer(
-    username: string,
-    resource_name: string,
-    public_name: string
-  ): Observable<CalipsoContainer> {
+  public removeContainer(username: string, resource_name: string, public_name: string): Observable<CalipsoContainer> {
     const username_url = this.removeResourceUrl.replace('$USERNAME', username);
     const remove_url = username_url.replace('$PUBLIC_NAME', public_name);
     const url = remove_url.replace('$RESOURCE', resource_name);
 
-    return this.http
-      .get<CalipsoContainer>(url, { withCredentials: true })
+    return this.http.get<CalipsoContainer>(url, { withCredentials: true })
       .map(res => {
         return res;
       });
   }
 
-  public stopContainer(
-    username: string,
-    resource_name: string,
-    public_name: string
-  ): Observable<CalipsoContainer> {
+  public stopContainer(username: string, resource_name: string, public_name: string): Observable<CalipsoContainer> {
     const username_url = this.stopResourceUrl.replace('$USERNAME', username);
     const stop_url = username_url.replace('$PUBLIC_NAME', public_name);
     const url = stop_url.replace('$RESOURCE', resource_name);
 
-    return this.http
-      .get<CalipsoContainer>(url, { withCredentials: true })
+    return this.http.get<CalipsoContainer>(url, { withCredentials: true })
       .map(res => {
         return res;
       });
@@ -427,97 +306,12 @@ export class CalipsoplusService {
     );
   }
 
-  public getUmbrellaSession(): Observable<CalipsoUmbrellaSession> {
-    return this.http
-      .get<CalipsoUmbrellaSession>(this.umbrellaSessionUrl, {
-        withCredentials: true
-      })
-      .map(res => {
-        return res;
-      });
-  }
-
-  public authWithEAAHash(username: string, eaahash: string) {
-    const body = `{"EAAHash":"${eaahash}", "uid":"${username}"}`;
-    let server_token = this.getCookie('csrftoken');
-
-    if (server_token === undefined) {
-      server_token = 'none';
-      // console.log("token_not_found!");
-    }
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'X-CSRFToken': server_token
-    });
-
-    return this.http
-      .post(this.uoUserFromHashUrl, body, {
-        headers: headers,
-        observe: 'response',
-        withCredentials: true
-      })
-      .map(res => {
-        return res;
-      })
-      .catch(function(e) {
-        // console.log("Error: ", e);
-        throw e;
-      });
-  }
-
-  public goExternalLoginUmbrella() {
-    // console.log("Go to umbrella login page");
-    window.location.href = this.umbrellaLoginUrl;
-  }
-
-  public goOpenIdConnect() {
-    window.location.href = environment.openIdConnectUrl;
-  }
-
-  public goExternalLoginWOU() {
-    // console.log("Go to UO page");
-    window.location.href = this.UOWebUrl;
+  public get_icon() {
+    return('assets/images/computer.jpg');
   }
 
   public openURL(url: string, name: string) {
     this.updateDateAccess(name);
     window.open(url, '_blank');
-  }
-
-  public logout() {
-    // console.log("login_local:"+this.calipsoService.calipsoSettings.local_auth);
-
-    if (this.getLoginType() === 'local' || this.getLoginType() === 'OpenID') {
-      this.removeStorage();
-      this.unauth().subscribe(
-        resp => {
-          // console.log("logout done from UO");
-          this.router.navigate(['/']);
-        },
-        error => {
-          // console.log("Error in UO logout");
-        }
-      );
-    } else {
-      this.removeStorage();
-      this.unauthUmbrella().subscribe(
-        resp => {
-          // console.log("logout done from umbrella");
-          window.location.href =
-            environment.backendUrl_calipso +
-            'Shibboleth.sso/Logout?return=' +
-            environment.frontend_calipso;
-        },
-        error => {
-          // console.log("Error in umbrella logout");
-        }
-      );
-    }
-  }
-
-
-  public get_icon(base_image: string) {
-    return('assets/images/computer.jpg');
   }
 }

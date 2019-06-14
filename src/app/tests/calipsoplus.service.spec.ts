@@ -25,7 +25,7 @@ describe('CalipsoplusService', () => {
 
   let testUser: CalipsoUser;
   let testQuota: CalipsoQuota;
-  const backendUrl_calipso = environment.backendUrl_calipso + environment.backendUrl_basehref;
+  const backendUrl_calipso = environment.servers.api.url + environment.servers.api.basehref;
   beforeEach(() => {
 
     TestBed.configureTestingModule({
@@ -55,7 +55,7 @@ describe('CalipsoplusService', () => {
 
   it('Should return the logo url found in the constants', inject([CalipsoplusService],
     (calipsoplusService: CalipsoplusService) => {
-      expect(calipsoplusService.getMyLogo()).toEqual(environment.facilityLogo);
+      expect(calipsoplusService.getMyLogo()).toEqual(environment.frontend.facilityLogo);
     }));
 
   it('Should return the facilities in Calipsoplus', inject([CalipsoplusService],
@@ -212,42 +212,6 @@ describe('CalipsoplusService', () => {
     expect(req.request.method).toEqual('GET');
     req.flush(testImages);
     httpTestingController.verify();
-  }));
-
-  it ('Should login() set ct and cb in session storage' , inject([CalipsoplusService], (calipsoplusService: CalipsoplusService) => {
-    expect(sessionStorage.getItem('ct')).toBeNull();
-    expect(sessionStorage.getItem('cb')).toBeNull();
-    calipsoplusService.login(testUser.user.username, '1');
-
-    expect(sessionStorage.getItem('ct')).toEqual(testUser.user.username);
-    expect(sessionStorage.getItem('cb')).toEqual('1');
-    calipsoplusService.removeStorage();
-
-  }));
-
-  it ('Should return the login type' , inject([CalipsoplusService], (calipsoplusService: CalipsoplusService) => {
-    sessionStorage.setItem('cb', '1');
-    expect(calipsoplusService.getLoginType()).toEqual('1');
-    sessionStorage.setItem('cb', '0');
-    expect(calipsoplusService.getLoginType()).toEqual('0');
-  }));
-
-  it ('Should return if user is logged in or not' , inject([CalipsoplusService], (calipsoplusService: CalipsoplusService) => {
-    expect(calipsoplusService.isLogged()).toEqual(false);
-    sessionStorage.setItem('ct', testUser.user.username);
-    expect(calipsoplusService.isLogged()).toEqual(true);
-  }));
-
-  it ('Should remove ct and cb from local storage' , inject([CalipsoplusService], (calipsoplusService: CalipsoplusService) => {
-    sessionStorage.setItem('ct', testUser.user.username);
-    // Assuming 1 = local authentication
-    sessionStorage.setItem('cb', '1');
-
-    expect(sessionStorage.getItem('ct')).toEqual(testUser.user.username);
-    expect(sessionStorage.getItem('cb')).toEqual('1');
-    calipsoplusService.removeStorage();
-    expect(sessionStorage.getItem('ct')).toBeNull();
-    expect(sessionStorage.getItem('cb')).toBeNull();
   }));
 
   it ('Should format date correctly' , inject([CalipsoplusService], (calipsoplusService: CalipsoplusService) => {

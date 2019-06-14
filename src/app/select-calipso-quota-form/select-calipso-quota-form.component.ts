@@ -6,6 +6,7 @@ import { CalipsoImage } from '../calipso-image';
 import { CalipsoplusService } from '../calipsoplus.service';
 
 import { Router } from '@angular/router';
+import {AuthenticationService} from '../authentication.service';
 
 @Component({
   selector: 'app-select-calipso-quota-form',
@@ -14,6 +15,7 @@ import { Router } from '@angular/router';
 })
 export class SelectCalipsoQuotaFormComponent implements OnInit {
   constructor(
+    private authService: AuthenticationService,
     private calipsoService: CalipsoplusService,
     private router: Router
   ) { }
@@ -24,8 +26,7 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
   available_quota: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
 
   ngOnInit() {
-    if (this.calipsoService.isLogged()) {
-      const username = this.calipsoService.getLoggedUserName();
+      const username = this.authService.getLoggedUserName();
       this.calipsoService.getCalipsoQuota(username).subscribe(
         quotas => {
           console.log('quotas:' + quotas.cpu, quotas.hdd, quotas.max_simultaneous, quotas.memory);
@@ -54,11 +55,15 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
           this.router.navigate(['/']);
         }
       );
+<<<<<<< HEAD
     } else {
       this.router.navigate(['/']);
     }
 
   }
+=======
+    }
+>>>>>>> 1cead0441c88aa65d6218da905719d10b187d179
 
   setUsedQuota(quota: CalipsoQuota) {
     this.used_quota = quota;

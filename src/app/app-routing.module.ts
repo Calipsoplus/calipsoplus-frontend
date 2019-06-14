@@ -14,22 +14,29 @@ import {CalipsoContainerImagesComponent} from './admin/calipso-container-images/
 import {CalipsoVmImagesComponent} from './admin/calipso-vm-images/calipso-vm-images.component';
 import {CalipsoUserProfileComponent} from './admin/calipso-user-profile/calipso-user-profile.component';
 import {CalipsoUsersComponent} from './admin/calipso-users/calipso-users.component';
-import {AuthGuard} from './auth-guard.service';
+import {AuthGuard} from './guards/auth-guard.service';
+import {UserNavComponent} from './user-nav/user-nav.component';
+import {AdminGuard} from './guards/admin-guard.service';
 
 export const routes: Routes = [
   { path: '', component: PartnersCalipsoPageComponent },
-  { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuard]},
-  { path: 'admin/container-images', component: CalipsoContainerImagesComponent, canActivate: [AuthGuard] },
-  { path: 'admin/virtual-machine-images', component: CalipsoVmImagesComponent, canActivate: [AuthGuard] },
-  { path: 'admin/user/:username', component: CalipsoUserProfileComponent, canActivate: [AuthGuard] },
-  { path: 'admin/users', component: CalipsoUsersComponent, canActivate: [AuthGuard] },
+  { path: 'navigation', component: UserNavComponent, canActivate: [AuthGuard] },
+  { path: 'admin', canActivate: [AdminGuard],
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: AdminDashboardComponent },
+      { path: 'container-images', component: CalipsoContainerImagesComponent },
+      { path: 'virtual-machine-images', component: CalipsoVmImagesComponent },
+      { path: 'user/:username', component: CalipsoUserProfileComponent },
+      { path: 'users', component: CalipsoUsersComponent },
+    ]},
   { path: 'autologin', component: LoginCalipsoUserFormComponent },
-  { path: 'experiment', component: SelectCalipsoExperimentFormComponent },
-  { path: 'favorite', component: SelectCalipsoFavoriteFormComponent },
+  { path: 'experiment', component: SelectCalipsoExperimentFormComponent, canActivate: [AuthGuard] },
+  { path: 'favorite', component: SelectCalipsoFavoriteFormComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginCalipsoUserFormComponent, pathMatch: 'full' },
   { path: 'logout', component: LoginCalipsoUserFormComponent },
-  { path: 'quota', component: SelectCalipsoQuotaFormComponent },
-  { path: 'resource', component: SelectCalipsoResourceFormComponent },
+  { path: 'quota', component: SelectCalipsoQuotaFormComponent, canActivate: [AuthGuard] },
+  { path: 'resource', component: SelectCalipsoResourceFormComponent, canActivate: [AuthGuard] },
   { path: '404', component: PageNotFoundComponent },
   { path: '**', redirectTo: '404', pathMatch: 'full' }
 ];

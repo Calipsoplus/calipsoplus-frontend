@@ -6,12 +6,12 @@
     <a class="col-4 nav-link" routerLink="/">
       <img src="assets/images/logo.jpg" />
     </a>
-    <a *ngIf="!calipsoService.isLogged()" class="col-4 nav-link ml-auto">login</a>
-    <div *ngIf="calipsoService.isLogged()" class="nav-link ml-auto text-right col-4">
+    <a *ngIf="!authService.isLogged()" class="col-4 nav-link ml-auto">login</a>
+    <div *ngIf="authService.isLogged()" class="nav-link ml-auto text-right col-4">
       <div class="row">
         <div class="col">
           <div ngbDropdown placement="bottom-right">
-            <button class="btn btn-outline-primary  btn-lg" id="dropdownBasic1" ngbDropdownToggle>{{calipsoService.getLoggedUserName()}}</button>
+            <button class="btn btn-outline-primary  btn-lg" id="dropdownBasic1" ngbDropdownToggle>{{authService.getLoggedUserName()}}</button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
               <a class="nav-link dropdown-menu-right  btn-lg" (click)="this.logout()" routerLink="/">Logout</a>
             </div>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CalipsoplusService } from '../calipsoplus.service';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import {AuthenticationService} from '../authentication.service';
 
 @Component({
   selector: 'app-facility-nav',
@@ -10,6 +11,7 @@ import { environment } from '../../environments/environment';
 })
 export class FacilityNavComponent implements OnInit {
   constructor(
+    private authService: AuthenticationService,
     public calipsoService: CalipsoplusService,
     private router: Router
   ) {}
@@ -17,14 +19,14 @@ export class FacilityNavComponent implements OnInit {
   ngOnInit() {}
 
   public getUserName(): string {
-    return this.calipsoService.getLoggedUserName();
+    return this.authService.getLoggedUserName();
   }
 
   public isLogged(): boolean {
-    return this.calipsoService.isLogged();
+    return this.authService.isLogged();
   }
 
   public logout() {
-    this.calipsoService.logout();
+    this.authService.logout();
   }
 }
