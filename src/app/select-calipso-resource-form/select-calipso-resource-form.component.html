@@ -52,15 +52,22 @@
         >
           Launch !
         </button>
+        &nbsp; &nbsp;
+        <span
+          *ngIf="this.statusActiveSessions[0] == 1"
+          class="label label-warning font-weight-light">wait...</span>
+
         <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-            <li *ngFor="let image of availableImages" role="presentation">
-                <a
-                  class="btn-lg"
-                  role="menuitem"
-                  tabindex="-1"
-                  (click)="!!run(image.public_name)"
-                  href="#">{{image.public_name}}</a>
-              </li>
+          <li *ngFor="let image of availableImages" role="presentation">
+            <a
+              class="btn-lg"
+              role="menuitem"
+              tabindex="-1"
+              (click)="!!run(image.public_name)"
+              href="#"
+              >{{ image.public_name }}</a
+            >
+          </li>
         </ul>
         <hr />
       </div>
@@ -73,12 +80,10 @@
           <thead>
             <tr class="d-flex">
               <th class="col" *ngFor="let resource of resources">
-                <span *ngIf="resource.experiment == this.getUsername()"
+                <span *ngIf="resource.experiment.length == 5"
                   >OWN RESOURCE</span
                 >
-                <span *ngIf="resource.experiment != this.getUsername()"
-                  >RESOURCE</span
-                >
+                <span *ngIf="resource.experiment.length != 5">RESOURCE</span>
               </th>
             </tr>
           </thead>
@@ -92,7 +97,7 @@
                     style="cursor: pointer;padding:1em;"
                     class="zoom"
                     (click)="go_in(resource.experiment)"
-                    src="{{get_icon(resource.public_name)}}"
+                    src="{{ get_icon(resource.public_name) }}"
                   />
                 </a>
                 <br />
@@ -127,7 +132,10 @@
                     <li role="presentation">
                       <a
                         (click)="
-                          !!stop_and_remove_resource(resource.experiment, resource.public_name)
+                          !!stop_and_remove_resource(
+                            resource.experiment,
+                            resource.public_name
+                          )
                         "
                         class="btn-lg"
                         role="menuitem"
