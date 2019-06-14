@@ -55,15 +55,7 @@ export class SelectCalipsoQuotaFormComponent implements OnInit {
           this.router.navigate(['/']);
         }
       );
-<<<<<<< HEAD
-    } else {
-      this.router.navigate(['/']);
     }
-
-  }
-=======
-    }
->>>>>>> 1cead0441c88aa65d6218da905719d10b187d179
 
   setUsedQuota(quota: CalipsoQuota) {
     this.used_quota = quota;
