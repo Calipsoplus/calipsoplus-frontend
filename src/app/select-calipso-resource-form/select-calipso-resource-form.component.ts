@@ -37,7 +37,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
   staff_forbbiden = false;
 
   statusActiveSessions: { [key: string]: Status } = {};
-  actualRunningContainer: { [key: string]: string } = {};
+
   used_quota: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
   user_quota: CalipsoQuota = new CalipsoQuota(0, 0, '0', '0');
 
@@ -80,7 +80,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
                   c.public_name
                 );
                 this.resources.push(resource);
-                this.statusActiveSessions[resource.experiment] = Status.running;
+                this.statusActiveSessions[0] = Status.running;
                 this.check_quota(c.public_name);
               }
             }
@@ -107,8 +107,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
 
   ngOnInit() {
       this.calipsoService.getCalipsoUserType().subscribe(user_type => {
-        const username = this.getUsername();
-        this.statusActiveSessions[username] = Status.idle;
+        this.statusActiveSessions[0] = Status.idle;
         if (user_type.result) {
           this.staff_forbbiden = false;
         } else {
@@ -163,7 +162,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
               }
             });
 
-            this.statusActiveSessions[proposal_id] = Status.idle;
+            this.statusActiveSessions[0] = Status.idle;
             this.safe_locked_button = false;
 
             this.resources_update();
@@ -172,11 +171,8 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
   }
 
   public ifDisabled() {
-    const username = this.getUsername();
-
     if (
-      this.statusActiveSessions[username] === Status.busy ||
-      this.statusActiveSessions[username] === Status.running ||
+      this.statusActiveSessions[0] === Status.busy ||
       this.max_num_machines_exceeded ||
       this.max_num_cpu_exceeded ||
       this.max_memory_exceeded ||
@@ -192,25 +188,25 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
 
   public run(base_image: string) {
     const username = this.getUsername();
+    const resource_uuid = Math.random().toString(36).substr(2, 5);
 
-    this.statusActiveSessions[username] = Status.busy;
-    this.actualRunningContainer[username] = base_image;
+    this.statusActiveSessions[0] = Status.busy;
     this.safe_locked_button = true;
 
-    this.calipsoService.runResource(username, username, base_image).subscribe(
+    this.calipsoService.runResource(username, resource_uuid, base_image).subscribe(
       data => {
         if (data != null) {
           this.containers.push(data);
-          this.statusActiveSessions[username] = Status.running;
+          this.statusActiveSessions[0] = Status.running;
           this.resources_update();
           this.check_quota(data.public_name);
         } else {
-          this.statusActiveSessions[username] = Status.idle;
+          this.statusActiveSessions[0] = Status.idle;
         }
 
       },
       error => {
-        this.statusActiveSessions[username] = Status.idle;
+        this.statusActiveSessions[0] = Status.idle;
         this.safe_locked_button = false;
         console.log('Ooops!');
       }
