@@ -1,17 +1,17 @@
 <div class="col-12">
   <nav class="navbar navbar-expand" style="background-color:white;">
     <a class="col-4 nav-link">
-      <img src={{calipsoService.getMyLogo()}} style="max-width: 228px"/>
+      <img src={{this.getMyLogo()}} alt="logo" style="max-width: 228px"/>
     </a>
     <a class="col-4 nav-link" routerLink="/">
-      <img src="assets/images/logo.jpg" />
+      <img src="assets/images/logo.jpg" alt="calipso"/>
     </a>
-    <a *ngIf="!authService.isLogged()" class="col-4 nav-link ml-auto">login</a>
-    <div *ngIf="authService.isLogged()" class="nav-link ml-auto text-right col-4">
+    <a *ngIf="!this.isLogged()" class="col-4 nav-link ml-auto">login</a>
+    <div *ngIf="this.isLogged()" class="nav-link ml-auto text-right col-4">
       <div class="row">
         <div class="col">
           <div ngbDropdown placement="bottom-right">
-            <button class="btn btn-outline-primary  btn-lg" id="dropdownBasic1" ngbDropdownToggle>{{authService.getLoggedUserName()}}</button>
+            <button class="btn btn-outline-primary  btn-lg" id="dropdownBasic1" ngbDropdownToggle>{{this.getUserName()}}</button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
               <a class="nav-link dropdown-menu-right  btn-lg" (click)="this.logout()" routerLink="/">Logout</a>
             </div>
