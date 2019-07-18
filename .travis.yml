@@ -1,6 +1,10 @@
 language: node_js
 node_js:
   - "9.11.1"
+
+cache:
+  npm: false
+
 dist: xenial
 sudo: true
 
