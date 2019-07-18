@@ -43,3 +43,15 @@
 .ng-invalid:not(form) {
   border-left: 5px solid #a94442; /* red */
 }
+
+
+.login-right{
+  text-align:right;
+}
+.login-left{
+  text-align:left;
+}
+
+.backcolor{
+  background-color:rgb(203, 233, 252);
+}
