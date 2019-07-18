@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CalipsoplusService } from '../calipsoplus.service';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-import {AuthenticationService} from '../authentication.service';
+import { AuthenticationService } from '../authentication.service';
 
 @Component({
   selector: 'app-facility-nav',
@@ -14,9 +14,9 @@ export class FacilityNavComponent implements OnInit {
     private authService: AuthenticationService,
     private calipsoService: CalipsoplusService,
     private router: Router
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   public getUserName(): string {
     return this.authService.getLoggedUserName();
@@ -30,7 +30,7 @@ export class FacilityNavComponent implements OnInit {
     this.authService.logout();
   }
 
-  public getMyLogo(){
+  public getMyLogo() {
     return this.calipsoService.getMyLogo();
   }
 }
