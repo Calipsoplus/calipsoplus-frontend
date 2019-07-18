@@ -1,51 +1,141 @@
 <app-main-nav></app-main-nav>
+
 <div class="container">
-  <div class="col nav-link  text-center">
-    <img src={{calipsoService.getMyLogo()}}  width="200"/>
-  </div>
 
-  <div class="center-all">Click on the logo bellow to sign in with your UmbrellaID</div>
-
-  <div class="row text-center">
-    <div class="col">
-      <a [routerLink]="" class="nav-link dropdown-menu-right" (click)="login_umbrella()">
-        <img src="assets/images/umbrella.logo.jpg" alt="umbrella" width="auto" />
-      </a>
+  <div class="col-1"></div>
+  <div class="col-10">
+    <div class="row">
+      <div class="col-3 login-right">
+        <img
+          src="{{ calipsoService.getMyLogo() }}"
+          alt="logo"
+          width="100%"
+          style="max-width: 228px"
+        />
+      </div>
+      <div class="col-6"></div>
+      <div class="col-3"></div>
     </div>
   </div>
+  <div class="col-1"></div>
+</div>
 
-  <div class="center-all">Click on the logo bellow to sign in with your OpenID Connect account</div>
-
-  <div class="row text-center">
-    <div class="col">
-      <a [routerLink]="" class="nav-link dropdown-menu-right" (click)="login_openid()">
-        <img src="assets/images/openidconnect.jpeg" alt="openid" width="400" />
-      </a>
-    </div>
+<div class="row  text-center">
+  <div class="col-12">
+    <img
+      style="max-width: 228px"
+      src="assets/images/logo.jpg"
+      alt="logo"
+      width="100%"
+    />
   </div>
+</div>
 
-  <div *ngIf="this.isSettingsLocalLogin()">
-    <h5 class="center-all">Or</h5>
-    <div class="center-all">Click <a href="#" (click)="!!toggle_ShowMeLocalLogin()">here</a> to sign in with your local
-      account</div>
-    <div *ngIf="showme">
-      <form class="form-signin center-all" #calipsoForm="ngForm">
-        <br />
-        <div class="form-group">
-          <label for="username" class="sr-only">User name</label>
-          <input [(ngModel)]="username" type="text" id="username" class="form-control" placeholder="User name" name="username"
-            required autofocus #bk_name="ngModel">
-          <div [hidden]="bk_name.valid || bk_name.pristine" class="alert alert-danger">
-            username is required
+<!--local login-->
+<div *ngIf="this.isSettingsLocalLogin()">
+  <div class="col-12">
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-10 text-center">
+        <form class="form-signin center-all backcolor" #calipsoForm="ngForm">
+          <h3>Enter your credentials to sign in</h3>
+          <br />
+          <div class="form-group">
+            <input
+              [(ngModel)]="username"
+              type="text"
+              id="username"
+              class="form-control"
+              placeholder="User name"
+              name="username"
+              required
+              autofocus
+              #bk_name="ngModel"
+            />
+            <div
+              [hidden]="bk_name.valid || bk_name.pristine"
+              class="alert alert-danger"
+            >
+              username is required
+            </div>
           </div>
-        </div>
-        <div class="form-group">
-          <label for="inputPassword" class="sr-only">Password</label>
-          <input [(ngModel)]="password" name="password" type="password" id="inputPassword" class="form-control"
-            placeholder="Password" required>
-        </div>
-        <button [disabled]="!calipsoForm.form.valid" class="btn btn-primary btn-block btn-lg" (click)="login_UO()">Login</button>
-      </form>
+          <div class="form-group">
+            <input
+              [(ngModel)]="password"
+              name="password"
+              type="password"
+              id="inputPassword"
+              class="form-control"
+              placeholder="Password"
+              required
+            />
+          </div>
+          <button
+            [disabled]="!calipsoForm.form.valid"
+            class="btn btn-primary btn-block btn-lg"
+            (click)="login_UO()"
+          >
+            Login
+          </button>
+        </form>
+        <div class="text-center"><br /><br /></div>
+      </div>
+      <div class="col-1"></div>
+    </div>
+  </div>
+  <div class="row  text-center">
+    <div class="col-12">
+      <h2>Or</h2>
     </div>
   </div>
 </div>
+<!--umbrella/openid-->
+<div class="row  text-center">
+  <div class="col-4"></div>
+  <div class="col-4">
+    <br /><br />
+    <h2 class="backcolor">Sign in with</h2>
+  </div>
+  <div class="col-4"></div>
+</div>
+
+<div class="col-12">
+  <div class="row">
+    <div class="col-2"></div>
+    <div class="col-4 ">
+      <a
+        [routerLink]=""
+        class="nav-link dropdown-menu-right text-center"
+        (click)="login_openid()"
+      >
+        <img
+          src="assets/images/openidconnect.jpeg"
+          alt="openId"
+          title="Click on the logo to sign in with your OpenID account"
+          width="100%"
+          style="max-width: 228px"
+        />
+      </a>
+    </div>
+
+    <div class="col-4 ">
+      <a
+        [routerLink]=""
+        class="nav-link dropdown-menu-right text-center"
+        (click)="login_umbrella()"
+      >
+        <img
+          src="assets/images/umbrella.png"
+          alt="umbrella"
+          title="Click on the logo to sign in with your UmbrellaID"
+          width="100%"
+          style="max-width: 228px"
+        />
+      </a>
+    </div>
+    <div class="col-2"></div>
+  </div>
+  <br><br><br><br>
+</div>
+
+

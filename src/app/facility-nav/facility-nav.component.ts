@@ -12,7 +12,7 @@ import {AuthenticationService} from '../authentication.service';
 export class FacilityNavComponent implements OnInit {
   constructor(
     private authService: AuthenticationService,
-    public calipsoService: CalipsoplusService,
+    private calipsoService: CalipsoplusService,
     private router: Router
   ) {}
 
@@ -28,5 +28,9 @@ export class FacilityNavComponent implements OnInit {
 
   public logout() {
     this.authService.logout();
+  }
+
+  public getMyLogo(){
+    return this.calipsoService.getMyLogo();
   }
 }

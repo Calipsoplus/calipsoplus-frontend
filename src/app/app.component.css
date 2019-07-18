@@ -3,10 +3,11 @@
 .footer-basic-centered{
   position: fixed;
   bottom: 0;
+  left:1px;
+  right:1px;
 	background-color: #292c2f;
 	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
 	box-sizing: border-box;
-	width: 100%;
 	text-align: center;
 	font: normal 18px sans-serif;
 	padding: 15px;
