@@ -386,7 +386,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
       this.getContainersActive();
   }
 
-  public get_icon(base_image: string){
+  public get_icon(base_image: string) {
     return this.calipsoService.get_icon();
   }
 
