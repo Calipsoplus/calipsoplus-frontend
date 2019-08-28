@@ -60,6 +60,11 @@ export class AuthenticationService {
         return res.user.is_superuser;
       })
       .catch((err) => {
+        if (!environment.auth.oidc.enabled) {
+          window.location.href = environment.frontend.url + 'login';
+        } else {
+          this.openIdAuth();
+        }
         console.error(err);
         return false;
       });

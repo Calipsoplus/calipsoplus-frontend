@@ -15,7 +15,10 @@ export class CalipsoContainerImagesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.getAvailableImages();
+  }
 
+  getAvailableImages() {
     this.calipsoService.getAllAvailableImages().subscribe(
       res => {
         this.images = res;

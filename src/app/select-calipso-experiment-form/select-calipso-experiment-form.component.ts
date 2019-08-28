@@ -354,7 +354,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
             const date_access = this.calipsoService.getDateAccess(
               c.container_name
             );
-            if (c.container_status === 'created') {
+            // if (c.container_status === 'created') {
               const resource: CalipsoResource = new CalipsoResource(
                 c.calipso_experiment,
                 c.container_name,
@@ -367,7 +367,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
               );
               this.message_resources = '';
               this.resources.push(resource);
-            }
+            // }
           }
           if (this.resources.length === 0) {
             this.message_resources = 'No resources found';
@@ -386,7 +386,7 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
       this.getContainersActive();
   }
 
-  public get_icon(base_image: string) {
+  public get_icon(base_image: string){
     return this.calipsoService.get_icon();
   }
 

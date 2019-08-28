@@ -41,7 +41,7 @@
       Form Value: {{ containerImageForm.value | json }}
     </p>
 
-    <button type="submit" class="btn btn-primary" [disabled]="!containerImageForm.valid">Submit</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!containerImageForm.valid" (click)="onSubmit()">Submit</button>
   </form>
 </ng-template>
 <button id="addimage" class="btn btn-lg btn-outline-primary" (click)="open(content)"> Add Image </button>
