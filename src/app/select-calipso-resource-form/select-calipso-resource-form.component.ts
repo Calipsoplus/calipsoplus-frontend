@@ -68,7 +68,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
               const date_access = this.calipsoService.getDateAccess(
                 c.container_name
               );
-              if (c.container_status === 'created') {
+              // if (c.container_status === 'created') {
                 const resource: CalipsoResource = new CalipsoResource(
                   c.calipso_experiment,
                   c.container_name,
@@ -82,7 +82,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
                 this.resources.push(resource);
                 this.statusActiveSessions[0] = Status.running;
                 this.check_quota(c.public_name);
-              }
+              // }
             }
           },
           err => {
