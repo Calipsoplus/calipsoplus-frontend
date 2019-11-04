@@ -1,20 +1,30 @@
 <div class="col">
   <div class="row text-center">
     <div class="col">
-        <img src="assets/images/logo.jpg" width="auto" alt="logo"/>
+      <img src="assets/images/logo.jpg" width="auto" alt="logo" />
+      <h1>Partners involved</h1>
     </div>
   </div>
 </div>
 
 <div class="container">
-  <h1>Partners involved</h1>
-  <br />
-  <ul>
-    <li style="list-style-type: none;" *ngFor="let facility of facilities">
-      <a href="#" (click)="!!enterFacility(facility.url)"
-        ><h2>{{ facility.name }}</h2></a
-      >
-      <p>{{ facility.description }}</p>
-    </li>
-  </ul>
+  <div class="row">
+    <div
+      class="pad col-xs-12 col-sm-6 col-md-4 col-lg-3"
+      *ngFor="let facility of facilities"
+    >
+      <div class="shadow text-center ">
+        <a href="#" (click)="!!enterFacility(facility.url)">
+          <h6>{{ facility.name }}</h6>
+          <img
+            class="bullet"
+            alt="{{ facility.name }}"
+            src="{{ facility.logo }}"
+            title="{{ facility.description }}"
+          />
+        </a>
+        <p>{{ facility.description | slice: 0:80 }}...</p>
+      </div>
+    </div>
+  </div>
 </div>

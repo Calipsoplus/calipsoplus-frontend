@@ -3,7 +3,7 @@ import { CalipsoFacility } from '../calipso-facility';
 import { CalipsoplusService } from '../calipsoplus.service';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-import {AuthenticationService} from '../authentication.service';
+import { AuthenticationService } from '../authentication.service';
 
 @Component({
   selector: 'app-partners-calipso-page',
@@ -15,7 +15,7 @@ export class PartnersCalipsoPageComponent implements OnInit {
     private authService: AuthenticationService,
     private calipsoService: CalipsoplusService,
     private router: Router
-  ) {}
+  ) { }
 
   facilities: CalipsoFacility[];
 
@@ -37,7 +37,7 @@ export class PartnersCalipsoPageComponent implements OnInit {
     // TODO: overwrite url for dependency with the environment.
     url = environment.frontend.url;
     window.location.href = url + 'login';
-   }
+  }
   public isLogged() {
     return this.authService.isLogged();
   }

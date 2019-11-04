@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --configuration=docker --base-href '/' --port 8001",
+    "start": "ng serve --configuration=docker --base-href '/' --port 8001 --disableHostCheck",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
