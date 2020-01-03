@@ -298,9 +298,9 @@ export class CalipsoplusService {
 
   public go_into_resource(resource_name: string, username: string, password: string) {
     this.updateDateAccess(resource_name);
-    const paramenters = btoa('un=' + username + '&up=' + password);
+    const parameters = btoa('un=' + username + '&up=' + password);
     window.open(
-      this.guacamoleUrl + '?t=' + paramenters,
+      this.guacamoleUrl + '?t=' + parameters,
       resource_name,
       'menubar=no, location=no, toolbar=no, scrollbars=yes, height=500'
     );
