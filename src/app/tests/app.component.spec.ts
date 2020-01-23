@@ -22,6 +22,7 @@ import {CalipsoVmImagesComponent} from '../admin/calipso-vm-images/calipso-vm-im
 import {CalipsoVmComponent} from '../calipso-vm/calipso-vm.component';
 import {CalipsoUserProfileComponent} from '../admin/calipso-user-profile/calipso-user-profile.component';
 import { UserNavComponent } from '../user-nav/user-nav.component';
+import {RemoteDesktopViewerComponent} from '../remote-desktop-viewer/remote-desktop-viewer.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -46,7 +47,8 @@ describe('AppComponent', () => {
         CalipsoVmImagesComponent,
         CalipsoVmComponent,
         CalipsoUserProfileComponent,
-        UserNavComponent
+        UserNavComponent,
+        RemoteDesktopViewerComponent
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     }).compileComponents();

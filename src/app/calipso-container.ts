@@ -1,7 +1,7 @@
 export class CalipsoContainer {
   constructor(
     public id: number,
-    public calipso_username: string,
+    public calipso_user: string,
     public calipso_experiment: string,
     public container_id: string,
     public container_name: string,
