@@ -1,3 +1,18 @@
-.container{
+.container {
   margin-bottom: 65px;
+}
+
+.bullet {
+  padding: 2em;
+  height: auto;
+  max-width: 10em;
+}
+
+.shadow {
+  box-shadow: 10px 10px 5px grey;
+  padding: 2em;
+}
+
+.pad {
+  padding: 2em;
 }
