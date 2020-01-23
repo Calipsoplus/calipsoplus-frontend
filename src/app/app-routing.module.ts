@@ -17,6 +17,7 @@ import {CalipsoUsersComponent} from './admin/calipso-users/calipso-users.compone
 import {AuthGuard} from './guards/auth-guard.service';
 import {UserNavComponent} from './user-nav/user-nav.component';
 import {AdminGuard} from './guards/admin-guard.service';
+import {RemoteDesktopViewerComponent} from './remote-desktop-viewer/remote-desktop-viewer.component';
 
 export const routes: Routes = [
   { path: '', component: PartnersCalipsoPageComponent },
@@ -36,6 +37,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginCalipsoUserFormComponent, pathMatch: 'full' },
   { path: 'logout', component: LoginCalipsoUserFormComponent },
   { path: 'quota', component: SelectCalipsoQuotaFormComponent, canActivate: [AuthGuard] },
+  { path: 'remote-view/:port', component: RemoteDesktopViewerComponent, canActivate: [AuthGuard] },
   { path: 'resource', component: SelectCalipsoResourceFormComponent, canActivate: [AuthGuard] },
   { path: '404', component: PageNotFoundComponent },
   { path: '**', redirectTo: '404', pathMatch: 'full' }

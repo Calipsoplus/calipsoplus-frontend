@@ -30,6 +30,7 @@ import {FormsModule} from '@angular/forms';
 import {by} from 'protractor';
 import {By} from '@angular/platform-browser';
 import {createComponent} from '@angular/compiler/src/core';
+import {RemoteDesktopViewerComponent} from '../remote-desktop-viewer/remote-desktop-viewer.component';
 
 describe('MainNavComponent', () => {
   let component: MainNavComponent;
@@ -57,7 +58,8 @@ describe('MainNavComponent', () => {
         CalipsoVmImagesComponent,
         CalipsoVmComponent,
         CalipsoUserProfileComponent,
-        UserNavComponent
+        UserNavComponent,
+        RemoteDesktopViewerComponent,
       ],
       imports: [HttpClientTestingModule, RouterTestingModule.withRoutes(routes), FormsModule],
       schemas: [NO_ERRORS_SCHEMA]

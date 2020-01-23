@@ -18,6 +18,7 @@ import { CalipsoPaginationExperiment } from './calipso-pagination-experiment';
 import { CalipsoSettings } from './calipso-settings';
 import { CalipsoUserType } from './calipso-user-type';
 import {CalipsoPaginationUser} from './CalipsoPaginationUser';
+import {AuthenticationService} from './authentication.service';
 
 @Injectable({providedIn: 'root'})
 export class CalipsoplusService {
@@ -44,7 +45,7 @@ export class CalipsoplusService {
 
   defaultCalipsoSettings: CalipsoSettings = new CalipsoSettings(false);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router, private authenticationService: AuthenticationService) {}
 
   public favorite_experiment(id: string, value: number) {
     const url = this.favoriteUrl.replace('$ID', id);
@@ -63,10 +64,10 @@ export class CalipsoplusService {
     });
 
     return this.http.put(url, body, {
-        headers: headers,
-        withCredentials: true,
-        observe: 'response'
-      })
+      headers: headers,
+      withCredentials: true,
+      observe: 'response'
+    })
       .map(res => {
         return res;
       });
@@ -144,7 +145,7 @@ export class CalipsoplusService {
         'cpu': newImage.cpu,
         'memory': newImage.memory.trim(),
         'hdd': newImage.hdd.trim(),
-        'resource_type': 'docker'
+        'resource_type': newImage.resource_type.trim()
       }, { headers: headers, withCredentials: true})
       .subscribe(
         resp  => {
@@ -241,10 +242,10 @@ export class CalipsoplusService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return this.http.get<CalipsoContainer>(run_url, {
-        headers: headers,
-        withCredentials: true,
-        observe: 'response'
-      })
+      headers: headers,
+      withCredentials: true,
+      observe: 'response'
+    })
       .map(res => {
         return res.body;
       });
@@ -296,14 +297,20 @@ export class CalipsoplusService {
     return localStorage.getItem(resource_name);
   }
 
-  public go_into_resource(resource_name: string, username: string, password: string) {
+  public go_into_resource(resource_name: string, username: string, password: string, host_port: string) {
     this.updateDateAccess(resource_name);
-    const parameters = btoa('un=' + username + '&up=' + password);
-    window.open(
-      this.guacamoleUrl + '?t=' + parameters,
-      resource_name,
-      'menubar=no, location=no, toolbar=no, scrollbars=yes, height=500'
-    );
+    if (environment.servers.guacamole.integrated_remote_desktop_viewer.enabled) {
+      if (username === this.authenticationService.getLoggedUserName()) {
+        this.router.navigate(['/remote-view/' + host_port]);
+      }
+    } else {
+      const paramenters = btoa('un=' + username + '&up=' + password);
+      window.open(
+        this.guacamoleUrl + '?t=' + paramenters,
+        resource_name,
+        'menubar=no, location=no, toolbar=no, scrollbars=yes, height=500'
+      );
+    }
   }
 
   public get_icon() {

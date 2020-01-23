@@ -33,16 +33,30 @@ import { NewContainerImageFormComponent } from './admin/new-container-image-form
 import {NewVmImageFormComponent} from './admin/new-vm-image-form/new-vm-image-form.component';
 import { UserNavComponent } from './user-nav/user-nav.component';
 import {AdminGuard} from './guards/admin-guard.service';
+import { RemoteDesktopViewerComponent } from './remote-desktop-viewer/remote-desktop-viewer.component';
+import { ClipboardModalComponent } from './clipboard-modal/clipboard-modal.component';
+import { MatSnackBarModule } from '@angular/material';
+
+import { CodemirrorModule } from '@ctrl/ngx-codemirror';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/markdown/markdown';
+
+import {NgxRemoteDesktopModule} from '@illgrenoble/ngx-remote-desktop';
+import { OverlayContainer, FullscreenOverlayContainer } from '@angular/cdk/overlay';
+import {RemoteDesktopManager} from './remote-desktop-manager.service';
 
 @NgModule({
   imports: [
     BrowserModule,
+    NgxRemoteDesktopModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
     FontAwesomeModule,
-    NgbModule
+    NgbModule.forRoot(),
+    MatSnackBarModule,
+    CodemirrorModule,
   ],
   declarations: [
     AppComponent,
@@ -66,8 +80,13 @@ import {AdminGuard} from './guards/admin-guard.service';
     NewContainerImageFormComponent,
     NewVmImageFormComponent,
     UserNavComponent,
+    RemoteDesktopViewerComponent,
+    ClipboardModalComponent,
   ],
-  providers: [CalipsoplusService, AuthGuard, AdminGuard],
+  providers: [CalipsoplusService, AuthGuard, AdminGuard, {provide: OverlayContainer, useClass: FullscreenOverlayContainer}],
+  entryComponents: [
+    ClipboardModalComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
