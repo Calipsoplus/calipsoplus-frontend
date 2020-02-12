@@ -9,7 +9,10 @@ export const environment = {
       integrated_remote_desktop_viewer : {
         enabled : false, // if true, the guacamole.url will be ignored as it isn't needed
         cluster_url : 'kubernetes-cluster.example.com', // the server or cluster which contains all of the docker/kubernetes containers
-        websocket_server : 'ws://java-server.example.com:8080/ws'
+        websocket_server : 'ws://java-server.example.com:8080/ws',
+        security : 'tls',  // one of: rdp, nla, tls, any.
+        ignore_cert: true,
+        disable_auth: false
       },
       url: 'https://calipsofrontend.domain.tld/gacces/'
     },
