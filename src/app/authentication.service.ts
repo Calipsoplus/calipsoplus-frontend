@@ -17,7 +17,7 @@ export class AuthenticationService {
   uoUserFromHashUrl = this.backendUrl_calipso + 'umbrella/wuo/';
   umbrellaLogoutUrl = this.backendUrl_calipso + 'umbrella/logout/';
   logoutUrl = this.backendUrl_calipso + 'logout/';
-  userUrl = this.backendUrl_calipso + 'user/$USERNAME/';
+  userUrl = this.backendUrl_calipso + 'users/$USERNAME/';
   UOWebUrl = 'https://useroffice.cells.es/Welcome';
 
 
