@@ -77,7 +77,7 @@ describe('CalipsoplusService', () => {
       expect(data).toEqual(testUser);
     });
 
-    const req = httpTestingController.expectOne(backendUrl_calipso + 'user/calipso/');
+    const req = httpTestingController.expectOne(backendUrl_calipso + 'users/calipso/');
     expect(req.request.method).toEqual('GET');
     req.flush(testUser);
     httpTestingController.verify();
@@ -132,7 +132,7 @@ describe('CalipsoplusService', () => {
         expect(data).toEqual(testImage);
       });
 
-      const req = httpTestingController.expectOne(backendUrl_calipso + 'image/base_jupyter/');
+      const req = httpTestingController.expectOne(backendUrl_calipso + 'images/base_jupyter/');
       expect(req.request.method).toEqual('GET');
       req.flush(testImage);
       httpTestingController.verify();
@@ -163,7 +163,7 @@ describe('CalipsoplusService', () => {
         expect(data).toEqual(testImage);
       });
 
-      const req = httpTestingController.expectOne(backendUrl_calipso + 'image/base_jupyter/');
+      const req = httpTestingController.expectOne(backendUrl_calipso + 'images/base_jupyter/');
       expect(req.request.method).toEqual('POST');
       req.flush(testImage);
       httpTestingController.verify();
