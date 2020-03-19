@@ -18,7 +18,7 @@ export class AuthenticationService {
   umbrellaLogoutUrl = this.backendUrl_calipso + 'umbrella/logout/';
   logoutUrl = this.backendUrl_calipso + 'logout/';
   userUrl = this.backendUrl_calipso + 'user/$USERNAME/';
-  UOWebUrl = 'https://useroffice.cells.es/Welcome';
+  UOWebUrl = environment.auth.useroffice.url;
 
 
   constructor(private http: HttpClient, private router: Router) { }
