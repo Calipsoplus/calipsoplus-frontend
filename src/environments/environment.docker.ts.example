@@ -2,30 +2,30 @@ export const environment = {
   production: false,
   servers: {
     api: {
-      url: "/",
-      basehref: "services/"
+      url: '/',
+      basehref: 'services/'
     },
     guacamole: {
-      url: "/guac/"
+      url: '/guac/'
     },
     jupyterhub: {
       enabled: false,
-      url: "http://jupyter.example.com"
+      url: 'http://jupyter.example.com'
     }
   },
   auth: {
     oidc: {
       enabled: false,
-      url: "http://example.com/oidc/authenticate"
+      url: 'http://example.com/oidc/authenticate'
     },
     useroffice: {
       enabled: true,
-      url: "https://USEROFFICE.URL"
+      url: 'https://USEROFFICE.URL'
     }
   },
   frontend: {
-    url: "http://web-front/",
-    facilityLogo: "assets/images/insert-logo-here.jpg"
+    url: 'http://web-front/',
+    facilityLogo: 'assets/images/insert-logo-here.jpg'
   },
-  env: "docker"
+  env: 'docker'
 };
