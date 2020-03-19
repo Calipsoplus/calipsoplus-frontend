@@ -18,6 +18,10 @@ export const environment = {
       enabled: false,
       url: 'http://example.com/oidc/authenticate'
     }
+	 useroffice: {
+      enabled: true,
+      url: 'https://USEROFFICE.URL'
+   }
   },
   frontend: {
     url: 'http://web-front/',
