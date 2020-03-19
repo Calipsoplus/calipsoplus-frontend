@@ -20,7 +20,6 @@ export class AuthenticationService {
   userUrl = this.backendUrl_calipso + 'user/$USERNAME/';
   UOWebUrl = environment.auth.useroffice.url;
 
-
   constructor(private http: HttpClient, private router: Router) { }
 
   public login(username: string, local_login: string) {
