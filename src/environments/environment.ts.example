@@ -22,8 +22,8 @@ export const environment = {
     oidc: {
       enabled: false,
       url: 'http://example.com/oidc/authenticate'
-    }
-	useroffice: {
+    },
+	  useroffice: {
       enabled: true,
       url: 'https://USEROFFICE.URL'
    }
