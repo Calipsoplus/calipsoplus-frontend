@@ -60,7 +60,7 @@ export class AuthenticationService {
       })
       .catch((err) => {
         if (!environment.auth.oidc.enabled) {
-          window.location.href = environment.frontend.url + 'login';
+          this.logout();
         } else {
           this.openIdAuth();
         }
@@ -110,7 +110,6 @@ export class AuthenticationService {
 
   public unauth() {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    sessionStorage.removeItem('ct');
     return this.http
       .get(this.logoutUrl, {
         headers: headers,
@@ -138,10 +137,10 @@ export class AuthenticationService {
   public removeStorage() {
     sessionStorage.removeItem('ct');
     sessionStorage.removeItem('cb');
+    document.cookie = 'csrftoken' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
   }
 
   public logout() {
-    // console.log("login_local:"+this.calipsoService.calipsoSettings.local_auth);
 
     if (this.getLoginType() === 'local' || this.getLoginType() === 'OpenID') {
       this.removeStorage();
