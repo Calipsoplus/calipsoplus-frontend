@@ -74,7 +74,10 @@ export class RemoteDesktopViewerComponent implements OnInit {
 
   handleConnect() {
     const parameters = {
-      hostname: environment.servers.guacamole.integrated_remote_desktop_viewer.cluster_url,
+      hostname:     environment.servers.guacamole.integrated_remote_desktop_viewer.cluster_url,
+      security:     environment.servers.guacamole.integrated_remote_desktop_viewer.security,
+      ignore_cert:  environment.servers.guacamole.integrated_remote_desktop_viewer.ignore_cert,
+      disable_auth: environment.servers.guacamole.integrated_remote_desktop_viewer.disable_auth,
       port: this.route.snapshot.paramMap.get('port'),
       image: 'image/png',
       audio: 'audio/L16',

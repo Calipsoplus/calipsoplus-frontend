@@ -264,9 +264,15 @@ export class RemoteDesktopManager {
    */
   private buildParameters(parameters = {}): string {
     const params = new URLSearchParams();
+    var _key;
     for (const key in parameters) {
+      if (typeof key === "string") {
+        _key = key.replace(/_/, '-');
+      } else {
+        _key = key;
+      }
       if (parameters.hasOwnProperty(key)) {
-        params.set(key, parameters[key]);
+        params.set(_key, parameters[key]);
       }
     }
     return params.toString();
