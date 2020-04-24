@@ -17,11 +17,15 @@ export const environment = {
     oidc: {
       enabled: false,
       url: 'http://example.com/oidc/authenticate'
+    },
+    useroffice: {
+      enabled: true,
+      url: 'https://USEROFFICE.URL'
     }
   },
   frontend: {
     url: 'http://web-front/',
     facilityLogo: 'assets/images/insert-logo-here.jpg'
   },
-  env : 'docker'
+  env: 'docker'
 };
