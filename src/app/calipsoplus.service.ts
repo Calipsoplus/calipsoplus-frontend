@@ -28,15 +28,15 @@ export class CalipsoplusService {
   favoriteUrl = this.backendUrl_calipso + 'favorite/$ID/';
   quotaUrl = this.backendUrl_calipso + 'quota/$USERNAME/';
   usedQuotaUrl = this.backendUrl_calipso + 'used_quota/$USERNAME/';
-  imageUrl = this.backendUrl_calipso + 'image/$PUBLIC_NAME/';
+  imageUrl = this.backendUrl_calipso + 'images/$PUBLIC_NAME/';
   imageListUrl = this.backendUrl_calipso + 'images/';
-  experimentsUrl = this.backendUrl_calipso + 'experiments/$USERNAME/';
+  experimentsUrl = this.backendUrl_calipso + 'users/$USERNAME/experiments/';
   runResourceUrl = this.backendUrl_calipso + 'resource/run/$USERNAME/$EXPERIMENT/$BASE_IMAGE/';
   removeResourceUrl = this.backendUrl_calipso + 'resource/rm/$USERNAME/$RESOURCE/$PUBLIC_NAME/';
   stopResourceUrl = this.backendUrl_calipso + 'resource/stop/$USERNAME/$RESOURCE/$PUBLIC_NAME/';
   listResourceUrl = this.backendUrl_calipso + 'resource/list/$USERNAME/';
   usersUrl = this.backendUrl_calipso + 'users/';
-  userUrl = this.backendUrl_calipso + 'user/$USERNAME/';
+  userUrl = this.backendUrl_calipso + 'users/$USERNAME/';
 
   settingsCalipsoUrl = this.backendUrl_calipso + 'settings/';
 

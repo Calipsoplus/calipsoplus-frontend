@@ -39,7 +39,7 @@
     "file-saver": "latest",
     "font-awesome": "4.7.0",
     "jquery": "^3.4.1",
-    "npm": "^6.11.3",
+    "npm": "6.14.6",
     "popper.js": "1.14.7",
     "rxjs": "6.4.0",
     "rxjs-compat": "6.4.0",

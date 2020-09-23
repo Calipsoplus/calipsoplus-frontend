@@ -5,7 +5,7 @@ node_js:
 cache:
   npm: false
 
-dist: xenial
+dist: focal
 sudo: true
 
 branches:
