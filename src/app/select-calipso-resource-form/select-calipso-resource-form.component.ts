@@ -8,6 +8,7 @@ import { CalipsoImage } from '../calipso-image';
 import { Router } from '@angular/router';
 import { CalipsoQuota } from '../calipso-quota';
 import {AuthenticationService} from '../authentication.service';
+import {environment} from '../../environments/environment';
 
 export enum Status {
   idle = 0, // ready
@@ -69,19 +70,19 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
                 c.container_name
               );
               // if (c.container_status === 'created') {
-                const resource: CalipsoResource = new CalipsoResource(
-                  c.calipso_experiment,
-                  c.container_name,
-                  c.public_name,
-                  str_creation_date,
-                  '-',
-                  date_access,
-                  c.container_info,
-                  c.public_name
-                );
-                this.resources.push(resource);
-                this.statusActiveSessions[0] = Status.running;
-                this.check_quota(c.public_name);
+              const resource: CalipsoResource = new CalipsoResource(
+                c.calipso_experiment,
+                c.container_name,
+                c.public_name,
+                str_creation_date,
+                '-',
+                date_access,
+                c.container_info,
+                c.public_name
+              );
+              this.resources.push(resource);
+              this.statusActiveSessions[0] = Status.running;
+              this.check_quota(c.public_name);
               // }
             }
           },
@@ -106,29 +107,41 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
 
 
   ngOnInit() {
-      this.calipsoService.getCalipsoUserType().subscribe(user_type => {
-        this.statusActiveSessions[0] = Status.idle;
-        if (user_type.result) {
-          this.staff_forbbiden = false;
-        } else {
-          this.safe_locked_button = true;
-          this.staff_forbbiden = true;
-        }
-        this.load_all_images();
-        this.resources_update();
-      });
-    }
+    this.calipsoService.getCalipsoUserType().subscribe(user_type => {
+      this.statusActiveSessions[0] = Status.idle;
+      if (user_type.result) {
+        this.staff_forbbiden = false;
+      } else {
+        this.safe_locked_button = true;
+        this.staff_forbbiden = true;
+      }
+      this.load_all_images();
+      this.resources_update();
+    });
+  }
 
   public go_in(session_proposal_id: string) {
     const c = this.containers.find(
       x => x.calipso_experiment === session_proposal_id
     );
-    if (c == null) { console.log('error win up'); } else if (!c.host_port.startsWith('http')) {
-      this.calipsoService.go_into_resource(
-        c.container_name,
-        c.guacamole_username,
-        c.guacamole_password
-      );
+    if (c == null) {
+      console.log('error win up');
+    } else if (!c.host_port.startsWith('http')) {
+      if (environment.servers.guacamole.integrated_remote_desktop_viewer.enabled) {
+        this.calipsoService.go_into_resource(
+          c.container_name,
+          c.calipso_user,
+          null,
+          c.host_port
+        );
+      } else {
+        this.calipsoService.go_into_resource(
+          c.container_name,
+          c.guacamole_username,
+          c.guacamole_password,
+          c.host_port
+        );
+      }
     } else {
       this.calipsoService.openURL(c.host_port, c.container_name);
     }
@@ -242,7 +255,7 @@ export class SelectCalipsoResourceFormComponent implements OnInit {
                 cpu_available - image_quota.cpu < 0;
               this.max_memory_exceeded =
                 memory_available -
-                  parseInt(image_quota.memory.slice(0, -1), 10) <
+                parseInt(image_quota.memory.slice(0, -1), 10) <
                 0;
               this.max_hdd_exceeded =
                 hdd_available - parseInt(image_quota.hdd.slice(0, -1), 10) < 0;

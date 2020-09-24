@@ -11,6 +11,7 @@ The aim of this project is to provide a frontend for the CalipsoPlus JRA2 Demons
     *  [Running the development server](#running-the-development-server)
 *  [Configuration](#configuration)
 *  [Deploy](#deploy)
+*  [Integrated Guacamole Remote Desktop Viewer](#integrated-guacamole-remote-desktop-viewer)
     *  [Build](#build)
     *  [Running under Apache 2](#running-under-apache-2)
 
@@ -46,6 +47,44 @@ For the application to function properly, the relevant environment settings need
 These files contain the mappings to the backend and Guacamole instance.
 
 ## Deploy
+
+### Integrated Guacamole Remote Desktop Viewer
+*Very experimental feature*  
+There is a choice between downloading and installing Guacamole to have remote access to a container or virtual machine which involves maintaining a separate database or it can be run without needing to download and install guacamole (using integrated guacamole).  
+
+The integrated Guacamole implementation is based entirely on the following repository:
+https://github.com/ILLGrenoble/ngx-remote-desktop
+
+#### Installing 
+
+##### Guacd container
+A guacd container must be running and exposed on a server for the websocket broker server to contact. Creating the container is as simple as running this command.  
+Make sure that the guacd tag is less than version 1.0 !!  
+`docker run --name some-guacd -d -p 4822:4822 guacamole/guacd:0.9.14`
+
+##### Websocket broker server
+The websocket broker server can be found here: https://github.com/jamhall/guacamole-test-server  
+It requires java to run and must be running on a server with access to the server with the guacd container.
+
+##### Configuring the frontend
+The guacamole configuration will be similar to this:  
+```
+guacamole: {
+  integrated_remote_desktop_viewer : {
+    enabled : false, // if true, the guacamole.url will be ignored as it isn't needed
+    cluster_url : 'kubernetes.example.fr', // the server or cluster which contains all of the docker/kubernetes containers
+    websocket_server : 'ws://java-server.example.com:8080/ws'
+  },
+  url: 'http://192.168.33.15:8080/'
+}
+```
+By setting `enabled` to `true`, the default guacamole implementation will no longer be used. 
+The `cluster_url` is the url of either the server or the cluster which is running the containers. If Docker is being used to run the containers, the `cluster_url` will be the url for that server e.g `docker.example.com`.  
+If Kubernetes is being used, `cluster_url` will be the url to the master node.  
+
+The `websocket_server` is the websocket broker server. If you run that server using a different port to the default, make sure to update the port in the `websocket_server`. Be sure to keep `ws://` at the beginning and `/ws` at the end.
+
+The `url` will no loger be used if the integrated guacamole is enabled.
 
 ### Build
 To build the project, use `ng build`. The build artifacts will be stored in the **dist/** directory. 

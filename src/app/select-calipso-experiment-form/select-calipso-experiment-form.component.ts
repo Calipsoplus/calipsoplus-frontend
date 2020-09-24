@@ -16,6 +16,7 @@ import { CalipsoSession } from '../calipso-sessions';
 import { CalipsoImage } from '../calipso-image';
 import { CalipsoResource } from '../calipso-resource';
 import {AuthenticationService} from '../authentication.service';
+import {environment} from '../../environments/environment';
 
 library.add(fas, far);
 
@@ -488,11 +489,21 @@ export class SelectCalipsoExperimentFormComponent implements OnInit {
   public go_in(session: string) {
     const c = this.containers.find(x => x.calipso_experiment === session);
     if (c == null) { console.log('error win up'); } else if (!c.host_port.startsWith('http')) {
-      this.calipsoService.go_into_resource(
-        c.container_name,
-        c.guacamole_username,
-        c.guacamole_password
-      );
+      if (environment.servers.guacamole.integrated_remote_desktop_viewer.enabled) {
+        this.calipsoService.go_into_resource(
+          c.container_name,
+          c.calipso_user,
+          null,
+          c.host_port
+        );
+      } else {
+        this.calipsoService.go_into_resource(
+          c.container_name,
+          c.guacamole_username,
+          c.guacamole_password,
+          c.host_port
+        );
+      }
     } else {
       this.calipsoService.openURL(c.host_port, c.container_name);
     }
