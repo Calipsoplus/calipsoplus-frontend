@@ -12,6 +12,7 @@
   },
   "private": true,
   "dependencies": {
+    "acorn": "8.0.1",
     "@angular/animations": "7.2.8",
     "@angular/common": "7.2.8",
     "@angular/compiler": "7.2.8",
